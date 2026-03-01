@@ -4,6 +4,7 @@
     w3di: "HMIItemPositionFix.Weskerson3DItems",
     rvTorchs: "HMIItemPositionFix.RVTorches",
     glowing3Darmors: "HMIItemPositionFix.Glowing3DArmors",
+    glowing3Dtotem: "HMIItemPositionFix.Glowing3DTotem",
     bensBundle: "HMIItemPositionFix.BensBundle",
     freshFlowersPlants: "HMIItemPositionFix.FreshFlowersAndPlants",
     freshFoods: "HMIItemPositionFix.FreshFoods",

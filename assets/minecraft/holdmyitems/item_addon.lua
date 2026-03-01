@@ -25,7 +25,8 @@ local packCompatibility = {
     rvTorchs = {"torch", "^lantern$", "soul_lantern", "copper_lantern", "campfire", "candle", "repeater", "comparator"},
     freshPaintings = {"painting"},
     freshSeeds = {"_seeds"},
-    bensBundle = {"_bundle"},
+    bensBundle = {"bundle"},
+    glowing3Dtotem = {"totem_of_undying"},
     w3di = {
         -- Blocos Funcionais
         "torch", "^lantern$", "soul_lantern", "copper_lantern", "campfire", "end_crystal", "flower_pot", "armor_stand", "_sign", "ender_eye",
@@ -44,7 +45,7 @@ local packCompatibility = {
         "cod", "salmon", "tropical_fish", "pufferfish", "_stew", "rotten_flesh", "spider_eye", 
         "dried_kelp", "sweet_berries", "glow_berries", "potion",
         -- Ingredientes
-        "coal", "raw", "emerald", "lapis_lazuli", "diamond$", "quartz$", "amethyst_shard",
+        "coal$", "raw", "^emerald$", "^lapis_lazuli$", "diamond$", "quartz$", "amethyst_shard",
         "nugget", "ingot", "netherite_scrap", "stick$", "flint$", "bone$", "feather", 
         "honeycomb", "scute", "slime_ball", "clay_ball", "prismarine_crystals",
         "nautilus_shell", "heart_of_the_sea", "blaze_rod", "breeze_rod", "shulker_shell",
@@ -54,19 +55,25 @@ local packCompatibility = {
         "spawn_egg"
     },
     freshFlowersPlants = {
-        "pale_hanging_moss", "_sapling", "mangrove_propagule", "azalea", "_mushroom$",
+        "pale_hanging_moss", "_sapling", "mangrove_propagule", "^azalea$", "^flowering_azalea$", "_mushroom$",
         "_fungus$", "_grass", "fern", "bush", "dandelion", "poppy", "blue_orchid", "allium",
-        "azure_bluet", "tulip", "oxeye_daisy", "cornflower", "lily_of_the_valley", "torchflower",
+        "azure_bluet", "tulip", "oxeye_daisy", "cornflower", "lily_of_the_valley", "^torchflower$",
         "cacutus_flower", "eyeblossom", "wither_rose", "pink_petals", "wildflowers", "leaf_litter",
-        "spore_blossom", "bamboo", "sugar_cane", "roots", "nether_sprouts", "weeping_vines",
-        "twisting_vines", "vine", "sunflower", "lilac", "peony", "pitcher_plant", "_dripleaf",
-        "glow_lichen", "lily_pad", "seagrass", "sea_pickle", "kelp", "_coral", "sculk_vein"
+        "spore_blossom", "bamboo", "sugar_cane", "roots", "nether_sprouts",
+        "vine", "sunflower", "lilac", "peony", "pitcher_plant", "_dripleaf", "rose_bush",
+        "glow_lichen", "lily_pad", "seagrass", "sea_pickle", "kelp", "_coral$", "_coral_fan", "sculk_vein", "cactus_flower"
     },
     freshFoods = {
-        "apple", "chorus_fruit", "melon_slice", "carrot", "potato", "beetroot",
-        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "chicken", "mutton", "rabbit", 
-        "cod", "salmon", "tropical_fish", "pufferfish", "_stew", "rotten_flesh", "spider_eye", 
-        "dried_kelp", "sweet_berries", "glow_berries"
+        "apple", "chorus_fruit", "melon_slice", "carrot$", "^potato$", "baked_potato", "poisonous_potato", "^beetroot$",
+        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "cooked_chicken", "mutton", "^rabbit$", "cooked_rabbit", 
+        "^cod$", "cooked_cod", "^salmon$", "cooked_salmon", "^tropical_fish$", "^pufferfish$", "_stew", "_soup", "rotten_flesh", "^spider_eye$", 
+        "dried_kelp", "sweet_berries", "glow_berries", "cake", "bowl"
+    },
+    freshOresIngots = {
+        "redstone$", "coal$", "raw", "^emerald$", "^lapis_lazuli$", "^diamond$", "quartz$",
+        "amethyst_shard", "_amethyst_bud", "amethyst_cluster", "nugget", "_ingot",
+        "netherite_scrap", "flint$", "resin_clump", "echo_shard", "resin_brick", "^brick$",
+        "nether_brick", "pointed_dripstone"
     },
     glowing3Darmors = {
         "copper_helmet", "copper_chestplate", "copper_leggings", "copper_boots",
@@ -75,12 +82,6 @@ local packCompatibility = {
         "diamond_helmet", "diamond_chestplate", "diamond_leggings", "diamond_boots",
         "netherite_helmet", "netherite_chestplate", "netherite_leggings", "netherite_boots",
         "horse_armor"
-    },
-    freshOresIngots = {
-        "redstone$", "coal", "raw", "emerald", "lapis_lazuli", "diamond", "quartz$",
-        "amethyst_shard", "_amethyst_bud", "amethyst_cluster", "nugget", "_ingot",
-        "netherite_scrap", "flint$", "resin_clump", "echo_shard", "resin_brick", "^brick$",
-        "nether_brick"
     }
 }
 
@@ -88,12 +89,15 @@ local activePacks = {}
     if ${w3di} then table.insert(activePacks, "w3di") end
     if ${rvTorchs} then table.insert(activePacks, "rvTorchs") end
     if ${glowing3Darmors} then table.insert(activePacks, "glowing3Darmors") end
+    if ${glowing3Dtotem} then table.insert(activePacks, "glowing3Dtotem") end
     if ${freshFlowersPlants} then table.insert(activePacks, "freshFlowersPlants") end
     if ${freshFoods} then table.insert(activePacks, "freshFoods") end
     if ${freshPaintings} then table.insert(activePacks, "freshPaintings") end
     if ${freshOresIngots} then table.insert(activePacks, "freshOresIngots") end
     if ${freshSeeds} then table.insert(activePacks, "freshSeeds") end
     if ${bensBundle} then table.insert(activePacks, "bensBundle") end
+
+------ FUNÇÕES ------
 
 local function compat(itemID)
     for _, pack in ipairs(activePacks) do
@@ -105,8 +109,6 @@ local function compat(itemID)
     end
     return false
 end
-
------- FUNÇÕES ------
 
 local function verifyList(list, sufixes)
     for _, material in ipairs(list) do
@@ -135,30 +137,244 @@ local function isInList(list)
     return false
 end
 
-local function move(x, y, z)
-    if not compat(itemName) then
+local function move(x, y, z, force)
+    if not compat(itemName) or force then
         if x then M:moveX(matrices, x * l) end
         if y then M:moveY(matrices, y) end
         if z then M:moveZ(matrices, z) end
     end
 end
 
-local function rotate(rx, ry, rz)
-    if not compat(itemName) then
+local function rotate(rx, ry, rz, force)
+    if not compat(itemName) or force then
         if rx then M:rotateX(matrices, rx) end
         if ry then M:rotateY(matrices, ry * l) end
         if rz then M:rotateZ(matrices, rz * l) end
     end
 end
 
-local function scale(sx, sy, sz)
-    if not compat(itemName) then
+local function scale(sx, sy, sz, force)
+    if not compat(itemName) or force then
         if sx or sy or sz then M:scale(matrices, sx, sy, sz) end
     end
 end
 
 local function skinModel(posAlex, posSteve)
     if AlexModel then return posAlex else return posSteve end
+end
+
+------ AJUSTES DE PACOTES ------
+
+local function packActive(respack)
+    for _, pack in ipairs(activePacks) do
+        if pack == respack then return true end
+    end
+    return false
+end
+
+local function applyAdj(adjustments)
+    for _, a in ipairs(adjustments) do
+        if verifyItems(a.items) then
+            if a.m then move(a.m[1], a.m[2], a.m[3], true) end
+            if a.r then rotate(a.r[1], a.r[2], a.r[3], true) end
+            if a.s then scale(a.s[1], a.s[2], a.s[3], true) end
+        end
+    end
+end
+
+-- Glowing 3D Totem
+if packActive("glowing3Dtotem") and itemName == "totem_of_undying" then
+    if packActive("w3di") then move(-0.05, 0.01, -0.075, true) rotate(-1, -55, 9.5, true) scale(1/1.2, 1/1.2, 1/1.2, true) end
+    move(skinModel(0.01, 0.03), 0.095, -0.13, true) rotate(13, 64, -21.5, true) scale(0.8, 0.8, 0.8, true)
+end
+
+-- Fresh Foods
+if packActive("freshFoods") and verifyItems(packCompatibility.freshFoods) then
+    if packActive("w3di") then
+        if not AlexModel then
+            applyAdj({
+                { items = {"beef", "porkchop", "mutton"},          m = {0.005, nil, nil} },
+                { items = {"apple", "chorus_fruit", "pufferfish"}, m = {0.015, nil, nil} },
+                { items = {"potato"},                              m = {nil, -0.015, nil} },
+                { items = {"chicken"},                             m = {0.005, -0.055, -0.02}, r = {nil, -1.5, nil} },
+                { items = {"salmon"},                              m = {nil, nil, 0.02} },
+                { items = {"tropical_fish"},                       m = {-0.015, nil, 0.035}, r = {-10, 3.5, 1.5} },
+            })
+            if not verifyItems({
+                "carrot", "spider_eye", "melon_slice", "sweet_berries", "glow_berries", "potato", "beetroot", "dried_kelp",
+                "beef", "porkchop", "mutton", "rabbit", "pufferfish", "bread", "cookie", "cake", "soup", "stew", "bowl"
+            }) then move(0.03, nil, nil, true) end
+        end
+
+        applyAdj({
+            -- Escala geral
+            { items = {"apple", "sweet_berries", "chorus_fruit", "pufferfish", "carrot"}, s = {1/1.05, 1/1.05, 1/1.05} },
+            { items = {"sweet_berries", "spider_eye", "glow_berries"}, s = {1/1.1, 1/1.1, 1/1.1} },
+            -- Rotação geral
+            { items = {"spider_eye", "apple", "sweet_berries", "chorus_fruit", "pufferfish", "pumpkin_pie",
+                       "potato", "beef", "porkchop", "chicken", "mutton", "rotten_flesh", "bread", "cookie",
+                       "cod", "salmon", "tropical_fish", "glow_berries", "melon", "kelp"}, r = {nil, nil, 5} },
+            -- Grupos
+            { items = {"apple", "chorus_fruit", "pufferfish"},        m = {-0.05, -0.01, 0.05}, r = {1.5, -2, -1} },
+            { items = {"beef", "porkchop", "mutton", "rotten_flesh"}, m = {-0.05, nil, 0.01}, s = {1/1.2, 1/1.4, 1/1.2} },
+            { items = {"chicken", "^rabbit$"},                        m = {-0.045, nil, 0.1}, r = {nil, 4, nil}, s = {1/1.15, 1/1.15, 1/1.15} },
+            { items = {"cod", "salmon", "tropical_fish"},             m = {-0.06, 0.01, -0.01}, r = {6, -3.5, nil}, s = {1/1.3, 1/1.4, 1/1.3} },
+            { items = {"cod", "salmon", "tropical_fish"},             r = {4, 0.5, -2.5} },
+            { items = {"_soup", "_stew", "bowl"},                     m = {nil, -0.13, -0.2}, r = {-115, -180, 180}, s = {1/1.2, 1/1.2, 1/1.2} },
+            { items = {"_soup", "_stew", "bowl"},                     r = {3.5, -9, nil} },
+            { items = {"_soup", "_stew", "bowl"},                     m = {-0.06, 0.2, -0.3} },
+            -- Individuais
+            { items = {"_soup"},         m = {0.08, nil, nil}, r = {nil, 3.5, -8.5} },
+            { items = {"chorus_fruit"},  m = {-0.015, nil, nil}, r = {-4, nil, nil} },
+            { items = {"pufferfish"},    r = {nil, -16, nil} },
+            { items = {"melon_slice"},   m = {0.025, nil, nil} },
+            { items = {"^cod$"},         m = {nil, nil, 0.055} },
+            { items = {"spider_eye"},    m = {-0.05, nil, 0.04} },
+            { items = {"potato"},        m = {-0.07, nil, 0.02}, r = {-4, -2, nil} },
+            { items = {"carrot"},        m = {-0.07, nil, -0.03}, r = {-4, -4, 8} },
+            { items = {"melon_slice"},   m = {-0.07, nil, nil}, s = {1/1.2, 1/1.2, 1/1.2} },
+            { items = {"chicken"},       m = {nil, nil, -0.06} },
+            { items = {"^rabbit$"},      m = {0.045, -0.055, -0.045}, r = {nil, -2.5, 6} },
+            { items = {"cooked_rabbit"}, m = {-0.06, nil, 0.07}, r = {nil, nil, 5.5} },
+            { items = {"pumpkin_pie"},   m = {-0.07, nil, nil}, s = {1/1.15, 1/1.15, 1/1.15} },
+            { items = {"bread"},         m = {-0.05, nil, 0.1}, s = {1/1.15, 1/1.25, 1/1.15} },
+            { items = {"cookie"},        m = {-0.04, nil, -0.015}, r = {-1, -2.5, -0.5}, s = {1/1.15, 1/1.25, 1/1.15} },
+            { items = {"golden_carrot"}, m = {nil, nil, -0.01} },
+            { items = {"beetroot"},      m = {-0.07, nil, 0.02}, r = {nil, -4, 8}, s = {1/1.04, 1/1.04, 1/1.04} },
+            { items = {"glow_berries"},  m = {-0.07, -0.025, -0.055} },
+            { items = {"sweet_berries"}, m = {0.015, 0.03, -0.025}, r = {nil, 4, -2} },
+            { items = {"dried_kelp"},    m = {-0.07, nil, 0.02}, s = {1/1.05, 1/1.05, 1/1.05} },
+            { items = {"tropical_fish"}, m = {0.02, nil, 0.05}, r = {-3.5, nil, 1.5} },
+            { items = {"cake"},          m = {-0.1, -0.1, -0.15}, r = {75, -7, -15}, s = {1/1.35, 1/1.35, 1/1.5} },
+            { items = {"cake"},          m = {0.14, 0.28, 0.115}, r = {3, -6, 23} },
+            { items = {"cake"},          m = {-0.2, -0.1, -0.4} },
+        })
+    end
+
+    if not isItemUsing then
+        if not AlexModel and not verifyItems({"carrot", "spider_eye"}) then move(0.03, nil, nil, true) end
+        applyAdj({
+            { items = {"apple"},                                 m = {skinModel(0.11, 0.095), 0.02, -0.035}, r = {10.5, 9.5, -7} },
+            { items = {"melon_slice"},                           m = {0.105, -0.06, -0.095}, r = {nil, 10.5, -8.5} },
+            { items = {"sweet_berries"},                         m = {0.02, nil, -0.025}, r = {nil, nil, -10} },
+            { items = {"glow_berries"},                          m = {0.03, -0.03, -0.075}, r = {10, nil, -18} },
+            { items = {"chorus_fruit"},                          m = {skinModel(0.125, 0.11), -0.04, -0.08}, r = {11, 4, -8} },
+            { items = {"carrot"},                                m = {nil, nil, -0.01}, r = {10.5, 4, -4.5} },
+            { items = {"golden_carrot"},                         m = {nil, -0.02, -0.03}, r = {-4, nil, 1} },
+            { items = {"potato"},                                m = {0.05, 0.03, -0.105}, r = {9, 6, -8.5}, s = {1.2, 1.2, 1.2} },
+            { items = {"poisonous_potato", "baked_potato"},      m = {-0.005, -0.016, nil}, r = {-3, nil, nil} },
+            { items = {"beetroot"},                              m = {0.025, -0.085, -0.195}, r = {9, 3.5, -8.5} },
+            { items = {"dried_kelp"},                            m = {0.08, -0.025, -0.105}, r = {11, 17, -10.5} },
+            { items = {"beef", "porkchop", "chicken", "mutton"}, m = {0.09, 0.012, -0.075}, r = {6, 2.5, -9}, s = {1.1, 1.1, 1.1} },
+            { items = {"mutton"},                                m = {-0.025, nil, nil} },
+            { items = {"chicken"},                               m = {0.005, -0.02, nil}, r = {nil, -0.5, nil}, s = {1/1.1, 1/1.1, 1/1.1} },
+            { items = {"chicken"},                               m = {-0.01, nil, nil}, r = {nil, 3, nil} },
+            { items = {"cooked_rabbit"},                         m = {0.005, nil, -0.06}, r = {nil, 3, -10} },
+            { items = {"cod", "salmon", "tropical_fish"},        m = {0.115, -0.06, -0.125}, r = {1, 5, -7} },
+            { items = {"salmon"},                                m = {-0.09, nil, skinModel(0, -0.03)} },
+            { items = {"pufferfish"},                            m = {0.145, -0.03, -0.075}, r = {11, nil, nil} },
+            { items = {"bread"},                                 m = {skinModel(0.105, 0.11), -0.05, -0.09}, r = {8.5, 7.5, -8} },
+            { items = {"cookie"},                                m = {0.105, 0.005, -0.08}, r = {10.5, 9.5, -9} },
+            { items = {"cake"},                                  m = {0.115, -0.02, -0.015}, r = {-1, -6, nil} },
+            { items = {"pumpkin_pie"},                           m = {0.095, 0.04, -0.15}, r = {14.5, 11.5, -3.5} },
+            { items = {"rotten_flesh"},                          m = {0.05, -0.11, -0.22} },
+            { items = {"spider_eye"},                            m = {-0.01, -0.14, -0.18}, r = {2, 10.5, 26.5} },
+            { items = {"_stew", "_soup", "bowl"},                m = {0.105, -0.035, -0.045}, r = {7.5, 3.5, -7} },
+        })
+        if itemName == "rabbit" then move(0.09, 0.012, -0.075, true) rotate(6, 2.5, -9, true) scale(1.1, 1.1, 1.1, true) end
+        if itemName == "rabbit" then move(0.005, -0.02, nil, true) rotate(nil, -0.5, nil, true) scale(1/1.1, 1/1.1, 1/1.1, true) end
+    end
+end
+
+-- R&V Torchs
+if packActive("rvTorchs") and verifyItems(packCompatibility.rvTorchs) then
+    if packActive("w3di") then
+        applyAdj({
+            { items = {"^torch", "soul_torch"},   m = {-0.04, 0.085, 0.01}, r = {nil, 5, nil, true}, s = {0.65, 0.65, 0.65} },
+            { items = {"campfire"},               m = {-0.1, -0.1, -0.15}, r = {75, -15, -7}, s = {1/1.35, 1/1.35, 1/1.5} },
+            { items = {"campfire"},               m = {0.15, 0.45, -0.56}, r = {-2.5, 7.5, -36.5} },
+            { items = {"repeater", "comparator"}, m = {-0.15, 0.15, -0.1}, r = {85, -35, 7}, s = {1/1.35, 1/1.35, 1/1.35} },
+            { items = {"repeater", "comparator"}, m = {0.15, 0.095, -0.06}, r = {nil, 2, 9} },
+        })
+    end
+    move(skinModel(0.01, 0.04), nil, nil, true) rotate(nil, -5.5, nil, true)
+end
+
+-- Fresh Seeds
+if packActive("freshSeeds") and verifyItems(packCompatibility.freshSeeds) then
+    move(skinModel(0.035, 0.065), 0.045, 0.025, true) rotate(8, 1.5, 1, true)
+end
+
+-- Fresh Flowers and Plants
+if packActive("freshFlowersPlants") and verifyItems(packCompatibility.freshFlowersPlants) then
+    if not AlexModel then move(0.03, nil, nil, true) end
+    applyAdj({
+        { items = {"sapling", "mangrove_propagule", "azalea", "grass", "fern", "bush", "crimson_roots", "warped_roots", "nether_sprouts"},
+          m = {0.01, -0.015, -0.055}, r = {16, -7.5, -3} },
+        { items = {"_coral"},             m = {0.16, -0.035, -0.035}, r = {nil, -4.5, -1.5} },
+        { items = {"mushroom", "fungus"}, m = {0.025, nil, nil}, r = {nil, -5, -2} },
+        { items = {"seagrass"},           m = {0.24, -0.105, -0.195}, r = {3, -2.5, -5} },
+        { items = {"bamboo"},             m = {0.015, nil, nil}, r = {nil, -5, nil} },
+        { items = {"sugar_cane"},         m = {-0.02, nil, nil}, r = {nil, -3, nil} },
+        { items = {"sea_pickle"},         m = {0.015, nil, nil}, r = {nil, -4, nil} },
+        { items = {"twisting_vines"},     m = {0.09, 0.01, 0.06}, r = {13.5, nil, nil} },
+    })
+    if isInList({"rose_bush", "seagrass"}) then move(-0.01, 0.015, 0.055, true) rotate(-16, 7.5, 3, true) end
+end
+
+-- Fresh Ores and Ingots
+if packActive("freshOresIngots") and verifyItems(packCompatibility.freshOresIngots) then
+    if not AlexModel and not verifyItems({"_shard"}) then move(0.04, -0.005, nil, true) end
+    if packActive("w3di") then
+        applyAdj({
+            { items = {"quartz", "nugget", "amethyst_shard", "redstone", "netherite_scrap", "resin_clump"},
+            m = {-0.07, nil, 0.05}, r = {0.3, -4, 7}, s = {1/1.1, 1/1.1, 1/1.1} },
+            { items = {"diamond", "emerald", "lapis_lazuli"}, m = {-0.07, 0.05, 0.1}, r = {0.3, 0, 7}, s = {1/1.1, 1/1.25, 1/1.1} },
+            { items = {"ingot", "brick"},                     m = {0, nil, 0.1}, r = {0.3, -15, 5}, s = {1/1.15, 1/1.15, 1/1.15} },
+            { items = {"raw"},                                m = {-0.05, nil, 0.05}, r = {nil, nil, 5}, s = {1/1.3, 1, 1/1.3} },
+            { items = {"coal"},                               m = {0.05, nil, 0.05}, r = {nil, -95, 5}, s = {1, 1/1.2, 1} },
+            { items = {"flint"},                              r = {10, nil, 5}, s = {1/1.3, 1/1.3, 1/1.3} },
+            
+            { items = {"diamond"},                            m = {0.045, -0.065, -0.015}, r = {nil, -6, -3.5}, s = {0.96, 0.96, 0.96} },
+            { items = {"emerald"},                            m = {0.04, -0.085, nil}, r = {nil, -3, -3} },
+            { items = {"coal"},                               m = {-0.275, 0.02, nil} },
+            { items = {"amethyst_shard"},                     m = {nil, -0.025, nil} },
+            { items = {"nugget", "ingot", "brick"},           m = {-0.01, nil, nil} },
+            { items = {"netherite_scrap"},                    m = {0.02, nil, -0.035}, r = {nil, nil, -4.5} },
+            { items = {"flint"},                              m = {0.03, -0.01, -0.055} },
+            { items = {"redstone"},                           m = {-0.025, nil, nil} },
+            { items = {"resin_clump"},                        m = {0.075, nil, -0.055} },
+        })
+    end
+    applyAdj({
+        { items = {"amethyst_cluster", "amethyst_bud"}, m = {0.005, -0.005, -0.01}, r = {nil, nil, -3.5} },
+        { items = {"ingot", "brick", },                 m = {0.025, -0.025, -0.055}, r = {3, 17, -7.5} },
+        { items = {"diamond"},                          m = {0.055, 0.02, -0.195}, r = {20, 21, -12} },
+        { items = {"emerald"},                          m = {0.045, -0.005, -0.235}, r = {20, 21, -12} },
+        { items = {"_shard"},                           m = {nil, -0.06, -0.06}, r = {15, 3, -7.5} },
+        { items = {"resin_clump"},                      m = {0.05, 0.005, -0.055}, r = {nil, nil, -8.5} },
+        { items = {"lapis_lazuli"},                     m = {-0.03, -0.11, -0.205}, r = {nil, 5, -7.5} },
+        { items = {"quartz"},                           m = {0.045, -0.035, -0.1}, r = {4.5, 2.5, -6} },
+        { items = {"pointed_dripstone"},                m = {0.135, -0.02, -0.105}, r = {nil, -5, -1.5} },
+        { items = {"redstone"},                         m = {0.135, -0.095, -0.165}, r = {-4, nil, -7} },
+        { items = {"raw"},                              m = {0.08, -0.03, -0.155}, r = {11.5, nil, nil} },
+        { items = {"nugget"},                           m = {0.095, -0.085, -0.105}, r = {nil, 3.5, -6.5} },
+        { items = {"netherite_scrap"},                  m = {0.11, -0.075, -0.17}, r = {nil, nil, -18} },
+        { items = {"flint"},                            m = {0.105, 0.06, -0.075}, r = {17, nil, -6.5} },
+        { items = {"coal"},                             m = {0.075, nil, -0.17}, r = {nil, nil, -6} },
+    })
+end
+
+-- Ben's Bundle
+if packActive("bensBundle") and verifyItems(packCompatibility.bensBundle) then
+    if packActive("w3di") then
+        applyAdj({
+            { items = {"bundle"}, m = {0.05, nil, 0.05}, r = {nil, -95, 5}, s = {0.7, 0.7, 0.7} },
+            { items = {"bundle"}, m = {-0.045, 0.03, 0.045}, r = {5.5, 66, -5} },
+        })
+    end
+    move(skinModel(0.04, 0.06), 0.085, -0.06, true) 
+    rotate(nil, nil, -10, true)
 end
 
 ------ LISTAS DE ITENS ------
@@ -250,7 +466,7 @@ if not isException then
         is2D or
         verifyList(itemLists.flowers, {""}) or
         verifyItems({
-            "_coral", "_sapling", "_fungus", "_roots", "_tulip", "_bush", "_grass", "fern", "_mushroom", "glass_pane",
+            "_coral$", "_coral_fan", "_sapling", "_fungus", "_roots", "_tulip", "_bush", "_grass", "fern", "_mushroom", "glass_pane",
             "_dripleaf"
         }) or
         isInList({
@@ -347,7 +563,7 @@ if itemName:match("_bed") then move(-0.2, nil, 0.3) end
 
 -- Mudas, Corais, Fungos, Raizes, Cogumelos, Flores, Matos, Espeleotema e Teia de Aranha
 if (
-    verifyItems({"_coral", "_sapling", "_fungus", "_roots", "_tulip", "_bush", "_grass", "fern", "_mushroom"}) or
+    verifyItems({"_coral$", "_coral_fan", "_sapling", "_fungus", "_roots", "_tulip", "_bush", "_grass", "fern", "_mushroom"}) or
     verifyList(itemLists.flowers, {""}) or
     isInList({"mangrove_propagule", "medium_amethyst_bud", "large_amethyst_bud", "amethyst_cluster", "pointed_dripstone", "nether_sprouts", "cobweb"})
 ) then 

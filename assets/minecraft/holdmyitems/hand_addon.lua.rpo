@@ -1,0 +1,8 @@
+{
+  expansions: {
+    AlexSkinModel: "HMIItemPositionFix.AlexSkinModel",
+    w3di: "HMIItemPositionFix.Weskerson3DItems",
+    rvTorchs: "HMIItemPositionFix.RVTorches",
+    freshOresIngots: "HMIItemPositionFix.FreshOresAndIngots"
+  }
+}
