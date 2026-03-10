@@ -1,18 +1,18 @@
 {
-    id: "HMIItemPositionFix",
-    version: 9,
-    capabilities: ["FileFilter", "DirFilter"],
-    conf: {
-      AlexSkinModel:          false,
-      Weskerson3DItems:       false,
-      RVTorches:              false,
-      Glowing3DArmors:        false,
-      Glowing3DTotem:         false,
-      BensBundle:             false,
-      FreshFlowersAndPlants:  false,
-      FreshFoods:             false,
-      FreshPaintings:         false,
-      FreshOresAndIngots:     false,
-      FreshSeeds:             false
-    }
+  id: "HMIItemPositionFix",
+  version: 9,
+  capabilities: ["FileFilter", "DirFilter"],
+  conf: {
+    AlexSkinModel:          false,
+    Weskerson3DItems:       false,
+    Actually3DStuff:        false,
+    RVTorches:              false,
+    Glowing3DArmors:        false,
+    Glowing3DTotem:         false,
+    BensBundle:             false,
+    FreshFlowersAndPlants:  false,
+    FreshFoods:             false,
+    FreshOresAndIngots:     false,
+    FreshSeeds:             false
+  }
 }
