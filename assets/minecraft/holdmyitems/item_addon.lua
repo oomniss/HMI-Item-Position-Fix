@@ -334,6 +334,10 @@ if rvTorchs and itemMatches(packCompatibility.rvTorchs) then
     end
     move(skinModel(0.01, 0.04), nil, nil, true)
     rotate(nil, -5.5, nil, true)
+    if itemName:match("campfire") then
+        move(-0.01, 0.14, 0.185, true)
+        rotate(6, -10, -2.5, true)
+    end
 end
 
 -- Fresh Seeds
