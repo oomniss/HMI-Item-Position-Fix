@@ -54,10 +54,9 @@ local undoPackAdjustments = {
     w3di = {
         { {
             "fire_charge", "goat_horn", "snowball", "^egg$", "blue_egg", "brown_egg", "ender_pearl", 
-            "ender_eye", "firework_rocket", "lead", "bone", "brick", "honeycomb",
+            "ender_eye", "firework_rocket", "lead", "^bone$", "brick&", "honeycomb",
             "clay_ball", "nautilus_shell", "_rod", "book", "gunpowder", "glowstone_dust", 
-            "blaze_powder", "^sugar$", "stick", "heart_of_the_sea", "slime_ball", "map",
-            "writable_book", "written_book", "totem_of_undying"
+            "blaze_powder", "^sugar$", "stick", "heart_of_the_sea", "slime_ball", "^map$", "totem_of_undying"
         }, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
 
         -- Tools
@@ -66,15 +65,14 @@ local undoPackAdjustments = {
         { {"shears"}, m = {nil, 0.1, -0.05}, r = {nil, nil, -10} },
         { {"armor_stand"}, m = {0.09, 0.12, -0.05}, r = {nil, nil, -10} },
         { {"^compass$"}, m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} },
-        { {"fishing_rod", "carrot_on_a_stick", "warped_fungus_on_a_stick"}, m = {-0.2, 0.2, 0.1}, r = {nil, nil, -9.8} },
 
         -- Ingredients
         { {"banner_pattern", "name_tag"}, m = {nil, -0.3, 0.05} },
     },
     wd3iOres = {
         { {
-            "^flint$", "coal$", "raw", "emerald", "diamond", "lapis_lazuli", "quartz", "nugget", 
-            "amethyst_shard", "ingot", "netherite_scrap", "redstone"
+            "^flint$", "coal$", "raw", "^emerald$", "^diamond$", "^lapis_lazuli$", "^quartz$", "nugget", 
+            "amethyst_shard", "ingot", "netherite_scrap", "^redstone$"
         }, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} }
     },
     w3diBundles = {

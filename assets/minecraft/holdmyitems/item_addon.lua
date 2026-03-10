@@ -102,29 +102,17 @@ local packCompatibility = {
         "horse_armor"
     }
 }
-
-local w3di            = ${w3di}
-local a3ds            = ${a3ds}
-local rvTorchs        = ${rvTorchs}
-local glowing3Darmors = ${glowing3Darmors}
-local glowing3Dtotem  = ${glowing3Dtotem}
-local freshFlowers    = ${freshFlowersPlants}
-local freshFoods      = ${freshFoods}
-local freshOres       = ${freshOresIngots}
-local freshSeeds      = ${freshSeeds}
-local bensBundle      = ${bensBundle}
-    
 local activePacks = {}
-    if w3di             then table.insert(activePacks, "w3di") end
-    if a3ds             then table.insert(activePacks, "a3ds") end
-    if rvTorchs         then table.insert(activePacks, "rvTorchs") end
-    if glowing3Darmors  then table.insert(activePacks, "glowing3Darmors") end
-    if glowing3Dtotem   then table.insert(activePacks, "glowing3Dtotem") end
-    if freshFlowers     then table.insert(activePacks, "freshFlowersPlants") end
-    if freshFoods       then table.insert(activePacks, "freshFoods") end
-    if freshOres        then table.insert(activePacks, "freshOresIngots") end
-    if freshSeeds       then table.insert(activePacks, "freshSeeds") end
-    if bensBundle       then table.insert(activePacks, "bensBundle") end
+    local w3di            = ${w3di}                 and (table.insert(activePacks, "w3di") or true)
+    local a3ds            = ${a3ds}                 and (table.insert(activePacks, "a3ds") or true)
+    local rvTorchs        = ${rvTorchs}             and (table.insert(activePacks, "rvTorchs") or true)
+    local glowing3Darmors = ${glowing3Darmors}      and (table.insert(activePacks, "glowing3Darmors") or true)
+    local glowing3Dtotem  = ${glowing3Dtotem}       and (table.insert(activePacks, "glowing3Dtotem") or true)
+    local freshFlowers    = ${freshFlowersPlants}   and (table.insert(activePacks, "freshFlowersPlants") or true)
+    local freshFoods      = ${freshFoods}           and (table.insert(activePacks, "freshFoods") or true)
+    local freshOres       = ${freshOresIngots}      and (table.insert(activePacks, "freshOresIngots") or true)
+    local freshSeeds      = ${freshSeeds}           and (table.insert(activePacks, "freshSeeds") or true)
+    local bensBundle      = ${bensBundle}           and (table.insert(activePacks, "bensBundle") or true)
 
 -- === FUNCTIONS ===
 local function itemMatches(tableMatch)
@@ -235,14 +223,13 @@ local undoPackAdjustments = {
         { {"^compass$"}, m = {-0.03, 0, -0.01}, r = {10, -4, 7}, s = {1/1.2} },
         { {"writable_book"}, m = {0.045, -0.035, -0.01}, r = {12.5, -14, 12.5} },
         { {"carrot_on_a_stick"}, m = {0.095, nil, -0.015}, r = {65.5, 80, nil} },
-        { {"carrot_on_a_stick"}, m = {0.025, nil, 0.01}, r = {nil, 10, nil} },
+        { {"carrot_on_a_stick"}, m = {0.025, nil, 0.01}, r = {5, 10, nil} },
         { {"warped_fungus_on_a_stick"}, m = {-0.02, 0.02, -0.02}, r = {87.5, 83.5, -73.5} },
         { {"warped_fungus_on_a_stick"}, m = {nil, nil, -0.02}, r = {nil, nil, -20} },
         { {"boat", "raft"}, m = {nil, 0.025, nil}, r = {-120, -4, -180}, s = {1/1.35} },
         { {"name_tag"}, m = {0.07, -0.18, -0.09}, r = {103, nil, nil} },
         { {"goat_horn"}, m = {-0.015, nil, 0.05}, r = {0, 0, 5}, s = {1/1.3} },
         { {"goat_horn"}, m = {0.02, 0.05, 0.05}, r = {-10, -40, -5}, s = {1/1.3}, condition = {P:isUsingItem(context.player)} },
-        { {"bucket"}, m = {-0.07, -0.065, -0.045}, r = {85, -159.5, -5.5}, s = {0.8} },
 
         -- Combat
         { {"snowball", "^egg$", "blue_egg", "brown_egg"}, m = {nil, -0.015, nil}, r = {nil, nil, 5} },
@@ -259,6 +246,7 @@ local undoPackAdjustments = {
         { {"firework_star"}, m = {-0.01, nil, 0.075} },
         { {"heart_of_the_sea"}, m = {0.06, nil, -0.02} },
         { {"clay_ball"}, m = {hand(0.065, 0), nil, hand(0, -0.07)} },
+        { {"^book$", "enchanted_book"}, m = {0.175, -0.07, 0.06}, r = {24, -45.5, 46.5}, s = {0.85} },
     },
     w3diOres = {
         { {"quartz", "nugget", "amethyst_shard", "redstone", "netherite_scrap", "resin_clump"},
@@ -614,7 +602,7 @@ if a3ds and itemMatches(packCompatibility.a3ds) then
         { {"nautilus_shell"}, m = {-0.025, -0.035, -0.045}, r = {2, 4, -7.5} },
         { {"heart_of_the_sea", "firework_star"}, m = {0.055, 0.045, 0.01}, r = {3, 5.5, -6} },
         { {"blaze_rod", "breeze_rod"}, m = {0.02, nil, -0.025}, r = {-5.5, -6, -3} },
-        { {"^book$"}, m = {-0.02, 0.105, 0.02}, r = {1.5, 4.5, -8} },
+        { {"^book$", "enchanted_book"}, m = {-0.045, 0.105, 0.145}, r = {1.5, 4.5, -8} },
         { {"glowstone_dust", "gunpowder", "blaze_powder", "^sugar$"}, m = {0.045, -0.014, -0.1}, r = {nil, nil, -3} },
         { {"banner_pattern"}, m = {nil, -0.055, -0.125}, r = {6, nil, nil} },
         { {"clay_ball"}, m = {hand(0, 0.1), nil, nil} },
@@ -675,12 +663,10 @@ if w3di then
             { {"ender_"}, m = {0.015, nil, -0.04}, r = {1.5, -0.5, -2.5}, s = {0.9} },
 
             -- Tools
-            { {"fishing_rod"}, m = {0.03, nil, 0.135} },
             { {"flint_and_steel"}, m = {nil, nil, -0.12}, r = {3, -6.5, 1.5} },
             { {"fire_charge"}, m = {0.05, nil, -0.045}, r = {nil, 1.5, nil}, s = {0.85} },
             { {"^compass$"}, m = {0.025, -0.005, -0.16}, r = {11.5, -1.5, nil} },
-            { {"writable_book"}, m = {0.09, nil, -0.155} },
-            { {"carrot_on_a_stick"}, m = {0.05, nil, -0.06}, r = {nil, nil, -14.5} },
+            { {"writable_book"}, m = {0.08, 0.075, -0.08}, r = {10.5, -11, -4} },
             { {"warped_fungus_on_a_stick"}, m = {-0.05, nil, 0.055}, r = {-52.5, 7.5, -2.5} },
             { {"shears"}, m = {nil, nil, -0.035} },
 
@@ -708,6 +694,7 @@ if w3di then
 
         -- Foods & Drinks
         { {"apple"}, m = {nil, -0.005, -0.02}, r = {0.5, 4.5, -2} },
+        { {"written_book"}, m = {0.08, 0.075, -0.08}, r = {10.5, -11, -4} },
 
         -- Spawn Eggs
         { {"_spawn_egg"}, m = {0.05, -0.01, nil}, r = {nil, -1, nil} }
@@ -865,22 +852,21 @@ pose({
 -- == Construction Blocks ==
 pose({
     { {"_fence", "_wall"}, m = {skinModel(-0.02, 0), nil, 0.05} },
-    { {"_fence_gate"},     m = {skinModel(-0.02, 0), -0.1, -0.03} },
-    { {"_button"},         m = {skinModel(0.215, 0.245), 0.035, 0.07}, r = {8.2, -31, -5}, s = {1.3} },
-    { {"_bars"},           m = {skinModel(-0.02, 0.01), nil, 0.04} },
-    { {"iron_bars"},       m = {0.07, 0.05, -0.06}, r = {nil, nil, -0.5} },
-    { {"chain"},           m = {skinModel(0.08, 0.1), 0.026, nil}, r = {0.4, nil, -14.7} }
+    { {"_fence_gate"}, m = {skinModel(-0.02, 0), -0.1, -0.03} },
+    { {"_button"}, m = {skinModel(0.215, 0.245), 0.035, 0.07}, r = {8.2, -31, -5}, s = {1.3} },
+    { {"_bars"}, m = {skinModel(-0.02, 0.01), nil, 0.04} },
+    { {"iron_bars"}, m = {0.07, 0.05, -0.06}, r = {nil, nil, -0.5} },
+    { {"chain"}, m = {skinModel(0.08, 0.1), 0.026, nil}, r = {0.4, nil, -14.7} },
+
+    { {"chain"}, m = {skinModel(-0.03, -0.02), nil, 0.049}, condition = {itemMatches({"^waxed"}) and itemMatches({"_copper_chain"})} }
 })
-if itemMatches({"^waxed"}) and itemMatches({"_copper_chain"}) then 
-    move(skinModel(-0.03, -0.02), nil, 0.049) 
-end
 
 -- == Colored Blocks ==
 pose({
     { {"glass_pane"}, m = {skinModel(-0.1, -0.07), 0.1, -0.12}, r = {nil, nil, -6} },
-    { {"_banner$"},   m = {skinModel(-0.14, -0.13), 0.13, 0.17}, r = {nil, -90, nil} },
-    { {"candle"},    m = {hand(0.02, 0.05), 0.03, -0.03} },
-    { {"_bed"},       m = {-0.2, nil, 0.3} }
+    { {"_banner$"}, m = {skinModel(-0.14, -0.13), 0.13, 0.17}, r = {nil, -90, nil} },
+    { {"candle"}, m = {hand(0.02, 0.05), 0.03, -0.03} },
+    { {"_bed"}, m = {-0.2, nil, 0.3} }
 })
 
 -- == Natural Blocks ==
@@ -948,11 +934,9 @@ pose({
     { {"^glow_item_frame$"}, m = {hand(0.02, 0.04), nil, -0.03} },
     { {"^armor_stand$"}, m = {hand(0.05, skinModel(0.02, 0.055)), 0.03, -0.07} },
     { {"^cauldron$"}, m = {hand(skinModel(0.06, 0.05), 0.02), nil, -0.03} },
-})
 
-if itemMatches({"_sign"}) and not itemMatches({"hanging_sign"}) then 
-    move(hand(0.02, 0.05), nil, nil)
-end
+    { {"sign"}, m = {hand(0.02, 0.05), nil, nil}, condition = {itemMatches({"_sign"}) and not itemMatches({"hanging_sign"})} }
+})
 
 -- == Redstone Blocks ==
 pose({
@@ -969,7 +953,7 @@ pose({
     { {"bone_meal", "name_tag"}, m = {hand(0, 0.05), nil, -0.06} },
     { {"_boat", "_raft"}, m = {0.1, 0.08, -0.05} },
     { {"pickaxe", "shovel", "hoe", "axe"}, m = {skinModel(0.02, 0.04), nil, -0.05} },
-    { {"pickaxe"}, m = {skinModel(0, -0.01), nil, 0.005}, r = {nil, nil, -0.5} },
+    { {"pickaxe"}, m = {skinModel(0, -0.01), nil, 0.035}, r = {nil, nil, -0.5} },
     { {"shovel"}, m = {-0.07, -0.2, skinModel(0.07, 0.095)}, r = {5.5, 3.5, -5.5} },
     { {"hoe"}, m = {skinModel(0, 0.02), -0.185, 0.005}, r = {nil, -6, nil} },
     { {"axe"}, m = {skinModel(0, 0.02), -0.105, nil}, r = {nil, -6, nil} },
@@ -991,12 +975,9 @@ pose({
     { {"^lead$"}, m = {hand(0, skinModel(0.05, 0)), nil, -0.06} },
     { {"^spyglass$"}, r = {nil, nil, -10} },
     { {"^wind_charge$"}, m = {hand(skinModel(0.055, 0.04), skinModel(0.02, 0)), -0.08, -0.04} },
-    { {"saddle", "goat_horn", "_harness"}, m = {nil, nil, -0.06} }
+    { {"saddle", "goat_horn", "_harness"}, m = {nil, nil, -0.06} },
+    { {"bucket"}, m = {nil, -0.2, nil} }
 })
-
-if itemMatches({"bucket"}) then 
-    move(nil, -0.2, nil) 
-end
 
 -- == Combat ==
 pose({
@@ -1014,12 +995,9 @@ pose({
     { {"^mace$"}, m = {0, -0.04, -0.04}, r = {nil, -5.5, nil}, s = {0.9, 0.9, 0.9} },
     { {"^shield$"}, r = {nil, nil, -8} },
     { {"^wolf_armor$"}, m = {hand(0, skinModel(0.06, 0.05)), -0.12, -0.06} },
-    { {"^arrow$", "^spectral_arrow$", "^tipped_arrow$"}, m = {nil, nil, -0.02} }
+    { {"^arrow$", "^spectral_arrow$", "^tipped_arrow$"}, m = {nil, nil, -0.02} },
+    { {"trident"}, m = {skinModel(-0.09, -0.04), nil, 0.07} }
 })
-
-if itemName == "trident" then 
-    move(skinModel(-0.09, -0.04), nil, 0.07) 
-end
 
 -- == Foods & Drinks ==
 pose({
@@ -1046,7 +1024,7 @@ pose({
     { {"bottle", "potion", "dragon_breath"}, 
         m = {hand(skinModel(0.05, 0.08), skinModel(0.08, 0.1)), skinModel(0.03, 0.05), skinModel(-0.09, -0.07)},
         r = {nil, 5, -8}
-        }
+    }
 })
 
 -- == Ingredients ==
