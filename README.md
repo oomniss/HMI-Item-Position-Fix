@@ -10,7 +10,7 @@ We've improved how multiple packs work together. It is now possible to combine v
 | --- | --- | --- |
 | **HMI 5.0** (v0.1) | ✅ **Compatible** | ----- |
 | **HMI 5.1 - 5.1.1** (v0.2) | ✅ **Compatible** | ----- |
-| **Actually 3D Items** | ✅ **Compatible** | Requires manual activation. |
+| **Actually 3D Stuff** | ✅ **Compatible** | Requires manual activation. |
 | **Weskerson's 3D Items** | ✅ **Compatible** | Requires manual activation. |
 | **R&V Torches** | ✅ **Compatible** | Requires manual activation. |
 | **Glowing 3D Armors & Totem** | ✅ **Compatible** | Requires manual activation. |
