@@ -1,0 +1,15 @@
+{
+  expansions: {
+    AlexSkinModel:      "HMIItemPositionFix.AlexSkinModel",
+    w3di:               "HMIItemPositionFix.Weskerson3DItems",
+    a3ds:               "HMIItemPositionFix.Actually3DStuff",
+    rvTorchs:           "HMIItemPositionFix.RVTorches",
+    glowing3Darmors:    "HMIItemPositionFix.Glowing3DArmors",
+    glowing3Dtotem:     "HMIItemPositionFix.Glowing3DTotem",
+    bensBundle:         "HMIItemPositionFix.BensBundle",
+    freshFlowersPlants: "HMIItemPositionFix.FreshFlowersAndPlants",
+    freshFoods:         "HMIItemPositionFix.FreshFoods",
+    freshOresIngots:    "HMIItemPositionFix.FreshOresAndIngots",
+    freshSeeds:         "HMIItemPositionFix.FreshSeeds"
+  }
+}

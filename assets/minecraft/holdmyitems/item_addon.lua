@@ -671,7 +671,7 @@ if w3di then
             { {"shears"}, m = {nil, nil, -0.035} },
 
             -- Combat
-            { {"snowball", "^egg$", "blue_egg", "brown_egg"}, m = {0.1, nil, -0.045}, r = {nil, 1.5, nil}, s = {0.85} },
+            { {"snowball", "^egg$", "blue_egg", "brown_egg"}, m = {0.06, -0.03, -0.05}, r = {3.5, 2.5, -3} },
 
             --Ingredients
             { {"^bone$"}, m = {-0.02, -0.06, nil} },
@@ -953,10 +953,10 @@ pose({
     { {"bone_meal", "name_tag"}, m = {hand(0, 0.05), nil, -0.06} },
     { {"_boat", "_raft"}, m = {0.1, 0.08, -0.05} },
     { {"pickaxe", "shovel", "hoe", "axe"}, m = {skinModel(0.02, 0.04), nil, -0.05} },
-    { {"pickaxe"}, m = {skinModel(0, -0.01), nil, 0.035}, r = {nil, nil, -0.5} },
-    { {"shovel"}, m = {-0.07, -0.2, skinModel(0.07, 0.095)}, r = {5.5, 3.5, -5.5} },
-    { {"hoe"}, m = {skinModel(0, 0.02), -0.185, 0.005}, r = {nil, -6, nil} },
-    { {"axe"}, m = {skinModel(0, 0.02), -0.105, nil}, r = {nil, -6, nil} },
+    { {"pickaxe"}, m = {skinModel(0, -0.025), nil, 0.035}, r = {nil, nil, -0.5} },
+    { {"shovel"}, m = {skinModel(-0.07, -0.1), -0.2, skinModel(0.07, 0.095)}, r = {5.5, 3.5, -5.5} },
+    { {"hoe"}, m = {skinModel(0, -0.015), -0.185, 0.005}, r = {nil, -6, nil} },
+    { {"axe"}, m = {skinModel(0, -0.015), -0.105, nil}, r = {nil, -6, nil} },
     { {"bundle"}, m = {hand(skinModel(0.01, -0.01), skinModel(0.04, 0.02)), nil, -0.02} },
     { {"music_disc"}, m = {hand(0.05, skinModel(0.02, 0)), -0.08, -0.05} },
     { {"^music_disc_11$"}, m = {nil, 0.04, nil} },
@@ -987,7 +987,7 @@ pose({
     { {"leggings"}, m = {0.05, -0.078, -0.06} },
     { {"boots"}, m = {0.04, -0.11, -0.06} },
     { {"_sword"}, r = {nil, -6.5, nil} },
-    { {"_sword", "mace"}, m = {skinModel(0.03, 0.04), nil, -0.02} },
+    { {"_sword", "mace"}, m = {skinModel(0.01, 0.04), nil, -0.02} },
     { {"_spear"}, m = {0.01, nil, 0.02} },
     { {"_horse_armor"}, m = {hand(0.03, -0.05), nil, nil} },
     { {"_nautilus_armor"}, m = {hand(0, 0.06), nil, -0.05} },
