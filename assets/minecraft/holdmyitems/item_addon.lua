@@ -9,7 +9,7 @@ local AlexModel = ${AlexSkinModel}
 local isItemUsing = false
 if P:isUsingItem(context.player) then
     local useAction = I:getUseAction(context.item)
-    isItemUsing = useAction == "drink" or useAction == "eat" or useAction == "trident"
+    isItemUsing = useAction == "drink" or useAction == "eat" or useAction == "trident" or useAction == "toot_horn"
 end
 
 -- === PACKS COMPATIBILITY ===
@@ -723,8 +723,8 @@ local itemLists = {
         "dandelion", "poppy", "blue_orchid", "allium", "azure_bluet",
         "oxeye_daisy", "cornflower", "lily_of_the_valley", "^torchflower$", "cactus_flower",
         "closed_eyeblossom", "open_eyeblossom", "wither_rose", 
-        "sunflower", "lilac", "rose_bush", "peony", "pitcher_plant", "^azalea$",
-        "^flowering_azalea$", "^nether_wart$"
+        "sunflower", "lilac", "peony", "pitcher_plant", "^azalea$",
+        "^flowering_azalea$", "^nether_wart$", "rose_bush"
     },
     foods = {
         "apple", "chorus_fruit", "melon_slice", "carrot", "potato", "^beetroot$",
@@ -821,7 +821,8 @@ if not isException then
                 "pressure_plate", "chorus_plant", "turtle_egg", "cocoa_beans", "sea_pickle", "copper_bars", "cake"
             })
         then
-            move(-0.135, 0.08, -0.07)
+            move(-0.145, 0.095, -0.07)
+            rotate(9, nil, -3)
             scale(0.9, 0.9, 0.9)
         else
             move(nil, 0.08, nil)
@@ -888,6 +889,7 @@ pose({
 
     { itemLists.flowers, m = {skinModel(-0.05, -0.047), 0.06, skinModel(-0.1, -0.08)}, r = {4, nil, -5} },
     { itemLists.hangingPlants, m = {nil, -0.53, nil}, r = {4, nil, -5} },
+    { {"rose_bush"}, m = {0.035, -0.065, 0.105}, r = {-1.5, nil, nil} },
     { {"^bush$"}, m = {0.045, nil, skinModel(0.02, 0.05)} },
     { {"^fern$"}, m = {skinModel(0.01, 0), nil, nil} },
     { {"^small_dripleaf$"}, m = {skinModel(-0.052, -0.03), nil, -0.083} },
@@ -917,6 +919,7 @@ pose({
     { {"_seeds"}, m = {hand(-0.03, 0.02), 0.08, skinModel(0.07, 0.1)} },
     { {"^beetroot_seeds$"}, m = {skinModel(0.04, 0.02), 0.03, -0.02}, r = {nil, -5, nil} },
     { {"^torchflower_seeds$"}, m = {0.22, -0.065, -0.055}, r = {nil, -1.5, hand(7, 3)} },
+    { {"wheat_seeds"}, m = {-0.05, nil, 0.065}, r = {nil, -6, nil} },
     { {"^cocoa_beans$"}, m = {skinModel(0.18, 0.2), -0.186, 0.145}, r = {8.8, -30, -3.4}, s = {1.5} },
 })
 
@@ -925,9 +928,10 @@ pose({
     { {"ender_eye", "ender_pearl"}, m = {hand(0.02, 0.05), -0.02, -0.05} },
     { {"torch"}, m = {skinModel(-0.01, 0.02), 0.04, 0.02}, r = {7.5, nil, -5}, s = {1.2} },
     { {"anvil"}, m = {skinModel(-0.31, -0.28), nil, nil}, r = {nil, 90, nil} },
-    { {"lightning_rod"}, m = {skinModel(-0.02, -0.01), nil, skinModel(0.02, 0.05)} },
+    { {"lightning_rod"}, m = {skinModel(0.02, 0.04), 0.08, 0.05}, r = {nil, 4.5, nil}, s = {1.2}, condition = {itemName:match("waxed")} },
+    { {"lightning_rod"}, m = {skinModel(-0.01, 0.01), nil, skinModel(0.02, 0.05)}, s = {1.1}, condition = {not itemName:match("waxed")} },
     { {"golem_statue"}, m = {-0.04, nil, -0.05} },
-    { {"^end_rod$"}, m = {skinModel(0.015, 0.005), -0.065, skinModel(0.035, -0.005)}, s = {1.3} },
+    { {"^end_rod$"}, m = {skinModel(0.055, 0.075), -0.035, -0.04}, r = {2.5, nil, nil}, s = {1.3} },
     { {"^grindstone$"}, m = {skinModel(0, 0.035), 0.33, -0.08}, r = {90, nil, nil} },
     { {"^end_crystal$"}, m = {-0.15, -0.1, 0.15} },
     { {"^conduit$"}, m = {skinModel(-0.05, -0.06), skinModel(-0.07, -0.04), skinModel(0.08, 0.16)} },
@@ -938,6 +942,7 @@ pose({
     { {"^glow_item_frame$"}, m = {hand(0.02, 0.04), nil, -0.03} },
     { {"^armor_stand$"}, m = {hand(0.05, skinModel(0.02, 0.055)), 0.03, -0.07} },
     { {"^cauldron$"}, m = {hand(skinModel(0.06, 0.05), 0.02), nil, -0.03} },
+    { {"_chest$", "_bulb"}, m = {-0.005, 0.1, 0.1}, condition = {itemName:match("waxed")} },
 
     { {"sign"}, m = {hand(0.02, 0.05), nil, nil}, condition = {itemMatches({"_sign"}) and not itemMatches({"hanging_sign"})} }
 })
@@ -982,6 +987,10 @@ pose({
     { {"saddle", "goat_horn", "_harness"}, m = {nil, nil, -0.06} },
     { {"bucket"}, m = {nil, -0.2, nil} }
 })
+if itemName == "goat_horn" and isItemUsing then
+    isItemUsing = false
+    move(0.2, 0.05, nil)
+end
 
 -- == Combat ==
 pose({
