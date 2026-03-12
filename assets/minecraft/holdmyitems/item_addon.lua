@@ -683,6 +683,10 @@ if w3di then
             { {"banner_pattern"}, m = {0.065, -0.07, nil}, r = {nil, 8.5, nil} },
         }, true)
     end
+    if itemName == "milk_bucket" and isItemUsing then
+        isItemUsing = false
+        move(0.15, 0.13, nil, true)
+    end
     pose({
         -- Functional Blocks
         { {"flower_pot"}, m = {0.02, 0.015, -0.015}, r = {9.5, -4.5, 3.5} },
