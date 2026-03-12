@@ -313,11 +313,10 @@ end
 if rvTorchs and itemMatches(packCompatibility.rvTorchs) then
     if w3di then
         pose({
-            { {"^torch", "soul_torch"}, m = {-0.04, 0.085, 0.01}, r = {nil, 5, nil}, s = {0.65} },
-            { {"campfire"}, m = {-0.1, -0.1, -0.15}, r = {75, -15, -7}, s = {1/1.35, 1/1.35, 1/1.5} },
-            { {"campfire"}, m = {0.15, 0.45, -0.56}, r = {-2.5, 7.5, -36.5} },
-            { {"repeater", "comparator"}, m = {-0.15, 0.15, -0.1}, r = {85, -35, 7}, s = {1/1.35} },
-            { {"repeater", "comparator"}, m = {0.15, 0.095, -0.06}, r = {nil, 2, 9} },
+            { {"^torch", "soul_torch", "redstone_torch"}, m = {skinModel(-0.04, -0.05), 0.085, 0.01}, r = {nil, 5, nil}, s = {0.65} },
+            { {"copper_torch"}, m = {skinModel(0, -0.02), nil, nil}, s = {0.9} },
+            { {"campfire"}, m = {skinModel(0.09, 0.005), skinModel(0.315, 0.33), -0.04}, r = {77.5, -12, 21}, s = {0.65} },
+            { {"repeater", "comparator"}, m = {skinModel(-0.025, -0.045), 0.175, 0.06}, r = {98, -34.5, 14}, s = {0.65} },
             { {"lantern"}, s = {0.6} }
         }, true)
         if not faPlayer and not nea then
@@ -331,6 +330,9 @@ if rvTorchs and itemMatches(packCompatibility.rvTorchs) then
                 { {"lantern"}, m = {-0.02, -0.59, -0.06} }
             }, true)
         end
+        pose({
+            { {"repeater", "comparator"}, m = {-0.035, nil, nil} }
+        }, true)
     end
     move(skinModel(0.01, 0.04), nil, nil, true)
     rotate(nil, -5.5, nil, true)
@@ -347,7 +349,7 @@ if freshSeeds and itemMatches(packCompatibility.freshSeeds) then
 end
 
 -- Fresh Ores and Ingots
-if freshOres and itemMatches(packCompatibility.freshOresIngots) then
+if freshOres then
     if not AlexModel and not itemMatches({"_shard"}) then move(0.04, -0.005, nil, true) end
     pose({
         { {"amethyst_cluster", "amethyst_bud"}, m = {0.005, -0.005, -0.01}, r = {nil, nil, -3.5} },
@@ -389,7 +391,7 @@ if bensBundle and itemName:match("bundle") then
 end
 
 -- Fresh Flowers and Plants
-if freshFlowers and itemMatches(packCompatibility.freshFlowersPlants) then
+if freshFlowers then
     if not AlexModel then move(0.03, nil, nil, true) end
     pose({
         { {
@@ -529,7 +531,7 @@ if a3ds and itemMatches(packCompatibility.a3ds) then
             rotate(3, 5, -8, true)
         end
     end
-    if not freshOres and itemMatches(packCompatibility.freshOresIngots) then
+    if not freshOres then
         if w3di then
             pose({
                 { {"coal"}, m = {-0.035, -0.055, -0.025}, r = {-7.5, -54, -7.5}, s = {0.8} },
@@ -630,7 +632,7 @@ end
 
 -- Weskerson's 3D Items
 if w3di then
-    if not freshFoods and itemMatches(packCompatibility.freshFoods) then
+    if not freshFoods then
         pose({
             { {"melon_slice"}, m = {nil, nil, -0.115}, r = {nil, 4.5, nil} },
             { {"glow_berries", "carrot"}, m = {nil, nil, -0.035} },
@@ -645,7 +647,7 @@ if w3di then
             { {"stew", "soup", "bowl"}, m = {0.05, -0.01, -0.115}, r = {nil, 5, -8.5} },
         }, true)
     end
-    if not rvTorchs and itemMatches(packCompatibility.rvTorchs) then
+    if not rvTorchs then
         pose({
             { {"torch"}, m = {0.015, 0.09, 0.005}, r = {4.5, -25.5, -6} },
             { {"copper_torch"}, m = {0.07, -0.085, 0.02}, r = {nil, -6, nil}, s = {1.3} },
@@ -658,7 +660,7 @@ if w3di then
             rotate(2.5, -0.5, -2.5, true)
             scale(0.8, 0.8, 0.8, true)
         end
-        if not freshOres and itemMatches(packCompatibility.freshOresIngots) then
+        if not freshOres then
             pose({
                 { {"emerald"}, m = {0.015, 0.035, -0.02}, r = {2.5, 4.5, nil}, s = {0.75} },
                 { {"lapis_lazuli"}, m = {-0.02, 0.045, nil}, r = {nil, 4.5, nil} },

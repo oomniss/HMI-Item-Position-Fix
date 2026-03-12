@@ -102,7 +102,7 @@ if w3di and not rvTorchs then
     })
 elseif w3di and rvTorchs then
     pose({
-        { {"^torch$", "soul_torch"}, m = {nil, nil, -0.05}, r = {nil, nil, -10} }
+        { {"^torch$", "soul_torch", "redstone_torch"}, m = {nil, nil, -0.05}, r = {nil, nil, -10} }
     })
 end
 

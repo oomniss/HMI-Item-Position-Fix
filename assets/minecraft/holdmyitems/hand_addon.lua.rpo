@@ -1,10 +1,10 @@
 {
   expansions: {
-    AlexSkinModel:    "HMIItemPositionFix.AlexSkinModel",
-    w3di:             "HMIItemPositionFix.Weskerson3DItems",
-    a3ds:             "HMIItemPositionFix.Actually3DStuff",
-    rvTorchs:         "HMIItemPositionFix.RVTorches",
-    freshOresIngots:  "HMIItemPositionFix.FreshOresAndIngots",
-    bensBundle:       "HMIItemPositionFix.BensBundle"
+    AlexSkinModel:    "HMIItemPositionFix.ItemsResourcePacksCompatibility.AlexSkinModel",
+    w3di:             "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DItems",
+    a3ds:             "HMIItemPositionFix.ItemsResourcePacksCompatibility.Actually3DStuff",
+    rvTorchs:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.RVTorches",
+    freshOresIngots:  "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshOresAndIngots",
+    bensBundle:       "HMIItemPositionFix.ItemsResourcePacksCompatibility.BensBundle"
   }
 }
