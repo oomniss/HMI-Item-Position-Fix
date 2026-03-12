@@ -1,15 +1,18 @@
 {
   expansions: {
-    AlexSkinModel:      "HMIItemPositionFix.AlexSkinModel",
-    w3di:               "HMIItemPositionFix.Weskerson3DItems",
-    a3ds:               "HMIItemPositionFix.Actually3DStuff",
-    rvTorchs:           "HMIItemPositionFix.RVTorches",
-    glowing3Darmors:    "HMIItemPositionFix.Glowing3DArmors",
-    glowing3Dtotem:     "HMIItemPositionFix.Glowing3DTotem",
-    bensBundle:         "HMIItemPositionFix.BensBundle",
-    freshFlowersPlants: "HMIItemPositionFix.FreshFlowersAndPlants",
-    freshFoods:         "HMIItemPositionFix.FreshFoods",
-    freshOresIngots:    "HMIItemPositionFix.FreshOresAndIngots",
-    freshSeeds:         "HMIItemPositionFix.FreshSeeds"
+    AlexSkinModel:      "HMIItemPositionFix.ItemsResourcePacksCompatibility.AlexSkinModel",
+    w3di:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DItems",
+    a3ds:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Actually3DStuff",
+    rvTorchs:           "HMIItemPositionFix.ItemsResourcePacksCompatibility.RVTorches",
+    glowing3Darmors:    "HMIItemPositionFix.ItemsResourcePacksCompatibility.Glowing3DArmors",
+    glowing3Dtotem:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.Glowing3DTotem",
+    bensBundle:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.BensBundle",
+    freshFlowersPlants: "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshFlowersAndPlants",
+    freshFoods:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshFoods",
+    freshOresIngots:    "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshOresAndIngots",
+    freshSeeds:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshSeeds",
+
+    faPlayer:           "HMIItemPositionFix.OtherResourcePacksCompatibility.FreshAnimationsPlayerExtension",
+    NEA:                "HMIItemPositionFix.OtherResourcePacksCompatibility.NotEnoughAnimations"
   }
 }

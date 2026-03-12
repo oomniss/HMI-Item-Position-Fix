@@ -1,9 +1,10 @@
 -- by omnis._.
 
--- === CONTEXTS ===
 local l         = context.mainHand and 1 or -1
 local itemName  = I:getName(context.item):gsub("minecraft:", "")
 local AlexModel = ${AlexSkinModel}
+local faPlayer  = ${faPlayer}
+local nea       = ${NEA}
 
 -- === ITEM STATE ===
 local isItemUsing = false
@@ -317,8 +318,19 @@ if rvTorchs and itemMatches(packCompatibility.rvTorchs) then
             { {"campfire"}, m = {0.15, 0.45, -0.56}, r = {-2.5, 7.5, -36.5} },
             { {"repeater", "comparator"}, m = {-0.15, 0.15, -0.1}, r = {85, -35, 7}, s = {1/1.35} },
             { {"repeater", "comparator"}, m = {0.15, 0.095, -0.06}, r = {nil, 2, 9} },
-            { {"lantern"}, m = {-0.035, 0.165, nil}, s = {0.6} }
+            { {"lantern"}, s = {0.6} }
         }, true)
+        if not faPlayer and not nea then
+            pose({
+                { {"lantern"}, m = {0.03, 0.165, nil} }
+            }, true)
+        end
+    else
+        if faPlayer or nea then
+            pose({
+                { {"lantern"}, m = {-0.02, -0.59, -0.06} }
+            }, true)
+        end
     end
     move(skinModel(0.01, 0.04), nil, nil, true)
     rotate(nil, -5.5, nil, true)
