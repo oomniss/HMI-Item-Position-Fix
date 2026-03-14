@@ -134,12 +134,10 @@ function easeCustomSec(t)
     return 3 * t * (1 - t) * (1 - t) * 0.44 + 3 * t2 * (1 - t) * 0.94 + t3
 end
 
-local function tags(itemsTags, tagType)
+local function tags(itemsTags)
 	for _, i in ipairs(itemsTags) do
-		if tagType == "fabric" then
-			if I:isIn(context.item, Tags:getFabricTag(i)) then return true end
-		else
-			if I:isIn(context.item, Tags:getVanillaTag(i)) then return true end
+		if I:isIn(context.item, Tags:getFabricTag(i)) or I:isIn(context.item, Tags:getVanillaTag(i)) then
+			return true
 		end
 	end
 	return false
@@ -423,8 +421,7 @@ local switchAnimationVariable = Easings:easeInBack(
 )
 if
 	(
-		tags({"bundles", "skulls"})
-		or tags({"music_discs", "nuggets"}, "fabric")
+		tags({"bundles", "skulls", "music_discs", "nuggets"})
 		or itemName == "ender_pearl"
 		or itemName == "ender_eye"
 		or I:isThrowable(context.item)
@@ -436,13 +433,13 @@ then
 
 	local switchEvent = (context.mainHand and mainHandSwitchEvent) or offHandSwitchEvent
 
-	if tags({"nuggets"}, "fabric") then
+	if tags({"nuggets"}) then
 		if switchEvent then
 			S:playSound("entity.experience_orb.pickup", 0.3)
 		end
 		M:moveY(mat, -0.07)
 		M:rotateX(mat, 360 * Easings:easeInOutBack((context.mainHand and M:clamp(mainHandSwitch * 1.65, 0, 1)) or M:clamp(offHandSwitch * 1.65, 0, 1)), 0, 0.1, 0)
-	elseif tags({"music_discs"}, "fabric") then
+	elseif tags({"music_discs"}) then
 		if switchEvent then
 			S:playSound("entity.context.player.attack.weak", 0.3)
 		end
