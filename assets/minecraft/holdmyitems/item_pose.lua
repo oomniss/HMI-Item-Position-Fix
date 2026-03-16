@@ -124,12 +124,11 @@ local itemLists = {
     exepct = {
         "pink_petals", "wildflowers", "leaf_litter", "bucket", "fishing_rod", "shears", "rail", "fence", "wall",
         "bed_", "_banner$", "candle", "glow_lichen", "sniffer_egg", "sculk_vein", "^torch$", "_torch",
-        "hanging_sign", "golem_statue", "comparator",
+        "hanging_sign", "golem_statue", "comparator", "conduit", "_head", "campfire", "anvil", "brewing_stand",
         "repeater", "button", "hopper", "pickaxe", "axe", "shovel", "hoe", "sword", "_on_a_stick", 
-        "boat", "raft", "_spear", "trident", "mace", "cake", "blaze_rod", "breeze_rod", 
-        "heavy_core", "item_frame", "painting", "^lantern$", "soul_lantern", "copper_lantern", "_head", "_skull",
-        "pressure_plate", "trapdoor", "carpet", "bamboo", "^vine$", "frogspawn", "turtle_egg", "dried_ghast",
-        "campfire", "anvil", "brewing_stand", "conduit", "_head"
+        "boat", "raft", "trident", "mace", "cake", "blaze_rod", "breeze_rod", "heavy_core", "item_frame", "painting", 
+        "^lantern$", "soul_lantern", "copper_lantern", "_head", "_skull", "pressure_plate", "trapdoor", "carpet", 
+        "bamboo", "^vine$", "frogspawn", "turtle_egg", "dried_ghast"
     },
 }
 
@@ -227,8 +226,6 @@ pose({
     { {"wooden_shelves"}, m = {nil, -0.005, 0.01}, r = {0.5, -23, nil} },
     { {"signs"}, m = {-0.02, nil, 0.015} },
     { {"ender_eye", "ender_pearl"}, m = {-0.045, nil, 0.03} },
-    { {"skeleton_skull"}, m = {nil, -0.055, nil} },
-    { {"wither_skeleton_skull"}, m = {nil, -0.095, nil} },
     { {"copper_golem_statues"}, m = {-0.005, 0.515, -0.385}, r = {175.5, -131.5, -3}, s = {1.4} },
     { {"lanterns"}, m = {0.035, -0.585, 0.095}, r = {-21.5, nil, nil} },
     { {"item_frame", "glow_item_frame", "painting"}, m = {0.035, -0.565, 0.225}, r = {-25, nil, nil} },
@@ -272,8 +269,10 @@ pose({
     -- Combat
     { {"horse_armor"}, m = {0.02, -0.075, nil}, matches = true },
     { {"nautilus_armor"}, m = {-0.04, -0.075, -0.005}, matches = true },
-    { {"swords", "mace"}, m = {0.025, nil, -0.05}, r = {nil, -5, nil} },
+    { {"swords"}, m = {0.025, nil, -0.05}, r = {nil, -5, nil} },
+    { {"mace"}, m = {0.025, -0.06, -0.05}, r = {nil, -5, nil} },
     { {"trident"}, m = {-0.005, nil, 0.1}, r = {nil, 19, nil} },
+    { {"spears"}, m = {-0.07, nil, 0.1}, r = {nil, -14, 180} },
     { {"shield"}, m = {-0.035, 0.06, 0.005}, r = {-1.5, -22.5, nil}, s = {0.8, 1, 1} },
     { {"head_armor", "foot_armor"}, m = {nil, -0.11, -0.005} },
     { {"leg_armor"}, m = {nil, -0.035, -0.005} },
