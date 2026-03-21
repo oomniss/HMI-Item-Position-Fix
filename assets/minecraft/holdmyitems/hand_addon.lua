@@ -4,111 +4,86 @@
 local l           = context.mainHand and 1 or -1
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
 
--- === PACKS COMPATIBILITY ===
-local w3di              = ${w3di}
-local a3ds              = ${a3ds}
-local rvTorchs          = ${rvTorchs}
-local bensBundle        = ${bensBundle}
-local freshOres         = ${freshOresIngots}
-local gPoses            = ${gHandPoses}
-local refinedBuckets    = ${refinedBuckets}
+-- === FUNCTIONS AND COMPATIBILITY ===
+local function matched(item, match)
+    local list = type(item) == "table" and item or {item}
 
--- === FUNCTIONS ===
-local function itemMatches(tableMatch)
-    for _, item in ipairs(tableMatch) do
-        if itemName:match(item) then
-            return true
+    local function check(i)
+        if match then
+            return itemName:match(i) ~= nil
         end
+        return itemName == i
+            or I:isIn(context.item, Tags:getFabricTag(i))
+            or I:isIn(context.item, Tags:getVanillaTag(i))
+    end
+
+    for _, i in ipairs(list) do
+        if check(i) then return true end
     end
     return false
 end
 
-local function pose(tables)
+-- == Compatibility ==
+local isItemCompat = false
+for _, rp in ipairs(ActivePacks) do
+    local pack = PackCompat[rp]
+    for _, i in ipairs(pack[1]) do
+        if matched(i, pack.matches) then
+            isItemCompat = true
+        end
+    end
+end
+
+-- == Position Processing ==
+local move = {
+    x = function(v) M:moveX(context.matrices, v * l) end,
+    y = function(v) M:moveY(context.matrices, v) end,
+    z = function(v) M:moveZ(context.matrices, v) end
+}
+local rotate = {
+    x = function(v) M:rotateX(context.matrices, v) end,
+    y = function(v) M:rotateY(context.matrices, v * l) end,
+    z = function(v) M:rotateZ(context.matrices, v * l) end
+}
+
+local function process(ops, dataORx, default_y, default_z)
+    if type(dataORx) ~= "table" then
+        if dataORx   then ops.x(dataORx)    end
+        if default_y then ops.y(default_y)  end
+        if default_z then ops.z(default_z)  end
+        return
+    end
+    local order = dataORx[4] or "xyz"
+    for i = 1, 3 do
+        local axis = order:sub(i, i):lower()
+        local val  = dataORx[i]
+        if val and ops[axis] then ops[axis](val) end
+    end
+end
+
+local function pose(tables, force)
     for _, t in ipairs(tables) do
-        if (t.condition and t.condition[1]) or not t.condition then
-            for _, i in ipairs(t[1]) do
-                if itemName:match(i) then
-                    if t.m then
-                        if t.m[1] then M:moveX(context.matrices, t.m[1] * l) end
-                        if t.m[2] then M:moveY(context.matrices, t.m[2]) end
-                        if t.m[3] then M:moveZ(context.matrices, t.m[3]) end
-                    end
-                    if t.r then
-                        if t.r[1] then M:rotateX(context.matrices, t.r[1]) end
-                        if t.r[2] then M:rotateY(context.matrices, t.r[2] * l) end
-                        if t.r[3] then M:rotateZ(context.matrices, t.r[3] * l) end
-                    end
+        for _, i in ipairs(t[1]) do
+            if matched(i, t.matches) then
+                if not isItemCompat or force then
+                    if t.m then process(move, t.m)   end
+                    if t.r then process(rotate, t.r) end
                     if t.s then
-                        if t.s[1] and not t.s[2] and not t.s[3] then
-                            M:scale(context.matrices, t.s[1], t.s[1], t.s[1])
-                        elseif t.s[1] or t.s[2] or t.s[3] then
-                            M:scale(context.matrices, t.s[1], t.s[2], t.s[3])
+                        if t.s[2] == nil and t.s[3] == nil then
+                            M:scale(t.s[1], t.s[1], t.s[1])
+                        else
+                            M:scale(t.s[1], t.s[2], t.s[3])
                         end
                     end
                 end
+                return
             end
         end
     end
 end
 
--- === PACKS ADJUSTS ===
-local undoPackAdjustments = {
-    w3di = {
-        { {
-            "fire_charge", "goat_horn", "snowball", "^egg$", "blue_egg", "brown_egg", "ender_pearl",
-            "ender_eye", "firework_rocket", "lead", "^bone$", "brick&", "honeycomb",
-            "clay_ball", "nautilus_shell", "_rod", "book", "gunpowder", "glowstone_dust",
-            "blaze_powder", "^sugar$", "stick", "heart_of_the_sea", "slime_ball", "^map$", "totem_of_undying"
-        }, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+-- === PACKS COMPATIBILITY ===
 
-        -- Tools
-        { {"boat", "raft"}, m = {nil, 0.05, nil} },
-        { {"flint_and_steel"}, m = {nil, nil, -0.05}, r = {nil, nil, -10} },
-        { {"shears"}, m = {nil, 0.1, -0.05}, r = {nil, nil, -10} },
-        { {"armor_stand"}, m = {0.09, 0.12, -0.05}, r = {nil, nil, -10} },
-        { {"^compass$"}, m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} },
-
-        -- Ingredients
-        { {"banner_pattern", "name_tag"}, m = {nil, -0.3, 0.05} },
-    },
-    wd3iOres = {
-        { {
-            "^flint$", "coal$", "raw", "^emerald$", "^diamond$", "^lapis_lazuli$", "^quartz$", "nugget",
-            "amethyst_shard", "ingot", "netherite_scrap", "^redstone$"
-        }, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} }
-    },
-    w3diBundles = {
-        { {"bundle"}, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} }
-    }
-}
-if w3di and a3ds and itemMatches(undoPackAdjustments.w3di[1][1]) then pose(undoPackAdjustments.w3di) end
-if w3di and freshOres and itemMatches(undoPackAdjustments.w3di[1][1]) then pose(undoPackAdjustments.wd3iOres) end
-
--- Actually 3D Stuff
-if a3ds then
-    if not bensBundle and itemName:match("bundle") then
-        if w3di then pose(undoPackAdjustments.w3diBundles) end
-    end
-    if not freshOres and itemMatches(undoPackAdjustments.wd3iOres[1][1]) then
-        if w3di then pose(undoPackAdjustments.wd3iOres) end
-    end
-    pose({
-        { {"lily_pad"}, m = {nil, 0.6, -0.1} }
-    })
-end
-
--- Weskerson's 3D Items
-if w3di then
-    if not rvTorchs then
-        pose({
-            { {"copper_torch"}, m = {nil, nil, 0.05}, r = {nil, nil, 10} }
-        })
-    elseif w3di and rvTorchs then
-        pose({
-            { {"^torch$", "soul_torch", "redstone_torch"}, m = {nil, nil, -0.05}, r = {nil, nil, -10} }
-        })
-    end
-end
 
 -- === INDIVIDUAL ADJUSTS ===
 pose({

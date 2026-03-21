@@ -15,6 +15,7 @@
       FreshFoods:             false,
       FreshOresAndIngots:     false,
       FreshSeeds:             false,
+      FreshMusicDiscs:        false,
       PatoRefinedBuckets:     false,
       PatoRefinedTorches:     false
     },

@@ -13,6 +13,7 @@
     freshSeeds:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshSeeds",
     refinedBuckets:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.PatoRefinedBuckets",
     refinedTorches:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.PatoRefinedTorches",
+    freshDiscs:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshMusicDiscs",
 
     faPlayer:           "HMIItemPositionFix.OtherResourcePacksCompatibility.FreshAnimationsPlayerExtension",
     NEA:                "HMIItemPositionFix.OtherResourcePacksCompatibility.NotEnoughAnimations",

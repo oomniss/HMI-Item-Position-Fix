@@ -62,7 +62,7 @@ local rotate = {
 
 local function process(ops, dataORx, default_y, default_z)
     if type(dataORx) ~= "table" then
-        if dataORx   then ops.x(dataORx)       end
+        if dataORx   then ops.x(dataORx)    end
         if default_y then ops.y(default_y)  end
         if default_z then ops.z(default_z)  end
         return
@@ -87,10 +87,10 @@ local function pose(tables, force)
                         if t.m then process(move, t.m)   end
                         if t.r then process(rotate, t.r) end
                         if t.s then
-                            if t.s[1] and not t.s[2] and not t.s[3] then
-                                M:scale(t.s[1], t.s[1], t.s[1])
-                            elseif t.s[1] or t.s[2] or t.s[3] then
-                                M:scale(t.s[1], t.s[2], t.s[3])
+                            if t.s[2] == nil and t.s[3] == nil then
+                                M:scale(context.matrices, t.s[1], t.s[1], t.s[1])
+                            else
+                                M:scale(context.matrices, t.s[1], t.s[2], t.s[3])
                             end
                         end
                     end
@@ -104,20 +104,6 @@ end
 -- === ITEMS LISTS ===
 local itemLists = {
     hangingPlants = {"spore_blossom", "hanging_roots", "pale_hanging_moss", "weeping_vines"},
-    spawnEggAdjust = {
-        "blaze", "bogged", "breeze", "camel", "cave_spider", "cod", "cow",
-        "creaking", "creeper", "dolphin", "donkey", "drowned", "elder_guardian",
-        "enderman", "evoker", "frog", "ghast", "glow_squid", "goat", "guardian",
-        "happy_ghast", "hoglin", "horse", "husk", "iron_golem", "llama", "magma_cube",
-        "mooshroom", "mule", "panda", "phantom", "pig", "piglin", "piglin_brute",
-        "pillager", "polar_bear", "pufferfish", "ravager", "salmon", "sheep", 
-        "shulker", "skeleton", "skeleton_horse", "slime", "sniffer", "snow_golem",
-        "cave", "squid", "stray", "strider", "tadpole", "trader_llama", "tropical_fish",
-        "turtle", "spider", "villager", "vindicator", "wandering_trader", "warden",
-        "witch", "wither_skeleton", "wolf", "zoglin", "zombie", "zombie_horse",
-        "zombie_villager", "zombified_piglin", "nautilus", "zombie_nautilus",
-        "camel_husk", "parched"
-    },
     sprites2D = {
         -- Colored Blocks
         "glass_pane",
@@ -353,8 +339,7 @@ pose({
     { {"smithing_template"}, m = {-0.02, nil, 0.02} },
 
     -- Spawn Eggs
-    { itemLists.spawnEggAdjust, m = {nil, 0.04, nil}, matches = true, condition = {itemName:match("spawn_egg")} },
-    { {"_spawn_egg"}, m = {-0.005, -0.04, nil}, matches = true }
+    { {"_spawn_egg"}, m = {-0.01, -0.04, nil}, matches = true }
 })
 
 -- === USING ITEM ===
@@ -368,4 +353,5 @@ if isUsingItem and not isItemCompat then
 end
 
 -- === PACK COMPATIBILITY ===
-pose(Positions, true)
+Positions = Positions or {}
+if Positions and #Positions > 0 then pose(Positions, true) end
