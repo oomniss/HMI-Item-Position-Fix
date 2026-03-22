@@ -2,7 +2,8 @@
 -- using item_model_addon.lua because it doesn't overwrite and to better separate compatibility between packs
 -- it is what it is, you gotta make do with what you've got
 
-local isUsingItem = P:isUsingItem(context.player)
+local isUsingItem   = P:isUsingItem(context.player)
+local l             = context.mainHand and 1 or -1
 
 -- === FUNCTION ===
 Positions = {}
@@ -48,14 +49,50 @@ PackCompat = {
         "_coral$", "_coral_fan", "weeping_vines", "twisting_vines", "_sapling", "mangrove_propagule", "fern",
         "_grass$", "bush", "crimson_roots", "warped_roots", "hanging_roots", "nether_sprouts"
         }, matches = true,
-        withBlocks = {
+        withBlocks =
+        {
             "saplings", "short_grass", "fern", "short_dry_grass", "bush", "dead_bush", "firefly_bush",
             "crimson_roots", "warped_roots", "nether_sprouts", "tall_grass", "large_fern", "tall_dry_grass",
+        }
+    },
+    a3ds = {
+        {
+        -- Natural Blocks
+        "pale_hanging_moss", "sapling", "mangrove_propagule", "_mushroom$", "_fungus$", "_grass$", "fern",
+        "bush", "dandelion", "poppy", "orchid", "allium", "azure_bluet", "tulip", "oxeye_daisy", "cornflower",
+        "lily_of_the_valley", "^torchflower$", "_eyeblossom", "wither_rose", "pink_petals", "wildflowers",
+        "leaf_litter", "^bamboo$", "sugar_cane", "crimson_roots", "warped_roots", "nether_sprouts",
+        "sunflower", "lilac", "rose_bush", "pitcher_plant", "glow_lichen", "hanging_roots", "frogspawn", "lily_pad",
+        "^azalea$", "^flowering_azalea$", "weeping_vines", "twisting_vines", "^vine$", "peony",
+        -- Functional Blocks
+        "^bell$", "armor_stand", "item_frame", "painting", "ender_eye",
+        -- Redstone Blocks
+        "^redstone$", "string", "minecart", "_raft", "_boat",
+        -- Tools
+        "fishing_rod", "flint_and_steel", "fire_charge", "bone_meal", "shears", "brush", "name_tag", "lead", "bundle",
+        "^compass$", "^map$", "writable_book", "ender_pearl", "firework_rocket", "saddle", "_harness", "on_a_stick",
+        "goat_horn",
+        -- Combat
+        "totem_of_undying", "snowball", "^egg$", "brown_egg", "blue_egg",
+        -- Ingredients
+        "coal$", "raw_", "^emerald$", "^lapis_lazuli$", "^diamond$", "^quartz$", "_shard", "_nugget", "_ingot",
+        "netherite_scrap", "^stick$", "flint", "^bone$", "^leather$", "rabbit_hide", "^honeycomb$", "resin_clump",
+        "ink_sac", "slime_ball", "clay_ball", "prismarine_crystals", "nautilus_shell", "heart_of_the_sea", "blaze_rod",
+        "breeze_rod", "nether_star", "_dye", "brick$", "paper", "^book$", "firework_star", "glowstone_dust", "gunpowder",
+        "blaze_powder", "^sugar$", "rabbit_foot", "magma_cream", "ghast_tear", "banner_pattern", "_smithing_template",
+        "_key", "enchanted_book"
+        }, matches = true,
+        naturalWithBlocks =
+        {
+            "saplings", "short_grass", "fern", "short_dry_grass", "bush", "dead_bush", "small_flowers",
+            "firefly_bush", "crimson_roots", "warped_roots", "nether_sprouts", "tall_grass", 'large_fern',
+            "tall_dry_grass", "sunflower", "lilac", "rose_bush", "peony", "pitcher_plant"
         }
     }
 }
 
 ActivePacks = {}
+    local a3ds              = ${a3ds} and (table.insert(ActivePacks, "a3ds") or true)
     local rvTorches         = ${rvTorches} and (table.insert(ActivePacks, "rvTorches") or true)
     local refinedTorches    = ${refinedTorches} and (table.insert(ActivePacks, "refinedTorches") or true)
     local refinedBuckets    = ${refinedBuckets} and (table.insert(ActivePacks, "refinedBuckets") or true)
@@ -73,6 +110,94 @@ UndoAdjusts = {
 }
 
 -- === INDIVIDUAL RESOURCE PACK ADJUST ===
+if a3ds then
+    addPos({
+        -- Natural Blocks
+        { {"vine", "weeping_vines", "twisting_vines"}, renderAsBlock = false },
+        { {"frogspawn"}, m = {-0.06, 0.04, -0.025}, r = {-4, -5.5, -2}, renderAsBlock = false },
+        { {"bamboo"}, m = {0.005, nil, -0.03}, r = {-5.5, -5, -1}, s = {0.8}, renderAsBlock = false },
+        { {"_mushroom$", "_fungus"}, m = {0.01, -0.03, -0.075}, r = {-5, -4, -1}, matches = true },
+        { {"azalea", "flowering_azalea"}, m = {0.065, -0.095, -0.17}, r = {-6, 29, nil} },
+        { {"cactus_flower"}, m = {-0.09, 0.1, 0.03}, r = {-2.5, -22.5, nil} },
+        { {"sugar_cane"}, m = {0.015, nil, -0.105}, r = {nil, -5.5, nil}, s = {0.9} },
+        { {"glow_lichen"}, m = {nil, -0.21, nil} },
+        { {"lily_pad"}, m = {nil, -0.215, 0.02}, r = {-109, nil, nil}, s = {1, 0.4, 1} },
+        { PackCompat.a3ds.naturalWithBlocks, m = {nil, nil, -0.08}, renderAsBlock = false },
+
+        -- Functional Blocks
+        { {"bell"}, m = {-0.165, -0.495, 0.17}, r = {-15.5, -4.5, -2.5} },
+        { {"armor_stand"}, m = {nil, 0.03, nil} },
+        { {"item_frame", "painting"}, m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
+
+        -- Tools & Utilities
+        { {"minecart"}, m = {nil, 0.045, nil}, matches = true },
+        { {"ender_eye"}, m = {0.03, -0.005, -0.08}, r = {-4.5, -6, nil} },
+        { {"ender_pearl"}, m = {0.01, -0.005, -0.08}, r = {-4.5, -6, nil} },
+        { {"flint_and_steel"}, m = {0.015, 0.005, -0.095}, r = {10, 2.5, -2.5}, s = {0.9} },
+        { {"bone_meal"}, m = {0.01, 0.07, -0.125}, r = {-5.5, -4, nil} },
+        { {"shears"}, r = {-7, nil, 38.5} },
+        { {"brush"}, m = {0.025, 0.05, -0.035}, r = {-4.5, -5.5, -1} },
+        { {"lead"}, m = {0.125, -0.13, -0.215}, r = {-5.5, -4, -1}, s = {0.9} },
+        { {"bundles"}, m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil} },
+        { {"compass"}, m = {0.015, 0.06, -0.03}, r = {-6.5, -5, -2} },
+        { {"map", "paper"}, m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
+        { {"writable_book"}, m = {nil, nil, -0.09} },
+        { {"firework_rocket"}, m = {-0.025, -0.08, -0.16}, r = {-6, -7, nil} },
+        { {"saddle"}, m = {-0.025, nil, nil} },
+        { {"boats"}, r = {nil, -37.5, nil} },
+        { {"goat_horn"}, m = {0.015, 0.09, nil}, r = {nil, -4, -1.5} },
+
+        -- Combat
+        { {"egg", "brown_egg", "blue_egg"}, m = {0.03, -0.01, -0.085}, r = {-6, -6, nil} },
+        { {"snowball"}, m = {0.015, -0.01, -0.085}, r = {-6, -6, nil} },
+        
+        -- Ingredients
+        { {"string"}, m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
+        { {"smithing_template"}, m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil}, matches = true },
+        { {"_key"}, m = {0.015, nil, -0.085}, r = {-7, -5.5}, matches = true },
+        { {"stick", "blaze_rod", "breeze_rod"}, m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
+        { {"flint"}, m = {0.01, -0.1, -0.085}, r = {-6, -4.5, -0.5} },
+        { {"bone"}, m = {0.025, -0.04, -0.035}, r = {-5, -5.5, nil} },
+        { {"leather", "rabbit_hide"}, m = {-0.01, -0.03, -0.08}, r = {-5.5, -4, -1} },
+        { {"honeycomb"}, m = {0.01, 0.04, -0.05}, r = {-5, -5, nil} },
+        { {"ink_sac", "glow_ink_sac"}, m = {0.015, 0.015, -0.085}, r = {-4, -4.5, -1} },
+        { {"clay_ball"}, m = {l == 1 and 0 or 0.06, nil, nil} },
+        { {"fire_charge", "heart_of_the_sea"}, m = {0.005, 0.05, 0.005}, r = {-6, -5, nil} },
+        { {"slime_ball"}, m = {0.02, 0.005, -0.09}, r = {-4, -3.5, nil} },
+        { {"prismarine_shard"}, m = {0.02, nil, -0.09}, r = {-6.5, -6, -1.5} },
+        { {"prismarine_crystals"}, m = {0.025, 0.01, -0.14}, r = {-7.5, -6.5, nil}, s = {1.15} },
+        { {"nautilus_shell"}, m = {0.025, -0.015, -0.04}, r = {-5.5, -5, nil} },
+        { {"nether_star"}, m = {0.01, -0.135, -0.035}, r = {-6, -5.5, -2} },
+        { {"dyes"}, m = {0.02, nil, -0.105}, r = {-4, -5.5, nil} },
+        { {"book", "enchanted_book"}, m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
+        { {"firework_star", "magma_cream"}, m = {0.03, 0.01, -0.01}, r = {-4.5, -5, -1.5} },
+        { {"redstone", "glowstone_dust", "gunpowder", "sugar", "blaze_powder"}, m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
+        { {"rabbit_foot"}, m = {-0.01, -0.005, -0.08}, r = {-5, -4.5, nil} },
+        { {"ghast_tear"}, m = {0.02, -0.02, -0.05}, r = {-5, -5, -2}, s = {1.3} },
+        { {"loom_patterns"}, m = {nil, nil, -0.175} },
+    })
+    if glowing3Dtotem then
+        addPos({
+            { {"totem_of_undying"}, m = {-0.02, 0.09, -0.155}, r = {-107, -15.5, -120.5}, s = {0.85} }
+        })
+    end
+    if not freshOres then
+        addPos({
+            { {"resin_clump"}, m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, renderAsBlock = false },
+            { {"coal$"}, m = {nil, nil, -0.025}, s = {0.9}, matches = true },
+            { {"raw_"}, m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, matches = true },
+            { {"nugget"}, m = {0.02, 0.03, -0.045}, r = {-6, -5, nil}, matches = true },
+            { {"ingot", "brick$"}, m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9}, matches = true },
+            { {"emerald"}, m = {0.015, -0.035, -0.085}, r = {-6.5, -3.5, nil} },
+            { {"lapis_lazuli"}, m = {nil, -0.06, -0.105}, r = {-6, -5.5, nil} },
+            { {"diamond"}, m = {0.015, -0.055, -0.09}, r = {-7.5, -3.5, nil} },
+            { {"quartz"}, m = {0.005, 0.07, -0.035}, r = {-6, -7, nil}, s = {0.7} },
+            { {"amethyst_shard", "echo_shard"}, m = {0.025, -0.01, -0.055}, r = {-4.5, -5.5, nil} },
+            { {"netherite_scrap"}, m = {-0.045, -0.035, -0.13}, r = {-6, -5, -1} },
+        })
+    end
+end
+
 if rvTorches then
     addPos({
         { {"torch", "soul_torch", "redstone_torch", "copper_torch"}, m = {0.01, nil, -0.035}, r = {-5, -5.5, nil} },

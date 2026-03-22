@@ -2,6 +2,7 @@
   expansions: {
     rvTorches:          "HMIItemPositionFix.ItemsResourcePacksCompatibility.RVTorches",
     refinedTorches:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.PatoRefinedTorches",
-    glowing3Darmors:    "HMIItemPositionFix.ItemsResourcePacksCompatibility.Glowing3DArmors"
+    glowing3Darmors:    "HMIItemPositionFix.ItemsResourcePacksCompatibility.Glowing3DArmors",
+    a3ds:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Actually3DStuff"
   }
 }

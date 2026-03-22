@@ -101,6 +101,7 @@ local useAction             = I:getUseAction(context.item)
 local itemName              = I:getName(context.item):gsub("minecraft:", "")
 local torchesPack           = ${rvTorches} or ${refinedTorches}
 local glowing3Darmors		= ${glowing3Darmors}
+local a3ds					= ${a3ds}
 
 -- == FUNCTIONS ==
 function easeCustom(t)
@@ -229,13 +230,23 @@ if useAction == "spear" then
 end
 
 if (useAction ~= "block" and useAction ~= "crossbow") or tags({"swords"}) then
-    M:moveZ(mat, -0.05 	* swing_rot)
-    M:moveY(mat, -0.05 	* swing_rot)
-    M:rotateX(mat, 10 	* swing_rot)
-    M:rotateX(mat, -30 	* swing_rot)
-    M:rotateX(mat, -10 	* swing_hit)
+	if not (glowing3Darmors and (tags({"head_armor", "foot_armor"}) or itemName:match("horse_armor"))) then
+		M:moveZ(mat, -0.05 	* swing_rot)
+		M:moveY(mat, -0.05 	* swing_rot)
+		M:rotateX(mat, 10 	* swing_rot)
+		M:rotateX(mat, -30 	* swing_rot)
+		M:rotateX(mat, -10 	* swing_hit)
+	elseif glowing3Darmors then
+		if tags({"head_armor"}) then
+			M:moveX(mat, -0.05 * swing_rot)
+			M:moveY(mat, -0.05 	* swing_rot)
+		elseif tags({"foot_armor"}) or itemName:match("horse_armor") then
+			M:moveZ(mat, -0.05 * swing_rot)
+			M:moveY(mat, -0.05 	* swing_rot)
+		end
+    end
 
-    if not tags({"swords"}) then
+    if not tags({"swords"}) and not (glowing3Darmors and (tags({"head_armor", "foot_armor"}) or itemName:match("horse_armor"))) then
         if useAction == "trident" or useAction == "spear" then
             M:moveZ(mat, -0.1 * swing_rot)
             M:moveY(mat, -0.05 * swing_rot)
@@ -316,7 +327,7 @@ then
 		M:rotateX(mat, M:clamp(P:getPitch(context.player) / 2.5, -35, 90) + ptAngle, 0, 0.55, 0)
 		M:rotateZ(mat, ywAngle * -1, 0, 0.55, 0)
 	end
-elseif itemName == "painting" or itemName == "item_frame" or itemName == "glow_item_frame" then
+elseif itemName == "painting" or itemName == "item_frame" or (itemName == "glow_item_frame" and not a3ds) then
 	context.swingProgress = 0
 	M:rotateX(mat, M:clamp(P:getPitch(context.player) / 2.5, -25, 90) + ptAngle, 0, 0.45, 0)
 	M:rotateZ(mat, ywAngle * -1, 0, 0.55, 0)

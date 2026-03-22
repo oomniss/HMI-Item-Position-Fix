@@ -87,9 +87,16 @@ local function pose(tables, force)
 end
 
 -- === PACKS COMPATIBILITY ===
-local glowing3Darmors = ${glowing3Darmors} and (table.insert(ActivePacks, "glowing3Darmors") or true)
+local a3ds              = ${a3ds}
+local glowing3Darmors   = ${glowing3Darmors}
 
 -- == PACKS INDIVIDUAL ADJUSTS ==
+if a3ds then
+    pose({
+        { {"lily_pad"}, m = {nil, 0.375, nil} }
+    }, true)
+end
+
 if glowing3Darmors then
     pose({
         { {"chest_armor"}, m = {nil, 0.415, nil} }
