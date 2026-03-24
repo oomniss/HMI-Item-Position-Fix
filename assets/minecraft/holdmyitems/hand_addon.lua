@@ -71,13 +71,17 @@ local function pose(tables, force)
             for _, i in ipairs(t[1]) do
                 if matched(i, t.matches) then
                     if not isItemCompat or force then
-                        if t.m then process(move, t.m)   end
-                        if t.r then process(rotate, t.r) end
-                        if t.s then
-                            if t.s[2] == nil and t.s[3] == nil then
-                                M:scale(context.matrices, t.s[1], t.s[1], t.s[1])
-                            else
-                                M:scale(context.matrices, t.s[1], t.s[2], t.s[3])
+                        local opsOrder = t.ops or "mrs"
+                        for j = 1, #opsOrder do
+                            local op = opsOrder:sub(j, j):lower()
+                            if op == "m" and t.m then process(move, t.m) end
+                            if op == "r" and t.r then process(rotate, t.r) end
+                            if op == "s" and t.s then
+                                if t.s[2] == nil and t.s[3] == nil then
+                                    M:scale(context.matrices, t.s[1], t.s[1], t.s[1])
+                                else
+                                    M:scale(context.matrices, t.s[1], t.s[2], t.s[3])
+                                end
                             end
                         end
                     end
@@ -99,6 +103,7 @@ local refinedBuckets    = ${refinedBuckets}
 local freshFoods        = ${freshFoods}
 local freshOres         = ${freshOresIngots}
 local freshDiscs        = ${freshDiscs}
+local bensBundle        = ${bensBundle}
 
 -- == UNDO ADJUSTS ==
 local handUndoAdjusts = {
@@ -111,6 +116,9 @@ local handUndoAdjusts = {
         },
         bucket = {
             { {"bucket"}, m = {0, -0.1, nil, "yzx"}, r = {5, -10, nil, "yzx"}, matches = true }
+        },
+        bundles = {
+            { {"bundle"}, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} }
         },
         torches = {
             { {"torch", "soul_torch", "redstone_torch"}, m = {-0.05, nil, nil, "zxy"}, r = {-10, nil, nil, "zyx"} },
@@ -131,11 +139,34 @@ local handUndoAdjusts = {
                 "coal$", "raw_", "^emerald$", "^diamond$", "^lapis_lazuli$", "_nugget", "^quartz$", "amethyst_shard",
                 "_ingot", "brick$", "netherite_scrap", "^flint$"
             }, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10}, matches = true },
+        },
+        a3dsCompat = {
+            { {
+                "ender_pearl", "ender_eye", "fire_charge", "lead", "map", "writable_book", "firework_rocket", "goat_horn",
+                "egg", "blue_egg", "brown_egg", "snowball", "stick", "blaze_rod", "breeze_rod", "bone", "honeycomb",
+                "clay_ball", "heart_of_the_sea"
+            }, m = {0.09, 0.09, -0.05}, r = {nil, nil, -10}},
+
+            { {"name_tag", "_banner_pattern"}, m = {0.05, -0.3, nil, "zyx"} },
+            { {"armor_stand"}, m = {0.09, 0.12, 0.05}, r = {nil, nil, -10} },
+            { {"boats"}, m = {nil, 0.05, nil} },
+            { {"fishing_rod", "carrot_on_a_stick", "warped_fungus_on_a_stick"}, m = {-0.2, 0.2, 0.1}, r = {nil, nil, -10} },
+            { {"flint_and_steel"}, m = {nil, nil, -0.05}, r = {nil, nil, -10} },
+            { {"shears"}, m = {nil, 0.1, -0.05}, r = {nil, nil, -10} },
+            { {"compass", "clock"}, m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} }
         }
     }
 }
+
+if w3di and a3ds then
+    pose(handUndoAdjusts.w3di.a3dsCompat, true)
+    if not freshOres                then pose(handUndoAdjusts.w3di.ores, true)          end
+    if not glowing3Dtotem           then pose(handUndoAdjusts.w3di.totem, true)         end
+    if not bensBundle               then pose(handUndoAdjusts.w3di.bundles, true)       end
+end
 if w3di then
     if glowing3Dtotem               then pose(handUndoAdjusts.w3di.totem, true)         end
+    if bensBundle                   then pose(handUndoAdjusts.w3di.bundles, true)       end
     if freshFoods                   then pose(handUndoAdjusts.w3di.foods, true)         end
     if freshOres                    then pose(handUndoAdjusts.w3di.ores, true)          end
     if freshDiscs                   then pose(handUndoAdjusts.w3di.musicDiscs, true)    end

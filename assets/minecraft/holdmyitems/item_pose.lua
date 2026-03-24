@@ -102,7 +102,8 @@ local function pose(tables, force)
                             end
                         end
                     end
-                    return
+                    local prox = t.prox ~= nil and t.prox
+                    if not prox then return end
                 end
             end
         end

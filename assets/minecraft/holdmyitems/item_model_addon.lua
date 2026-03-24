@@ -98,6 +98,8 @@ PackCompat = {
     },
     w3di = {
         {
+            -- Natural Blocks
+            "turtle_egg",
             -- Functional Blocks
             "torch", "^lantern$", "soul_lantern", "copper_lantern", "campfire", "end_crystal", "flower_pot", 
             "armor_stand", "_sign", "ender_eye",
@@ -201,12 +203,45 @@ ItemsUndoAdjusts = {
             { {"emerald", "diamond", "lapis_lazuli"}, s = {1/1.1, 1/1.25, 1/1.1}, r = {0, 0.3, 7, "yxz"}, m = {0.05, 0.1, -0.07, "yzx"} },
             { {"netherite_scrap"}, s = {1/1.15}, r = {-15, 0.3, 5, "yxz"}, ops = "srm" },
             { {"flint"}, s = {1/1.3}, r = {5, 10, nil, "zxy"}, ops = "srm" }
+        },
+        a3dsCompat = {
+            { {"bone_meal", "map", "honeycomb", "nautilus_shell", "gunpowder", "glowstone_dust", "blaze_powder", "sugar"},
+            s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
+            { {"armor_stand"}, s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
+            { {"boats"}, s = {1/1.35}, r = {-4, -180, 120, "yzx"}, m = {nil, -0.15, nil}, ops = "srm" },
+            { {"name_tag", "_banner_pattern"}, s = {1/1.4}, r = {180, 130, nil, "zxy"}, m = {-0.1, 0.15, nil, "zyx"}, ops = "srm" },
+            { {"ender_eye", "ender_pearl"}, s = {1/1.05}, m = {0.05, 0.05, nil, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" },
+            { {"fishing_rod"}, s = {1/1.2}, m = {0.1, 0.1, nil}, r = {1, 10, 70, "yzx"}, ops = "smr" },
+            { {"flint_and_steel"}, s = {1/1.1}, r = {5, 10, nil, "zxy"}, ops = "srm" },
+            { {"fire_charge"}, s = {1/1.25}, r = {nil, nil, 5}, ops = "srm" },
+            { {"shears"}, s = {1/1.3, 1/1.4, 1/1.3}, m = {0.1, -0.05, nil, "zxy"}, r = {25, 30, 45, "yxz"}, ops = "smr" },
+            { {"lead"}, s = {1/1.2, 1, 1}, r = {nil, -24.5, 10}, m = {-0.025, 0.2, nil, "xzy"}, ops = "srm" },
+            { {"compass", "clock"}, s = {1/1.2}, r = {-4, 10, 7, "yxz"}, m = {0, -0.01, -0.03, "yzx"}, ops = "srm" },
+            { {"writable_book"}, s = {1/1.1}, r = {-4, 30, 7, "yxz"}, m = {0.05, -0.05, 0.03, "yzx"}, ops = "srm" },
+            { {"firework_rocket"}, s = {1/1.2}, m = {0.03, 0, nil, "zxy"}, ops = "smr", prox = true },
+            { {"firework_rocket"}, s = {1/1.05}, m = {0.05, 0.05, nil, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" },
+            { {"carrot_on_a_stick"}, s = {1/1.2}, m = {0.1, 0.1, nil}, r = {1, 60, nil, "yxz"}, ops = "smr" },
+            { {"goat_horn"}, s = {1/1.3}, m = {0.05, -0.05, nil, "zxy"}, r = {nil, nil, 5}, ops = "smr" },
+            { {"egg", "blue_egg", "brown_egg", "snowball"}, r = {nil, nil, 5} },
+            { {"loom_patterns"}, s = {1/1.4}, r = {180, 130, nil, "zxy"}, m = {-0.1, 0.15, nil, "zyx"}, ops = "srm" },
+            { {"stick", "bone", "blaze_rod", "breeze_rod"}, m = {0.05, 0.07, 0.05, "yzx"}, r = {4, nil, -85, "zxy"} },
+            { {"slime_ball"}, s = {1/1.05}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
+            { {"clay_ball"}, m = {-0.055, 0.015, nil}, r = {-3, 0, 6} },
+            { {"heart_of_the_sea"}, s = {1/1.35}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"} },
+            { {"book", "enchanted_book"}, s = {1/1.1, 1/1.2, 1/1.1}, r = {-40, 20, 30, "yxz"}, m = {-0.2, -0.07, -0.1, "yzx"}, ops = "srm" }
         }
     }
 }
+if a3ds and w3di then
+    addUndoAdj(ItemsUndoAdjusts.w3di.a3dsCompat)
+    if not glowing3Dtotem           then addUndoAdj(ItemsUndoAdjusts.w3di.totem)        end
+    if not bensBundle               then addUndoAdj(ItemsUndoAdjusts.w3di.bundles)      end
+    if not freshOres                then addUndoAdj(ItemsUndoAdjusts.w3di.ores)         end
+end
 if a3ds then
     if glowing3Dtotem               then addUndoAdj(ItemsUndoAdjusts.a3ds.totem)        end
-elseif w3di then
+end
+if w3di then
     if glowing3Dtotem               then addUndoAdj(ItemsUndoAdjusts.w3di.totem)        end
     if refinedBuckets               then addUndoAdj(ItemsUndoAdjusts.w3di.bucket)       end
     if freshOres                    then addUndoAdj(ItemsUndoAdjusts.w3di.ores)         end
@@ -230,15 +265,13 @@ if a3ds then
         { {"glow_lichen"}, m = {nil, -0.21, nil} },
         { {"lily_pad"}, m = {nil, -0.215, 0.02}, r = {-109, nil, nil}, s = {1, 0.4, 1} },
         { PackCompat.a3ds.naturalWithBlocks, m = {nil, nil, -0.08}, renderAsBlock = false },
-
         -- Functional Blocks
         { {"bell"}, m = {-0.165, -0.495, 0.17}, r = {-15.5, -4.5, -2.5} },
         { {"armor_stand"}, m = {nil, 0.03, nil} },
         { {"item_frame", "painting"}, m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
-
         -- Tools & Utilities
         { {"minecart"}, m = {nil, 0.045, nil}, matches = true },
-        { {"ender_eye"}, m = {0.03, -0.005, -0.08}, r = {-4.5, -6, nil} },
+        { {"ender_eye"}, m = {0.03, nil, -0.08}, r = {-4.5, -6, nil} },
         { {"ender_pearl"}, m = {0.01, -0.005, -0.08}, r = {-4.5, -6, nil} },
         { {"flint_and_steel"}, m = {0.015, 0.005, -0.095}, r = {10, 2.5, -2.5}, s = {0.9} },
         { {"bone_meal"}, m = {0.01, 0.07, -0.125}, r = {-5.5, -4, nil} },
@@ -253,15 +286,14 @@ if a3ds then
         { {"saddle"}, m = {-0.025, nil, nil} },
         { {"boats"}, r = {nil, -37.5, nil} },
         { {"goat_horn"}, m = {0.015, 0.09, nil}, r = {nil, -4, -1.5} },
-
         -- Combat
+        { {"totem_of_undying"}, m = {0.025, -0.02, -0.055}, condition = {not glowing3Dtotem and w3di} },
         { {"egg", "brown_egg", "blue_egg"}, m = {0.03, -0.01, -0.085}, r = {-6, -6, nil} },
         { {"snowball"}, m = {0.015, -0.01, -0.085}, r = {-6, -6, nil} },
-
         -- Ingredients
         { {"string"}, m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
         { {"smithing_template"}, m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil}, matches = true },
-        { {"_key"}, m = {0.015, nil, -0.085}, r = {-7, -5.5}, matches = true },
+        { {"_key"}, m = {0.015, nil, -0.085}, r = {-6, -5.5, nil}, matches = true },
         { {"stick", "blaze_rod", "breeze_rod"}, m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
         { {"flint"}, m = {0.01, -0.1, -0.085}, r = {-6, -4.5, -0.5} },
         { {"bone"}, m = {0.025, -0.04, -0.035}, r = {-5, -5.5, nil} },
@@ -303,17 +335,17 @@ end
 
 if w3di then
     addPos({
+        -- Natural Blocks
+        { {"turtle_egg"}, m = {0.255, -0.18, -0.2}, r = {-5.5, -5.5, 4}, s = {1.7} },
         -- Functional Blocks
         { {"end_crystal"}, m = {-0.08, -0.225, -0.04} },
         { {"flower_pot"}, m = {0.025, -0.015, -0.04}, r = {4, -5.5, 3.5} },
         { {"armor_stand"}, m = {-0.055, -0.015, -0.08}, r = {-4, -9.5, 6} },
         { {"signs"}, m = {-0.035, 0.02, -0.065}, r = {-4.5, -5, 6.5} },
-
         -- Redstone Blocks
         { {"repeater", "comparator"}, r = {-6.5, nil, nil}, condition = {not rvTorches} },
         { {"lever"}, r = {8.5, nil, nil} },
         { {"boats"}, r = {3.5, -8, -4.5} },
-
         -- Tools & Utilities
         { {"bundles"}, m = {-0.05, -0.015, -0.015}, r = {-6, -11, 2.5}, s = {0.9}, condition = {not bensBundle} },
         { {"music_discs"}, m = {-0.05, nil, -0.06}, r = {-5.5, -10.5, 2.5}, condition = {not freshDiscs} },
@@ -330,15 +362,12 @@ if w3di then
         { {"goat_horn"}, m = {-0.015, nil, -0.15}, r = {14, -9, 5.5} },
         { {"firework_rocket"}, m = {-0.03, nil, -0.03}, r = {-6, -13.5, 4.5} },
         { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil} },
-
         -- Combat
         { {"totem_of_undying"}, m = {-0.06, nil, -0.045}, r = {-7.5, nil, nil}, condition = {not glowing3Dtotem} },
         { {"nautilus_armor", "nautilus_shell"}, m = {-0.055, 0.04, 0.01}, r = {-4.5, -9.5, 6}, matches = true },
         { {"snowball", "egg", "brown_egg", "blue_egg"}, m = {0.01, -0.015, -0.05}, r = {-6, -5.5, 3} },
-
         -- Foods & Drinks
         { {"bottle", "potion", "dragon_breath"}, m = {-0.055, nil, -0.035}, r = {-4.5, -7, 4}, matches = true },
-
         -- Ingredients
         { {"bone_meal", "gunpowder", "glowstone_dust", "sugar"}, m = {-0.1, 0.015, 0.035}, r = {-3, -11, nil} },
         { {"stick"}, m = {0.01, 0.01, -0.02}, r = {-2, -2, -1.5} },
@@ -355,7 +384,7 @@ if w3di then
         { {"book", "enchanted_book"}, m = {-0.1, nil, -0.01}, r = {nil, -8.5, nil} },
         { {"fermented_spider_eye"}, m = {-0.025, -0.085, -0.045}, r = {0.5, nil, 4} },
         { {"blaze_powder"}, m = {-0.01, -0.03, -0.045}, r = {-13, -47, nil} },
-
+        { {"feather"}, m = {-0.055, -0.02, -0.03}, r = {nil, -10, 6} },
         -- Spawn Eggs
         { {"spawn_egg"}, m = {-0.02, -0.015, -0.03}, r = {-6.5, -10.5, 3}, matches = true }
     })
@@ -374,7 +403,7 @@ if w3di then
             { {"beef", "porkchop","mutton", "rotten_flesh"}, m = {-0.05, -0.005, -0.025}, r = {-5, -6, 3.5}, matches = true },
             { {"potato", "bread"}, m = {-0.05, -0.005, -0.035}, r = {-6, -5.5, 3.5}, matches = true },
             { {"_stew", "_soup", "bowl"}, m = {0.01, -0.015, -0.105}, r = {-7, -6.5, -1}, matches = true },
-            { {"spider_eye"}, m = {-0.07, -0.14, -0.115}, r = {-6, -6.5, 2} },
+            { {"spider_eye"}, m = {-0.07, -0.14, -0.115}, r = {-6, -6.5, 3} },
             { {"sweet_berries"}, m = {0.025, 0.085, -0.12}, r = {-5.5, -4.5, 7.5} },
             { {"glow_berries"}, m = {-0.06, -0.01, -0.07} },
             { {"dried_kelp"}, m = {-0.095, 0.02, -0.005}, r = {nil, -4, nil} },
@@ -529,5 +558,6 @@ if freshFlowers then
         { {"lily_pad"}, m = {0.14, -0.1, -0.075}, r = {-5.5, -6.5, nil} },
         { {"sea_pickle"}, m = {0.025, -0.025, -0.04}, r = {-5, -7, nil} },
         { {"seagrass"}, m = {0.225, -0.17, -0.18}, r = {-11, -11.5, nil} },
+        { {"kelp"}, m = {-0.045, -0.01, -0.06}, r = {14.5, -14, -9.5} }
     })
 end
