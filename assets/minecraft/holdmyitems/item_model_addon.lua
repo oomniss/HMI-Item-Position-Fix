@@ -97,6 +97,13 @@ PackCompat = {
             "tall_dry_grass", "sunflower", "lilac", "rose_bush", "peony", "pitcher_plant"
         }
     },
+    wNature = {
+        {
+            "oak_sapling", "^azalea$", "^flowering_azalea$", "_mushroom$", "_fungus$", "^fern$", "dead_bush",
+            "dandelion", "poppy", "blue_orchid", "allium", "azure_bluet", "_tulip", "oxeye_daisy", "cornflower",
+            "lily_of_the_valley"
+        }, matches = true
+    },
     w3di = {
         {
             -- Natural Blocks
@@ -135,6 +142,7 @@ PackCompat = {
 ActivePacks = {}
     local a3ds              = ${a3ds}               and (table.insert(ActivePacks, "a3ds") or true)
     local w3di              = ${w3di}               and (table.insert(ActivePacks, "w3di") or true)
+    local wNature           = ${wNature}            and (table.insert(ActivePacks, "wNature") or true)
     local rvChests          = ${rvChests}           and (table.insert(ActivePacks, "rvChests") or true)
     local rvTorches         = ${rvTorches}          and (table.insert(ActivePacks, "rvTorches") or true)
     local refinedTorches    = ${refinedTorches}     and (table.insert(ActivePacks, "refinedTorches") or true)
@@ -147,7 +155,7 @@ ActivePacks = {}
     local freshSeeds        = ${freshSeeds}         and (table.insert(ActivePacks, "freshSeeds") or true)
     local freshOres         = ${freshOresIngots}    and (table.insert(ActivePacks, "freshOresIngots") or true)
     local freshFlowers      = ${freshFlowersPlants} and (table.insert(ActivePacks, "freshFlowersPlants") or true)
-    local gousPoses         = ${gousPoses}               and (table.insert(ActivePacks, "gousPoses") or true)
+    local gousPoses         = ${gousPoses}          and (table.insert(ActivePacks, "gousPoses") or true)
 
 -- === UNDO ADJUSTS ===
 ItemsUndoAdjusts = {
@@ -280,6 +288,7 @@ if a3ds then
         { {"armor_stand"}, m = {nil, 0.03, nil} },
         { {"item_frame", "painting"}, m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
         -- Tools & Utilities
+        { {"bundles"}, m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil}, condition = {not bensBundle} },
         { {"minecart"}, m = {nil, 0.045, nil}, matches = true },
         { {"ender_eye"}, m = {0.03, nil, -0.08}, r = {-4.5, -6, nil} },
         { {"ender_pearl"}, m = {0.01, -0.005, -0.08}, r = {-4.5, -6, nil} },
@@ -288,7 +297,6 @@ if a3ds then
         { {"shears"}, r = {-7, nil, 38.5} },
         { {"brush"}, m = {0.025, 0.05, -0.035}, r = {-4.5, -5.5, -1} },
         { {"lead"}, m = {0.125, -0.13, -0.215}, r = {-5.5, -4, -1}, s = {0.9} },
-        { {"bundles"}, m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil} },
         { {"compass"}, m = {0.015, 0.06, -0.03}, r = {-6.5, -5, -2} },
         { {"map", "paper"}, m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
         { {"writable_book"}, m = {nil, nil, -0.09} },
@@ -482,7 +490,7 @@ end
 
 if bensBundle then
     addPos({
-        { {"bundles"}, m = {-0.045, 0.095, -0.035}, r = {-0.5, 23, -4} }
+        { {"bundles"}, m = {-0.04, 0.095, -0.035}, r = {-0.5, 23, -4} }
     })
 end
 
@@ -569,5 +577,24 @@ if freshFlowers then
         { {"sea_pickle"}, m = {0.025, -0.025, -0.04}, r = {-5, -7, nil} },
         { {"seagrass"}, m = {0.225, -0.17, -0.18}, r = {-11, -11.5, nil} },
         { {"kelp"}, m = {-0.045, -0.01, -0.06}, r = {14.5, -14, -9.5} }
+    })
+end
+
+if wNature then
+    addPos({
+        { {"_mushroom$", "_fungus$"}, m = {0.245, -0.11, -0.135}, r = {-4, -5, nil}, s = {1.45}, matches = true },
+        { {"_tulip"}, m = {0.15, -0.065, -0.08}, matches = true },
+        { {"oak_sapling"}, m = {0.115, -0.075, -0.08}, r = {-3.5, nil, nil} },
+        { {"azalea", "flowering_azalea"}, m = {0.165, -0.075, -0.075}, r = {-5, -3.5, nil} },
+        { {"dead_bush"}, m = {0.22, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
+        { {"fern"}, m = {0.21, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
+        { {"dandelion"}, m = {0.16, -0.06, -0.11} },
+        { {"poppy"}, m = {0.06, nil, nil} },
+        { {"blue_orchid"}, m = {0.135, -0.06, -0.095} },
+        { {"allium"}, m = {-0.075, -0.055, -0.095}, r = {nil, 75.5, nil}, s = {0.9} },
+        { {"azure_bluet"}, m = {0.095, -0.06, -0.135}, r = {nil, 35.5, nil} },
+        { {"oxeye_daisy"}, m = {0.205, -0.075, -0.07}, r = {nil, -20.5, nil}, s = {1.25} },
+        { {"cornflower"}, m = {0.21, -0.055, -0.125}, s = {1.25} },
+        { {"lily_of_the_valley"}, m = {0.07, -0.09, -0.115}, r = {nil, 20, nil} }
     })
 end

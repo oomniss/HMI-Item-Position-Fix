@@ -57,14 +57,14 @@ end
 -- == Render Item as Block ==
 local function renderBlock(render, items, force)
     if force then
-        renderAsBlock:put(context.item, render)
+        renderAsBlock:put(I:getName(context.item), render)
         return
     end
     if isItemCompat then return end
 
     for _, i in ipairs(items) do
-        if matched(i, false) then
-            renderAsBlock:put(context.item, render)
+        if matched(i) then
+            renderAsBlock:put(I:getName(context.item), render)
             return
         end
     end
@@ -181,7 +181,7 @@ local general2D     = not isException and is2D and not isItemCompat
 -- === NOT RENDER AS BLOCK ===
 renderBlock(
     false,
-    {"weeping_vines", "vine", "ladder", "signs", "tripwire_hook", "string", "bars", "resin_clump", "glass_pane", "sugar_cane"}
+    {"weeping_vines", "vine", "ladder", "signs", "tripwire_hook", "string", "bars", "resin_clump", "glass_panes", "sugar_cane"}
 )
 
 -- === GENERAL ADJUST ===

@@ -15,6 +15,7 @@
     refinedBuckets:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.PatoRefinedBuckets",
     refinedTorches:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.PatoRefinedTorches",
     freshDiscs:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshMusicDiscs",
+    wNature:            "HMIItemPositionFix.ItemsResourcePacksCompatibility.WeskersonNature",
 
     gousPoses:          "HMIItemPositionFix.OtherResourcePacksCompatibility.GoussHandPoses"
   }

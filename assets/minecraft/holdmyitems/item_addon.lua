@@ -238,6 +238,18 @@ else
     swing_hit_second = M:sin(M:clamp(context.swingProgress, 0.65594, 0.82025) * 4.78 * 2 - 4.7)
 end
 
+local invertedAxis =
+    (glowing3Darmors and tags({"head_armor"}))
+    or (glowing3Dtotem and itemName == "totem_of_undying")
+    or (w3di and a3ds and itemName == "shears")
+    or (freshFoods and (
+        itemName == "cake"
+        or itemName == "pumpkin_pie"
+        or itemName == "bowl"
+        or itemName:match("_stew")
+        or itemName:match("_soup")
+    ))
+
 if useAction == "spear" then
     M:rotateZ(mat, 180 * l)
 
@@ -255,12 +267,22 @@ if useAction == "spear" then
 
     M:moveY(mat, -0.25 * M:clamp(M:sin(Easings:easeInOutSine(hic) * 6.28), 0, 1))
 end
+
 if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
-    M:moveZ(mat, -0.05 * swing_rot)
-    M:moveY(mat, -0.05 * swing_rot)
-    M:rotateX(mat, 10 * swing_rot)
-    M:rotateX(mat, -30 * swing_rot)
-    M:rotateX(mat, -10 * swing_hit)
+
+    if invertedAxis then
+        M:moveX(mat, -0.05 * swing_rot)
+        M:moveY(mat, -0.05 * swing_rot)
+		M:rotateZ(mat, 10  * swing_rot)
+        M:rotateZ(mat, -30 * swing_rot)
+        M:rotateZ(mat, -10 * swing_hit)
+    else
+        M:moveZ(mat, -0.05 * swing_rot)
+        M:moveY(mat, -0.05 * swing_rot)
+        M:rotateX(mat, 10 * swing_rot)
+        M:rotateX(mat, -30 * swing_rot)
+        M:rotateX(mat, -10 * swing_hit)
+    end
 
     if not isSword then
         if useAction == "trident" or useAction == "spear" then
@@ -284,7 +306,7 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
             M:moveY(mat, 0.05 * swing_hit)
             M:moveY(mat, 0.3 * swingOverall)
 
-        else
+        elseif not invertedAxis then
             M:moveZ(mat, -0.05 * swing_rot)
             M:moveY(mat, -0.05 * swing_rot)
             M:rotateX(mat, -10 * swing_rot)
