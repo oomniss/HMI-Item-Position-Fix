@@ -2,8 +2,7 @@
 -- using item_model_addon.lua because it doesn't overwrite and to better separate compatibility between packs
 -- it is what it is, you gotta make do with what you've got
 
-local isUsingItem   = P:isUsingItem(context.player)
-local l             = context.mainHand and 1 or -1
+local l = context.mainHand and 1 or -1
 
 -- === FUNCTION ===
 Positions = {}
@@ -229,8 +228,7 @@ ItemsUndoAdjusts = {
             { {"firework_rocket"}, s = {1/1.2}, m = {0.03, 0, nil, "zxy"}, ops = "smr", prox = true },
             { {"firework_rocket"}, s = {1/1.05}, m = {0.05, 0.05, nil, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" },
             { {"carrot_on_a_stick"}, s = {1/1.2}, m = {0.1, 0.1, nil}, r = {1, 60, nil, "yxz"}, ops = "smr" },
-            { {"goat_horn"}, s = {1/1.3}, m = {0.05, -0.05, nil, "zxy"}, r = {nil, nil, 5}, ops = "smr", prox = true },
-            { {"goat_horn"}, m = {-0.095, 0.09, -0.12}, r = {nil, -52, nil}, condition = {isUsingItem} },
+            { {"goat_horn"}, s = {1/1.3}, m = {0.05, -0.05, nil, "zxy"}, r = {nil, nil, 5}, ops = "smr" },
             { {"egg", "blue_egg", "brown_egg", "snowball"}, r = {nil, nil, 5} },
             { {"loom_patterns"}, s = {1/1.4}, r = {180, 130, nil, "zxy"}, m = {-0.1, 0.15, nil, "zyx"}, ops = "srm" },
             { {"stick", "bone", "blaze_rod", "breeze_rod"}, m = {0.05, 0.07, 0.05, "yzx"}, r = {4, nil, -85, "zxy"} },
@@ -363,8 +361,7 @@ if w3di then
         { {"bundles"}, m = {-0.05, -0.015, -0.015}, r = {-6, -11, 2.5}, s = {0.9}, condition = {not bensBundle} },
         { {"music_discs"}, m = {-0.05, nil, -0.06}, r = {-5.5, -10.5, 2.5}, condition = {not freshDiscs} },
         { {"disc_fragment_5"}, m = {-0.065, -0.045, -0.005}, r = {-5.5, -9.5, 5.5}, condition = {not freshDiscs} },
-        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, matches = true, condition = {not refinedBuckets}, prox = true },
-        { {"milk_bucket"}, m = {0.125, nil, 0.035}, r = {30, -10, -60}, condition = {not refinedBuckets and isUsingItem} },
+        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, matches = true, condition = {not refinedBuckets} },
         { {"shears"}, m = {nil, -0.085, -0.085}, r = {-40.5, 10, 24}, condition = {not gousPoses} },
         { {"flint_and_steel"}, m = {0.05, -0.015, -0.145}, r = {3.5, -6, 4.5} },
         { {"lead"}, m = {0.075, -0.03, -0.08}, r = {nil, -26, 10} },
@@ -373,8 +370,7 @@ if w3di then
         { {"writable_book", "written_book"}, m = {nil, nil, -0.115} },
         { {"wind_charge"}, m = {-0.02, -0.03, -0.06}, r = {-3.5, -11, 3} },
         { {"ender_eye", "ender_pearl"}, m = {-0.015, -0.01, -0.005}, r = {-4, -10, 3} },
-        { {"goat_horn"}, m = {-0.015, nil, -0.15}, r = {14, -9, 5.5}, prox = true },
-        { {"goat_horn"}, m = {0.055, nil, 0.04}, condition = {isUsingItem} },
+        { {"goat_horn"}, m = {-0.015, nil, -0.15}, r = {14, -9, 5.5} },
         { {"firework_rocket"}, m = {-0.03, nil, -0.03}, r = {-6, -13.5, 4.5} },
         { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil} },
         -- Combat

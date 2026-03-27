@@ -9,16 +9,26 @@ local switch_val                = (context.mainHand and mainHandSwitch) or offHa
 local switchAnimationVariable   = Easings:easeInBack(M:sin(M:clamp(switch_val, 0.09723, 0.60632) * 3.24 * 1.65 - 0.1))
 
 -- === FUNCTIONS AND COMPATIBILITY ===
+local matchedCache = { [0] = {}, [1] = {} }
 local function matched(item, match)
     local list = type(item) == "table" and item or {item}
+    local cache = matchedCache[match and 1 or 0]
 
     local function check(i)
+        local cached = cache[i]
+        if cached ~= nil then return cached end
+
+        local result
         if match then
-            return itemName:match(i) ~= nil
+            result = (itemName:match(i) ~= nil)
+        else
+            result = itemName == i
+                or I:isIn(context.item, Tags:getFabricTag(i))
+                or I:isIn(context.item, Tags:getVanillaTag(i))
         end
-        return itemName == i
-            or I:isIn(context.item, Tags:getFabricTag(i))
-            or I:isIn(context.item, Tags:getVanillaTag(i))
+
+        cache[i] = result
+        return result
     end
 
     for _, i in ipairs(list) do
@@ -28,13 +38,21 @@ local function matched(item, match)
 end
 
 -- == Compatibility ==
+ActivePacks        = ActivePacks or {}
+PackCompat         = PackCompat or {}
 local isItemCompat = false
-for _, rp in ipairs(ActivePacks) do
-    local pack = PackCompat[rp]
-    for _, i in ipairs(pack[1]) do
-        if matched(i, pack.matches) then
-            isItemCompat = true
+if next(ActivePacks) and next(PackCompat) then
+    for _, rp in ipairs(ActivePacks) do
+        local pack = PackCompat[rp]
+        if pack and pack[1] then
+            for _, i in ipairs(pack[1]) do
+                if matched(i, pack.matches) then
+                    isItemCompat = true
+                    break
+                end
+            end
         end
+        if isItemCompat then break end
     end
 end
 
