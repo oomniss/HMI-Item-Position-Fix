@@ -282,7 +282,8 @@ if a3ds then
         { {"sugar_cane"}, m = {0.015, nil, -0.105}, r = {nil, -5.5, nil}, s = {0.9} },
         { {"glow_lichen"}, m = {nil, -0.21, nil} },
         { {"lily_pad"}, m = {nil, -0.215, 0.02}, r = {-109, nil, nil}, s = {1, 0.4, 1} },
-        { PackCompat.a3ds.naturalWithBlocks, m = {nil, nil, -0.08}, renderAsBlock = false },
+        { {"pink_petals", "wildflowers", "leaf_litter"}, m = {-0.035, -0.22, -0.085}, r = {-73.5, nil, nil} },
+        { PackCompat.a3ds.naturalWithBlocks, m = {nil, -0.04, -0.08}, renderAsBlock = false },
         -- Functional Blocks
         { {"bell"}, m = {-0.165, -0.495, 0.17}, r = {-15.5, -4.5, -2.5} },
         { {"armor_stand"}, m = {nil, 0.03, nil} },
@@ -320,7 +321,7 @@ if a3ds then
         { {"honeycomb"}, m = {0.01, 0.04, -0.05}, r = {-5, -5, nil} },
         { {"ink_sac", "glow_ink_sac"}, m = {0.015, 0.015, -0.085}, r = {-4, -4.5, -1} },
         { {"clay_ball"}, m = {l == 1 and 0 or 0.06, nil, nil} },
-        { {"fire_charge", "heart_of_the_sea"}, m = {0.005, 0.05, 0.005}, r = {-6, -5, nil} },
+        { {"fire_charge", "heart_of_the_sea"}, m = {0.005, 0.04, 0.005}, r = {-6, -5, nil} },
         { {"slime_ball"}, m = {0.02, 0.005, -0.09}, r = {-4, -3.5, nil} },
         { {"prismarine_shard"}, m = {0.02, nil, -0.09}, r = {-6.5, -6, -1.5} },
         { {"prismarine_crystals"}, m = {0.025, 0.01, -0.14}, r = {-7.5, -6.5, nil}, s = {1.15} },
@@ -337,7 +338,7 @@ if a3ds then
     if not freshOres then
         addPos({
             { {"resin_clump"}, m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, renderAsBlock = false },
-            { {"coal$"}, m = {nil, nil, -0.025}, s = {0.9}, matches = true },
+            { {"coal$"}, m = {nil, nil, -0.025}, r = {-8, nil, nil}, s = {0.9}, matches = true },
             { {"raw_"}, m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, matches = true },
             { {"nugget"}, m = {0.02, 0.03, -0.045}, r = {-6, -5, nil}, matches = true },
             { {"ingot", "brick$"}, m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9}, matches = true },

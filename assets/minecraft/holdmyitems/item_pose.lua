@@ -13,8 +13,7 @@ local function matched(item, match)
     local cache = matchedCache[match and 1 or 0]
 
     local function check(i)
-        local cached = cache[i]
-        if cached ~= nil then return cached end
+        if cache[i] ~= nil then return cache[i] end
 
         local result
         if match then
@@ -228,7 +227,7 @@ pose({
     { {"bamboo"}, m = {0.4, -0.15, -0.25}, r = {-3.5, -4.5, nil}, s = {2.4, 1.5, 2.4} },
     { {"weeping_vines"}, m = {0.105, -0.24, -0.12}, r = {-3, nil, nil}, s = {1.6} },
     { {"twisting_vines"}, m = {0.085, nil, nil} },
-    { {"vine", "glow_lichen", "sculk_vein"}, m = {-0.07, -0.35, 0.01}, r = {-7.5, -96, -6.5}, s = {1, 1, 0.2} },
+    { {"vine", "glow_lichen", "sculk_vein"}, m = {l == 1 and -0.1 or -0.07, -0.35, 0.01}, r = {-7.5, -96, -6.5}, s = {1, 1, 0.2} },
     { {"sunflower"}, m = {l == 1 and -0.08 or -0.02, nil, l == 1 and 0.33 or -0.07}, r = {nil, l == 1 and -131.5 or 30, nil} },
     { {"small_dripleaf"}, m = {0.06, nil, -0.015} },
     { {"big_dripleaf"}, m = {0.065, nil, -0.09} },
