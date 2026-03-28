@@ -164,7 +164,6 @@ local isHangingSign  = tags({"hanging_signs"})
 local isPickaxe      = tags({"pickaxes"})
 local isNugget       = tags({"nuggets"})
 local isMusicDisc    = tags({"music_discs"})
-local isLanternTag   = tags({"lanterns"})
 local isSpearTag     = tags({"spears"})
 local isSkull        = tags({"skulls"})
 
@@ -238,18 +237,6 @@ else
     swing_hit_second = M:sin(M:clamp(context.swingProgress, 0.65594, 0.82025) * 4.78 * 2 - 4.7)
 end
 
-local invertedAxis =
-    (glowing3Darmors and tags({"head_armor"}))
-    or (glowing3Dtotem and itemName == "totem_of_undying")
-    or (w3di and a3ds and itemName == "shears")
-    or (freshFoods and (
-        itemName == "cake"
-        or itemName == "pumpkin_pie"
-        or itemName == "bowl"
-        or itemName:match("_stew")
-        or itemName:match("_soup")
-    ))
-
 if useAction == "spear" then
     M:rotateZ(mat, 180 * l)
 
@@ -268,14 +255,26 @@ if useAction == "spear" then
     M:moveY(mat, -0.25 * M:clamp(M:sin(Easings:easeInOutSine(hic) * 6.28), 0, 1))
 end
 
+local invertedAxis =
+    (glowing3Darmors and tags({"head_armor"}))
+    or (glowing3Dtotem and itemName == "totem_of_undying")
+    or (w3di and a3ds and (
+        itemName == "shears"
+        or itemName == "ender_pearl"
+        or itemName == "ender_eye"))
+    or (freshFoods and (
+        itemName == "cake"
+        or itemName == "pumpkin_pie"
+        or itemName == "bowl"
+        or itemName:match("_stew")
+        or itemName:match("_soup")
+    ))
+
 if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
 
     if invertedAxis then
         M:moveX(mat, -0.05 * swing_rot)
         M:moveY(mat, -0.05 * swing_rot)
-		M:rotateZ(mat, 10  * swing_rot)
-        M:rotateZ(mat, -30 * swing_rot)
-        M:rotateZ(mat, -10 * swing_hit)
     else
         M:moveZ(mat, -0.05 * swing_rot)
         M:moveY(mat, -0.05 * swing_rot)
@@ -590,38 +589,27 @@ if I:isOf(context.item, Items:get("minecraft:filled_map")) then
 end
 
 -- == GLOW AND PARTICLES ==
-if
-	itemName == "brewing_stand"
-	or itemName == "lava_bucket"
-	or itemName == "torch"
-	or itemName:match("_torch")
-	or (isLanternTag and not (w3di or torchesPack))
-then
-	if
-		itemName == "brewing_stand" or itemName == "torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")
-		elseif itemName == "copper_torch" and not torchesPack 	then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")
-		elseif itemName == "soul_torch" 						then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")
-		elseif itemName == "redstone_torch" 					then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")
-		elseif itemName == "lantern" 							then glow(0.45 * l, 0.15, 0.5, "textures/particle/orange_glow.png")
-		elseif itemName == "soul_lantern" 						then glow(0.45 * l, 0.15, 0.5, "textures/particle/blue_glow.png")
-		elseif itemName:match("copper_lantern") 				then glow(0.45 * l, 0.15, 0.5, "textures/particle/copper_glow.png")
-		elseif itemName == "lava_bucket" 						then glow(-0.05 * l, 0, 0, "textures/particle/orange_glow.png")
-	end
-end
+if not (refinedBuckets or torchesPack or w3di) then
 
-if
-	w3di and not torchesPack
-	and (
-		isLanternTag
-		or itemName == "soul_torch"
-		or itemName == "redstone_torch"
-	)
-then
-	if itemName == "soul_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/b_glow.png") end
-	if itemName == "redstone_torch" 	then glow(0.5 * l, 0.6, 0.5, "textures/particle/r_glow.png") end
-	if itemName == "lantern" 			then glow(0.05 * l, -0.2, -0.2, "textures/particle/orange_glow.png") end
-	if itemName == "soul_lantern" 		then glow(0.05 * l, -0.2, -0.2, "textures/particle/b_glow.png") end
-	if itemName:match("copper_lantern") then glow(0.05 * l, -0.2, -0.2, "textures/particle/copper_glow.png") end
+    if itemName == "torch" 		            then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")       end
+    if itemName == "copper_torch" 	        then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")       end
+    if itemName == "soul_torch" 			then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")         end
+    if itemName == "redstone_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")          end
+    if itemName == "lantern" 				then glow(0.45 * l, 0.15, 0.5, "textures/particle/orange_glow.png")     end
+    if itemName == "soul_lantern" 			then glow(0.45 * l, 0.15, 0.5, "textures/particle/blue_glow.png")       end
+    if itemName:match("copper_lantern") 	then glow(0.45 * l, 0.15, 0.5, "textures/particle/copper_glow.png")     end
+    if itemName == "lava_bucket" 			then glow(-0.05 * l, 0, 0, "textures/particle/orange_glow.png")         end
+
+elseif w3di and not (torchesPack or refinedBuckets) then
+
+    if itemName == "torch" 		            then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")       end
+    if itemName == "copper_torch" 	        then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")       end
+    if itemName == "soul_torch" 			then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")         end
+    if itemName == "redstone_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")          end
+	if itemName == "lantern" 			    then glow(0.05 * l, -0.2, -0.2, "textures/particle/orange_glow.png")    end
+	if itemName == "soul_lantern" 		    then glow(0.05 * l, -0.2, -0.2, "textures/particle/b_glow.png")         end
+	if itemName:match("copper_lantern")     then glow(0.05 * l, -0.2, -0.2, "textures/particle/copper_glow.png")    end
+
 end
 
 if swingCountPrev ~= P:getSwingCount(context.player) and context.mainHand and itemName == "bell" then

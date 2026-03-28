@@ -40,7 +40,7 @@ PackCompat = {
         "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
         "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
         "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
-        "^dried_kelp$", "^honeycomb$", "_berries", "bowl"
+        "^dried_kelp$", "^honeycomb$", "_berries", "bowl", "cake"
     }, matches = true },
     freshOresIngots = { {
         "redstone$", "coal$", "raw", "^emerald$", "^lapis_lazuli$", "^diamond$", "quartz$",
@@ -71,7 +71,7 @@ PackCompat = {
         "lily_of_the_valley", "^torchflower$", "_eyeblossom", "wither_rose", "pink_petals", "wildflowers",
         "leaf_litter", "^bamboo$", "sugar_cane", "crimson_roots", "warped_roots", "nether_sprouts",
         "sunflower", "lilac", "rose_bush", "pitcher_plant", "glow_lichen", "hanging_roots", "frogspawn", "lily_pad",
-        "^azalea$", "^flowering_azalea$", "weeping_vines", "twisting_vines", "^vine$", "peony",
+        "^azalea$", "^flowering_azalea$", "weeping_vines", "twisting_vines", "^vine$", "peony", "cactus_flower",
         -- Functional Blocks
         "^bell$", "armor_stand", "item_frame", "painting", "ender_eye",
         -- Redstone Blocks
@@ -207,7 +207,7 @@ ItemsUndoAdjusts = {
             { {"cod", "cooked_cod", "salmon", "cooked_salmon", "tropical_fish"}, s = {1/1.3, 1/1.4, 1/1.3}, m = {-0.05, 0.1, -0.07, "zzx"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
             { {"bread"}, s = {1/1.15, 1/1.25, 1/1.15}, m = {-0.05, 0.15, -0.07, "zzx"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
             { {"cookie"}, s = {1/1.15, 1/1.25, 1/1.15}, m = {-0.05, 0.07, -0.07, "zzx"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
-            { {"cake"}, s = {1/1.35, 1/1.35, 1/1.5}, r = {-7, -15, 75, "yzx"}, m = {0.1, -0.15, -0.1, "xzy"}, ops = "srm" },
+            { {"cake"}, s = {1/1.35, 1/1.35, 1/1.5}, r = {-7, -15, 75, "yzx"}, m = {-0.1, -0.15, -0.1, "xzy"}, ops = "srm" },
             { {"pumpkin_pie"}, s = {1/1.15}, m = {0, 0, -0.07, "yzx"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
             { {"spider_eye"}, s = {1/1.1}, m = {0.04, -0.05, nil, "zxy"}, r = {0, 5, nil, "xzy"}, ops = "smr" }
         },
@@ -243,7 +243,6 @@ ItemsUndoAdjusts = {
             { {"slime_ball"}, s = {1/1.05}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
             { {"clay_ball"}, m = {-0.055, 0.015, nil}, r = {-3, 0, 6} },
             { {"heart_of_the_sea"}, s = {1/1.35}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"} },
-            { {"book", "enchanted_book"}, s = {1/1.1, 1/1.2, 1/1.1}, r = {-40, 20, 30, "yxz"}, m = {-0.2, -0.07, -0.1, "yzx"}, ops = "srm" },
             { {"totem_of_undying"}, s = {1/1.2}, m = {-0.015, -0.005, -0.02}, r = {51, 140, 30.5}, ops = "smr", condition = {glowing3Dtotem} },
             { {"shears"}, m = {nil, -0.155, -0.15}, r = {-7, 10, -32.5}, s = {0.9}, condition = {gousPoses} }
         }
@@ -278,7 +277,7 @@ if a3ds then
         { {"bamboo"}, m = {0.005, nil, -0.03}, r = {-5.5, -5, -1}, s = {0.8}, renderAsBlock = false },
         { {"_mushroom$", "_fungus$"}, m = {0.01, -0.03, -0.075}, r = {-5, -4, -1}, matches = true },
         { {"azalea", "flowering_azalea"}, m = {0.065, -0.095, -0.17}, r = {-6, 29, nil} },
-        { {"cactus_flower"}, m = {-0.09, 0.1, 0.03}, r = {-2.5, -22.5, nil} },
+        { {"cactus_flower"}, m = {0.03, 0.07, -0.09}, r = {-4.5, -4.5, nil} },
         { {"sugar_cane"}, m = {0.015, nil, -0.105}, r = {nil, -5.5, nil}, s = {0.9} },
         { {"glow_lichen"}, m = {nil, -0.21, nil} },
         { {"lily_pad"}, m = {nil, -0.215, 0.02}, r = {-109, nil, nil}, s = {1, 0.4, 1} },
@@ -291,7 +290,7 @@ if a3ds then
         -- Tools & Utilities
         { {"bundles"}, m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil}, condition = {not bensBundle} },
         { {"minecart"}, m = {nil, 0.045, nil}, matches = true },
-        { {"ender_eye"}, m = {0.03, nil, -0.08}, r = {-4.5, -6, nil} },
+        { {"ender_eye"}, m = {0.03, -0.01, -0.08}, r = {-4.5, -6, nil} },
         { {"ender_pearl"}, m = {0.01, -0.005, -0.08}, r = {-4.5, -6, nil} },
         { {"flint_and_steel"}, m = {0.015, 0.005, -0.095}, r = {10, 2.5, -2.5}, s = {0.9} },
         { {"bone_meal"}, m = {0.01, 0.07, -0.125}, r = {-5.5, -4, nil} },
@@ -311,6 +310,7 @@ if a3ds then
         { {"snowball"}, m = {0.015, -0.01, -0.085}, r = {-6, -6, nil} },
         -- Ingredients
         { {"flint"}, m = {0.03, 0.06, -0.08}, r = {14.5, 12.5, -8}, condition = {freshOres} },
+        { {"book", "enchanted_book"}, m = {-0.135, nil, 0.085}, r = {-5, -6, -2}, condition = {not w3di} },
         { {"string"}, m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
         { {"smithing_template"}, m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil}, matches = true },
         { {"_key"}, m = {0.015, nil, -0.085}, r = {-6, -5.5, nil}, matches = true },
@@ -328,7 +328,6 @@ if a3ds then
         { {"nautilus_shell"}, m = {0.025, -0.015, -0.04}, r = {-5.5, -5, nil} },
         { {"nether_star"}, m = {0.01, -0.135, -0.035}, r = {-6, -5.5, -2} },
         { {"dyes"}, m = {0.02, nil, -0.105}, r = {-4, -5.5, nil} },
-        { {"book", "enchanted_book"}, m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
         { {"firework_star", "magma_cream"}, m = {0.03, 0.01, -0.01}, r = {-4.5, -5, -1.5} },
         { {"glowstone_dust", "gunpowder", "sugar", "blaze_powder"}, m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
         { {"rabbit_foot"}, m = {-0.01, -0.005, -0.08}, r = {-5, -4.5, nil} },
@@ -372,6 +371,7 @@ if w3di then
         { {"disc_fragment_5"}, m = {-0.065, -0.045, -0.005}, r = {-5.5, -9.5, 5.5}, condition = {not freshDiscs} },
         { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, matches = true, condition = {not refinedBuckets} },
         { {"shears"}, m = {nil, -0.085, -0.085}, r = {-40.5, 10, 24}, condition = {not gousPoses} },
+        { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil}, condition = {not glowing3Darmors} },
         { {"flint_and_steel"}, m = {0.05, -0.015, -0.145}, r = {3.5, -6, 4.5} },
         { {"lead"}, m = {0.075, -0.03, -0.08}, r = {nil, -26, 10} },
         { {"compasses", "clock"}, m = {-0.005, -0.03, -0.16}, r = {5.5, -9.5, 7.5} },
@@ -381,7 +381,6 @@ if w3di then
         { {"ender_eye", "ender_pearl"}, m = {-0.015, -0.01, -0.005}, r = {-4, -10, 3} },
         { {"goat_horn"}, m = {-0.015, nil, -0.15}, r = {14, -9, 5.5} },
         { {"firework_rocket"}, m = {-0.03, nil, -0.03}, r = {-6, -13.5, 4.5} },
-        { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil} },
         -- Combat
         { {"totem_of_undying"}, m = {-0.06, nil, -0.045}, r = {-7.5, nil, nil}, condition = {not glowing3Dtotem} },
         { {"nautilus_armor", "nautilus_shell"}, m = {-0.055, 0.04, 0.01}, r = {-4.5, -9.5, 6}, matches = true },
@@ -485,7 +484,8 @@ if glowing3Darmors then
         { {"head_armor"}, m = {-0.125, -0.12, -0.04}, r = {-4, 84.5, nil} },
         { {"chest_armor"}, m = {nil, -0.26, 0.085}, r = {58, 180, -15} },
         { {"leg_armor"}, m = {-0.04, -0.385, -0.205}, r = {-2, nil, 7.5} },
-        { {"foot_armor"}, m = {-0.095, -0.01, -0.02}, r = {nil, 82, nil} }
+        { {"foot_armor"}, m = {-0.095, -0.01, -0.02}, r = {nil, 82, nil} },
+        { {"elytra"}, m = {-0.04, -0.03, -0.045}, r = {-11, nil, 10} }
     })
 end
 
@@ -504,13 +504,13 @@ end
 
 if freshFoods then
     addPos({
-        { {"spider_eye"}, m = {-0.01, -0.13, -0.19}, r = {-5.5, 1.5, 34.5} },
         { {"_soup", "_stew", "bowl"}, m = {0.07, -0.025, -0.03}, r = {1.5, -4.5, -1}, matches = true },
         { {"beef", "porkchop"}, m = {0.06, 0.005, -0.13}, r = {-1.5, -5.5, -1}, s = {1.15}, matches = true },
         { {"mutton"}, m = {0.025, 0.005, -0.13}, r = {-1.5, -5.5, -1}, s = {1.15}, matches = true },
         { {"apple"}, m = {0.075, 0.015, -0.07}, r = {2, -0.5, nil}, matches = true },
         { {"melon_slice"}, m = {0.03, nil, -0.055}, r = {2, -0.5, nil}, matches = true },
         { {"potato"}, m = {0.025, -0.01, -0.105}, r = {-5, -5, nil}, s = {1.15}, matches = true },
+        { {"spider_eye"}, m = {-0.01, -0.13, -0.19}, r = {-5.5, 1.5, 34.5} },
         { {"carrot", "golden_carrot"}, m = {-0.04, -0.035, -0.05}, r = {nil, -5, 3} },
         { {"sweet_berries"}, m = {-0.035, nil, -0.055}, r = {nil, -4, nil} },
         { {"glow_berries"}, m = {0.015, -0.055, -0.095} },
@@ -526,7 +526,7 @@ if freshFoods then
         { {"pufferfish"}, m = {0.075, 0.005, -0.065}, r = {15, 7.5, 9} },
         { {"bread"}, m = {0.07, -0.04, -0.085}, r = {1, nil, nil} },
         { {"cookie"}, m = {0.07, 0.005, -0.075} },
-        { {"cake"}, m = {-0.05, 0.025, 0.015} },
+        { {"cake"}, m = {0.115, -0.04, nil}, r = {-6, -5, nil} },
         { {"pumpkin_pie"}, m = {0.06, 0.02, -0.175}, r = {4.5, 3, 5.5} },
         { {"rotten_flesh"}, m = {0.085, -0.19, -0.035}, r = {-40.5, nil, 3.5}, s = {1.15} },
     })

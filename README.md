@@ -6,24 +6,25 @@ The **Hold My Items** mod brings visible first-person hands and stunning animati
 
 This pack includes full compatibility support for the most popular 3D resource packs. When multiple packs are active at the same time, their item positioning adjustments can stack and conflict with each other — by manually enabling the corresponding toggles in the settings, this pack applies the correct corrections for every combination, so everything stays perfectly aligned no matter what you're running.
 
-| Compat | Pack                          | Details/Notes                                                    |
-| ------ | ----------------------------- | ---------------------------------------------------------------- |
-| ✅     | **Actually 3D Stuff**         | Incompatible with Fresh Flowers and Plants                       |
-| ✅     | **Weskerson's 3D Items**      | Limited compatibility with Refined Torches                       |
-| ✅     | **Weskerson's Nature**        | ---------------------------------------------------------------- |
-| ✅     | **R&V Chests & Boxes**        | ---------------------------------------------------------------- |
-| ✅     | **R&V Torches**               | Incompatible with Pato's Refined Torches                         |
-| ✅     | **Pato's Refined Torches**    | Incompatible with R&V Torches; Limited compatibility with W3DI   |
-| ✅     | **Pato's Refined Buckets**    | ---------------------------------------------------------------- |
-| ✅     | **Glowing 3D Armors**         | ---------------------------------------------------------------- |
-| ✅     | **Glowing 3D Totem**          | ---------------------------------------------------------------- |
-| ✅     | **Fresh Flowers and Plants**  | Incompatible with Actually 3D Stuff                              |
-| ✅     | **Fresh Foods**               | ---------------------------------------------------------------- |
-| ✅     | **Fresh Ores And Ingots**     | ---------------------------------------------------------------- |
-| ✅     | **Fresh Seeds**               | ---------------------------------------------------------------- |
-| ✅     | **Fresh Music Discs**         | ---------------------------------------------------------------- |
-| ✅     | **Ben's Bundle**              | ---------------------------------------------------------------- |
-| ✅     | **NNE Action Swords**         | ---------------------------------------------------------------- |
+| Compat | Pack                          | Details/Notes                                                                            |
+| ------ | ----------------------------- | ---------------------------------------------------------------------------------------- |
+| ✅     | **Actually 3D Stuff**         | Incompatible with Fresh Flowers and Plants                                               |
+| ✅     | **Weskerson's 3D Items**      | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses|
+| ✅     | **Weskerson's Nature**        | ---                                                                                      |
+| ✅     | **R&V Chests & Boxes**        | ---                                                                                      |
+| ✅     | **R&V Torches**               | Incompatible with Pato's Refined Torches                                                 |
+| ✅     | **Pato's Refined Torches**    | Incompatible with R&V Torches; Limited compatibility with W3DI                           |
+| ✅     | **Pato's Refined Buckets**    | ---                                                                                      |
+| ✅     | **Glowing 3D Armors**         | ---                                                                                      |
+| ✅     | **Glowing 3D Totem**          | ---                                                                                      |
+| ✅     | **Fresh Flowers and Plants**  | Incompatible with Actually 3D Stuff                                                      |
+| ✅     | **Fresh Foods**               | ---                                                                                      |
+| ✅     | **Fresh Ores And Ingots**     | ---                                                                                      |
+| ✅     | **Fresh Seeds**               | ---                                                                                      |
+| ✅     | **Fresh Music Discs**         | ---                                                                                      |
+| ✅     | **Ben's Bundle**              | ---                                                                                      |
+| ✅     | **NNE Action Swords**         | ---                                                                                      |
+| ✅     | **Gous's Hand Poses**         | Currently incompatible with W3DI                                                         |
 
 > To enable compatibility with the packs listed above, you must have the Respackopts mod installed. It adds a settings menu to your resource packs screen where you can toggle support for each pack individually.
 

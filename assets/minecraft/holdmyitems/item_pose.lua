@@ -251,7 +251,7 @@ pose({
     { {"froglight", "shulker_box"}, m = {-0.04, nil, 0.025}, matches = true },
     { {"campfire"}, m = {0.21, -0.085, -0.095}, r = {-4, -5.5, -1}, s = {1.25}, matches = true },
     { {"lightning_rod"}, m = {0.18, -0.1, 0.02}, r = {-1, -23, nil}, s = {1.3}, matches = true },
-    { {"torch", "soul_torch", "copper_torch", "redstone_torch"}, m = {0.07, -0.08, -0.065}, r = {-4.5, -5, -1}, s = {1.2} },
+    { {"torch", "soul_torch", "copper_torch", "redstone_torch"}, m = {0.07, -0.125, -0.065}, r = {-4.5, -5, -1}, s = {1.2} },
     { {"end_rod"}, m = {0.195, -0.025, 0.03}, r = {nil, -24, nil}, s = {1.5} },
     { {"grindstone"}, m = {0.16, 0.35, -0.05}, r = {90, nil, 22.5} },
     { {"furnace", "blast_furnace", "smoker", "lectern", "barrel"}, m = {-0.305, nil, 0.27}, r = {-180, nil, 180} },
