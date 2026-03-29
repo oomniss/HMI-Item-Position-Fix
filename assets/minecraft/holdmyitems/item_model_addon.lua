@@ -164,7 +164,7 @@ ItemsUndoAdjusts = {
             { {"totem_of_undying"}, r = {10, 190, 110, "yzx"} }
         },
         shears = {
-            { {"shears"}, m = {nil, -0.075, -0.065}, r = {-14.5, 2.5, -35.5} }
+            { {"shears"}, m = {nil, -0.025, -0.065}, r = {-14.5, 2.5, -35.5} }
         }
     },
     w3di = {
