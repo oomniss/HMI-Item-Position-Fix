@@ -241,7 +241,6 @@ ItemsUndoAdjusts = {
             { {"carrot_on_a_stick"}, s = {1/1.2}, m = {0.1, 0.1, nil}, r = {1, 60, nil, "yxz"}, ops = "smr" },
             { {"goat_horn"}, s = {1/1.3}, m = {0.05, -0.05, nil, "zxy"}, r = {nil, nil, 5}, ops = "smr" },
             { {"egg", "blue_egg", "brown_egg", "snowball"}, r = {nil, nil, 5} },
-            { {"loom_patterns"}, s = {1/1.4}, r = {180, 130, nil, "zxy"}, m = {-0.1, 0.15, nil, "zyx"}, ops = "srm" },
             { {"stick", "bone", "blaze_rod", "breeze_rod"}, m = {0.05, 0.07, 0.05, "yzx"}, r = {4, nil, -85, "zxy"} },
             { {"slime_ball"}, s = {1/1.05}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
             { {"clay_ball"}, m = {-0.055, 0.015, nil}, r = {-3, 0, 6} },

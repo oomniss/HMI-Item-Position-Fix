@@ -224,7 +224,10 @@ yawAngleO = yawAngleO + yawSpeedO * dt
 local invertAxisRules = {
     {
         pack = w3di and a3ds,
-        items = {"shears", "ender_pearl", "ender_eye", "firework_rocket"},
+        items = {
+            "shears", "ender_pearl", "ender_eye", "firework_rocket", "boats", "name_tag", "banner_pattern", "stick",
+            "blaze_rod", "breeze_rod", "totem_of_undying"
+        },
     },
     {
         pack = glowing3Darmors,
@@ -357,19 +360,11 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
 end
 
 -- == PHYSICS ==
-if
-	itemName == "bell"
-	or itemName == "end_crystal"
-	or itemName == "pink_petals"
-	or itemName == "leaf_litter"
-	or itemName == "wildflowers"
-	or I:isLantern(context.item)
-	or isHangingSign
-then
-	if itemName == "pink_petals" or itemName == "wildflowers" or itemName == "leaf_litter" then
+if matched({"bell", "end_crystal", "pink_petals", "leaf_litter", "wildflowers"}) or I:isLantern(context.item) or isHangingSign then
+	if matched({"pink_petals", "wildflowers", "leaf_litter"}) then
 		M:rotateX(mat, M:clamp(P:getPitch(context.player) / 2.5, -20, 90) + ptAngle + ywAngle * 0.5, 0, -0.13, 0)
 	end
-	if itemName == "bell" or itemName == "end_crystal" or I:isLantern(context.item) then
+	if matched({"end_crystal", "bell"}) or I:isLantern(context.item) then
 		if itemName == "end_crystal" then
 			M:scale(mat, 1 + 0.01 * M:sin(a * 15), 1 + 0.01 * M:sin(a * 15), 1 + 0.01 * M:sin(a * 8))
 			M:moveY(mat, 0.03 * M:sin(a * 2))
