@@ -245,7 +245,7 @@ pose({
     { {"lightning_rod"}, m = {0.18, -0.1, 0.02}, r = {-1, -23, nil}, s = {1.3}, matches = true },
     { {"torch", "soul_torch", "copper_torch", "redstone_torch"}, m = {0.07, -0.125, -0.065}, r = {-4.5, -5, -1}, s = {1.2} },
     { {"end_rod"}, m = {0.195, -0.025, 0.03}, r = {nil, -24, nil}, s = {1.5} },
-    { {"grindstone"}, m = {0.16, 0.35, -0.05}, r = {90, nil, 22.5} },
+    { {"grindstone"}, m = {0.215, 0.365, -0.08}, r = {90, nil, 22.5}, s = {1.35} },
     { {"furnace", "blast_furnace", "smoker", "lectern", "barrel"}, m = {-0.305, nil, 0.27}, r = {-180, nil, 180} },
     { {"anvil", "brewing_stand"}, m = {-0.105, -0.09, -0.13}, r = {-6, 84.5, -1} },
     { {"end_crystal"}, m = {-0.125, -0.065, 0.23}, r = {nil, -29.5, nil} },
@@ -263,12 +263,13 @@ pose({
 
     -- Redstone Blocks
     { {"minecart"}, m = {-0.055}, matches = true },
+    { {"piston"}, r = {90, nil, nil}, m = {-0.01, -0.085, -0.355}, matches = true, ops = "rms" },
     { {"repeater", "comparator"}, m = {0.2, -0.075, -0.065}, r = {-5.5, -6, -0.5}, s = {1.25} },
     { {"lever"}, m = {-0.47, -0.06, -0.1}, r = {nil, 100, nil}, s = {2} },
     { {"buttons"}, m = {0.235, -0.105, -0.115}, r = {-7, -6, -0.5}, s = {1.4} },
     { {"hopper"}, m = {0.18, -0.09, -0.085}, r = {-5.5, -5.5, nil} },
     { {"string"}, m = {-0.05, -0.005, 0.015} },
-    { {"piston", "dropper", "dispenser", "crafter", "chiseled_bookshelf"}, m = {-0.305, nil, 0.27}, r = {-180, nil, 180} },
+    { {"dropper", "dispenser", "crafter", "chiseled_bookshelf"}, m = {-0.305, nil, 0.27}, r = {-180, nil, 180} },
     { {"rails"}, m = {0.165, -0.085, -0.09}, r = {-5.5, -5, -1.5} },
 
     -- Tools & Utilities
@@ -295,7 +296,7 @@ pose({
     { {"music_disc_11"}, m = {nil, nil, -0.025} },
 
     -- Combat
-    { {"horse_armor"}, m = {0.02, -0.075, nil}, matches = true },
+    { {"horse_armor"}, m = {0.02, -0.04, nil}, matches = true },
     { {"nautilus_armor"}, m = {-0.04, -0.075, -0.005}, matches = true },
     { {"swords"}, m = {0.025, nil, -0.05}, r = {nil, -5, nil} },
     { {"mace"}, m = {0.025, -0.06, -0.05}, r = {nil, -5, nil} },
@@ -329,7 +330,7 @@ pose({
 
     -- Ingredients
     { {"raw"}, m = {nil, -0.035, -0.01}, matches = true },
-    { {"_ingot", "brick$"}, m = {nil, -0.06, nil}, matches = true },
+    { {"_ingot", "brick$"}, m = {-0.065, -0.075, nil}, matches = true },
     { {"_key"}, m = {-0.025, 0.005, 0.01}, s = {0.8}, matches = true },
     { {"emerald", "lapis_lazuli"}, m = {nil, -0.035, nil} },
     { {"amethyst_shard"}, m = {nil, -0.05, nil} },

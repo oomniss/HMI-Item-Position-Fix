@@ -226,7 +226,7 @@ local invertAxisRules = {
         pack = w3di and a3ds,
         items = {
             "shears", "ender_pearl", "ender_eye", "firework_rocket", "boats", "name_tag", "banner_pattern", "stick",
-            "blaze_rod", "breeze_rod", "totem_of_undying"
+            "blaze_rod", "breeze_rod", "totem_of_undying", "bone"
         },
     },
     {
