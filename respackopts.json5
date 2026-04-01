@@ -24,7 +24,8 @@
     },
     OtherResourcePacksCompatibility: {
       GoussHandPoses:                   false,
-      NNEActionSwords:                  false
+      NNEActionSwords:                  false,
+      BeashSwingAnimations:             false
     },
     HMISettings: {
       InspectKeybind: {

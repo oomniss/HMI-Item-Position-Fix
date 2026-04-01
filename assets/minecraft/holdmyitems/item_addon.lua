@@ -110,6 +110,7 @@ local freshFoods			= ${freshFoods}
 local better3Dbooks			= ${better3Dbooks}
 local gousPoses			    = ${gousPoses}
 local nneSwords			    = ${nneSwords}
+local beashAnimations	    = ${beashAnimations}
 
 -- == FUNCTIONS ==
 function easeCustom(t)
@@ -355,11 +356,11 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
         M:rotateX(mat, 10 * swing_hit_second)
     end
 
-    if isSword and not nneSwords then
+    if isSword and not (beashAnimations or nneSwords) then
         swing = M:sin(context.swingProgress * 3.14)
         M:moveY(mat, -0.1 * Easings:easeInOutBack(swing))
         M:rotateX(mat, -60 * Easings:easeInOutBack(swing))
-     end
+    end
 
     if useAction == "bow" then
         M:moveX(mat, -0.065 * l)

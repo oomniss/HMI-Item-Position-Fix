@@ -12,6 +12,7 @@
 
     gousPoses:          "HMIItemPositionFix.OtherResourcePacksCompatibility.GoussHandPoses",
     nneSwords:          "HMIItemPositionFix.OtherResourcePacksCompatibility.NNEActionSwords",
+    beashAnimations:    "HMIItemPositionFix.OtherResourcePacksCompatibility.BeashSwingAnimations",
 
     inspectKeybind:     "HMIItemPositionFix.HMISettings.InspectKeybind"
   }
