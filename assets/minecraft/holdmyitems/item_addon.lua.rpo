@@ -10,6 +10,7 @@
     w3di:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DItems",
     better3Dbooks:      "HMIItemPositionFix.ItemsResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
     bensBundle:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.BensBundle",
+    fyoncle3Dtrims:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.Fyoncle3DTrims",
 
     gousPoses:          "HMIItemPositionFix.OtherResourcePacksCompatibility.GoussHandPoses",
     nneSwords:          "HMIItemPositionFix.OtherResourcePacksCompatibility.NNEActionSwords",

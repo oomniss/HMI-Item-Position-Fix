@@ -18,6 +18,7 @@
     freshDiscs:         "HMIItemPositionFix.ItemsResourcePacksCompatibility.FreshMusicDiscs",
     wNature:            "HMIItemPositionFix.ItemsResourcePacksCompatibility.WeskersonNature",
     better3Dbooks:      "HMIItemPositionFix.ItemsResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
+    fyoncle3Dtrims:     "HMIItemPositionFix.ItemsResourcePacksCompatibility.Fyoncle3DTrims",
 
     gousPoses:          "HMIItemPositionFix.OtherResourcePacksCompatibility.GoussHandPoses"
   }

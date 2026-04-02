@@ -21,7 +21,8 @@
       FreshOresAndIngots:               false,
       FreshSeeds:                       false,
       FreshMusicDiscs:                  false,
-      BrayAndCyberBetterFresher3DBooks: false
+      BrayAndCyberBetterFresher3DBooks: false,
+      Fyoncle3DTrims:                   false
     },
     OtherResourcePacksCompatibility: {
       GoussHandPoses:                   false,

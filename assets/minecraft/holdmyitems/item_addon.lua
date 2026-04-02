@@ -96,23 +96,6 @@ local swingOverall          = M:sin(context.swingProgress * 3.14)
 local useAction             = I:getUseAction(context.item)
 local itemName              = I:getName(context.item):gsub("minecraft:", "")
 
--- == RESOURCE PACKS ==
-
-local rvTorches             = ${rvTorches}
-local refinedTorches        = ${refinedTorches}
-local torchesPack           = rvTorches or refinedTorches
-local glowing3Darmors		= ${glowing3Darmors}
-local glowing3Dtotem		= ${glowing3Dtotem}
-local a3ds					= ${a3ds}
-local w3di					= ${w3di}
-local refinedBuckets		= ${refinedBuckets}
-local freshFoods			= ${freshFoods}
-local better3Dbooks			= ${better3Dbooks}
-local bensBundle			= ${bensBundle}
-local gousPoses			    = ${gousPoses}
-local nneSwords			    = ${nneSwords}
-local beashAnimations	    = ${beashAnimations}
-
 -- == FUNCTIONS ==
 function easeCustom(t)
     local t2 = t * t
@@ -227,6 +210,24 @@ yawSpeedO = yawSpeedO - GRAVITY * yawAngleO * dt
 yawSpeedO = yawSpeedO * M:pow(DAMPING, dt)
 yawAngleO = yawAngleO + yawSpeedO * dt
 
+-- == RESOURCE PACKS ==
+
+local rvTorches             = ${rvTorches}
+local refinedTorches        = ${refinedTorches}
+local torchesPack           = rvTorches or refinedTorches
+local glowing3Darmors		= ${glowing3Darmors}
+local glowing3Dtotem		= ${glowing3Dtotem}
+local a3ds					= ${a3ds}
+local w3di					= ${w3di}
+local refinedBuckets		= ${refinedBuckets}
+local freshFoods			= ${freshFoods}
+local better3Dbooks			= ${better3Dbooks}
+local bensBundle			= ${bensBundle}
+local fyoncle3Dtrims	    = ${fyoncle3Dtrims}
+local gousPoses			    = ${gousPoses}
+local nneSwords			    = ${nneSwords}
+local beashAnimations	    = ${beashAnimations}
+
 -- == INVERTED AXIS CHECKING ==
 local invertAxisRules = {
     {
@@ -244,6 +245,10 @@ local invertAxisRules = {
     {
         pack = freshFoods,
         items = {"cake", "pumpkin_pie", "bowl", "_stew", "_soup"},
+    },
+    {
+        pack = fyoncle3Dtrims,
+        items = {"_smithing_template"},
     },
     {
         pack = w3di and bensBundle,
