@@ -53,8 +53,8 @@ PackCompat = {
     refinedBuckets      = { {"bucket"}, matches = true },
     freshDiscs          = { {"music_disc", "disc_fragment_5"}, matches = true },
     glowing3Dtotem      = { {"totem_of_undying"} },
-    glowing3Darmors     = { {"_helmet", "_chestplate", "_leggings", "_boots", "horse_armor", "elytra"}, matches = true },
-    just3Darmors        = { {"_helmet", "_chestplate", "_leggings", "_boots", "horse_armor", "wolf_armor", "nautilus_armor", "elytra"}, matches = true },
+    glowing3Darmors     = { {"head_armor", "chest_armor", "leg_armor", "foot_armor", "horse_armor", "elytra"}, matches = true },
+    just3Darmors        = { {"head_armor", "chest_armor", "leg_armor", "foot_armor", "horse_armor", "wolf_armor", "nautilus_armor", "elytra"}, matches = true },
     freshSeeds          = { {"_seeds"}, matches = true },
     bensBundle          = { {"bundles"} },
     gousPoses           = { {"shears"} },
@@ -89,13 +89,11 @@ PackCompat = {
     }, matches = true },
     freshFlowersPlants = {
         {
-        "pale_hanging_moss", "_mushroom$", "_fungus$", "dandelion", "poppy", "blue_orchid", "allium",
-        "azure_bluet", "tulip", "oxeye_daisy", "cornflower", "lily_of_the_valley", "^torchflower$",
-        "cacutus_flower", "eyeblossom", "wither_rose", "pink_petals", "wildflowers", "leaf_litter",
-        "spore_blossom", "bamboo", "sugar_cane", "^vine$", "sunflower", "lilac", "peony", "pitcher_plant",
+        "pale_hanging_moss", "_mushroom$", "_fungus$", "small_flowers", "cacutus_flower", "pink_petals", "wildflowers",
+        "leaf_litter", "spore_blossom", "bamboo", "sugar_cane", "^vine$", "sunflower", "lilac", "peony", "pitcher_plant",
         "_dripleaf", "rose_bush", "sculk_vein", "glow_lichen", "lily_pad", "seagrass", "sea_pickle", "^kelp$",
-        "_coral$", "_coral_fan", "weeping_vines", "twisting_vines", "_sapling", "mangrove_propagule", "fern",
-        "_grass$", "bush", "crimson_roots", "warped_roots", "hanging_roots", "nether_sprouts"
+        "_coral$", "_coral_fan", "weeping_vines", "twisting_vines", "saplings", "fern", "_grass$", "bush", "crimson_roots", 
+        "warped_roots", "hanging_roots", "nether_sprouts"
         }, matches = true,
         withBlocks =
         {
@@ -106,12 +104,10 @@ PackCompat = {
     a3ds = {
         {
         -- Natural Blocks
-        "pale_hanging_moss", "sapling", "mangrove_propagule", "_mushroom$", "_fungus$", "_grass$", "fern",
-        "bush", "dandelion", "poppy", "orchid", "allium", "azure_bluet", "tulip", "oxeye_daisy", "cornflower",
-        "lily_of_the_valley", "^torchflower$", "_eyeblossom", "wither_rose", "pink_petals", "wildflowers",
-        "leaf_litter", "^bamboo$", "sugar_cane", "crimson_roots", "warped_roots", "nether_sprouts",
-        "sunflower", "lilac", "rose_bush", "pitcher_plant", "glow_lichen", "hanging_roots", "frogspawn", "lily_pad",
-        "^azalea$", "^flowering_azalea$", "weeping_vines", "twisting_vines", "^vine$", "peony", "cactus_flower",
+        "pale_hanging_moss", "saplings", "_mushroom$", "_fungus$", "_grass$", "fern", "small_flowers", "cactus_flower",
+        "bush", "pink_petals", "wildflowers", "leaf_litter", "^bamboo$", "sugar_cane", "crimson_roots", "warped_roots",
+        "nether_sprouts", "sunflower", "lilac", "rose_bush", "pitcher_plant", "glow_lichen", "hanging_roots", "frogspawn",
+        "lily_pad", "^azalea$", "^flowering_azalea$", "weeping_vines", "twisting_vines", "^vine$", "peony", 
         -- Functional Blocks
         "^bell$", "armor_stand", "item_frame", "painting", "ender_eye",
         -- Redstone Blocks
@@ -156,12 +152,11 @@ PackCompat = {
             -- Tools
             "bucket", "fishing_rod", "flint_and_steel", "fire_charge", "bone_meal", "shears", "name_tag",
             "lead", "bundle", "compass", "clock", "map", "book", "wind_charge", "ender_pearl", "elytra",
-            "firework_rocket", "carrot_on_a_stick", "warped_fungus_on_a_stick", "goat_horn", "music_disc",
-            "_boat", "_raft",
+            "firework_rocket", "_on_a_stick", "goat_horn", "music_disc", "boats",
             -- Combat
             "mace", "nautilus_armor", "totem_of_undying", "snowball", "^egg$", "brown_egg", "blue_egg",
             -- Foods & Potions
-            "apple", "^chorus_fruit$", "melon_slice", "carrot", "potato", "^beetroot$",
+            "apple", "^chorus_fruit$", "melon_slice", "^carrot$", "potato", "^beetroot$",
             "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
             "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
             "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
@@ -248,7 +243,7 @@ if just3Darmors then
     addPos({
         { {"horse_armor"}, m = {-0.035, -0.03, -0.045}, r = {-8, 3.5, -5.5}, matches = true },
         { {"nautilus_armor"}, m = {0.03, 0.015, -0.105}, r = {-4.5, 20, nil}, matches = true },
-        { {"turtle_helmet"}, m = {0.02, 0.01, 0.035}, r = {2.5, -4.5, -4}, matches = true },
+        { {"turtle_helmet"}, m = {0.02, 0.01, 0.035}, r = {2.5, -4.5, -4} },
         { {"head_armor"}, m = {0.005, nil, nil}, r = {8, nil, -1.5} },
         { {"leg_armor"}, m = {0.04, nil, nil} },
         { {"wolf_armor"}, m = {0.055, -0.125, -0.14}, r = {6.5, -15.5, 2} }
@@ -435,6 +430,9 @@ if a3ds then
         { {"raw_"}, m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, matches = true },
         { {"nugget"}, m = {0.02, 0.03, -0.045}, r = {-6, -5, nil}, matches = true },
         { {"ingot", "brick$"}, m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9}, matches = true },
+        { {"string"}, m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
+        { {"smithing_template"}, m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil}, matches = true },
+        { {"_key"}, m = {0.015, nil, -0.085}, r = {-6, -5.5, nil}, matches = true },
         { {"emerald"}, m = {0.015, -0.035, -0.085}, r = {-6.5, -3.5, nil} },
         { {"lapis_lazuli"}, m = {nil, -0.06, -0.105}, r = {-6, -5.5, nil} },
         { {"diamond"}, m = {0.015, -0.055, -0.09}, r = {-7.5, -3.5, nil} },
@@ -444,9 +442,6 @@ if a3ds then
         { {"redstone"}, m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
         { {"flint"}, m = {0.03, 0.06, -0.08}, r = {14.5, 12.5, -8} },
         { {"book", "enchanted_book"}, m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
-        { {"string"}, m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
-        { {"smithing_template"}, m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil}, matches = true },
-        { {"_key"}, m = {0.015, nil, -0.085}, r = {-6, -5.5, nil}, matches = true },
         { {"stick", "blaze_rod", "breeze_rod"}, m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
         { {"flint"}, m = {0.01, -0.1, -0.085}, r = {-6, -4.5, -0.5} },
         { {"bone"}, m = {0.025, -0.04, -0.035}, r = {-5, -5.5, nil} },
@@ -487,10 +482,10 @@ if w3di then
         { {"boats"}, r = {3.5, -8, -4.5} },
         -- Tools & Utilities
         { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil}, condition = {not just3Darmors} },
+        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, matches = true },
         { {"bundles"}, m = {-0.05, -0.015, -0.015}, r = {-6, -11, 2.5}, s = {0.9} },
         { {"music_discs"}, m = {-0.05, nil, -0.06}, r = {-5.5, -10.5, 2.5} },
         { {"disc_fragment_5"}, m = {-0.065, -0.045, -0.005}, r = {-5.5, -9.5, 5.5} },
-        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, matches = true },
         { {"shears"}, m = {nil, -0.085, -0.085}, r = {-40.5, 10, 24} },
         { {"writable_book", "written_book"}, m = {0.07, 0.065, -0.09}, r = {10, -26, 13} },
         { {"flint_and_steel"}, m = {0.05, -0.015, -0.145}, r = {3.5, -6, 4.5} },
@@ -502,16 +497,17 @@ if w3di then
         { {"goat_horn"}, m = {-0.015, nil, -0.15}, r = {14, -9, 5.5} },
         { {"firework_rocket"}, m = {-0.03, nil, -0.03}, r = {-6, -13.5, 4.5} },
         -- Combat
-        { {"totem_of_undying"}, m = {-0.06, nil, -0.045}, r = {-7.5, nil, nil} },
         { {"nautilus_armor"}, m = {-0.055, 0.04, 0.01}, r = {-4.5, -9.5, 6}, matches = true },
-        { {"nautilus_shell"}, m = {-0.055, 0.04, 0.01}, r = {-4.5, -9.5, 6}, matches = true },
+        { {"nautilus_shell"}, m = {-0.055, 0.04, 0.01}, r = {-4.5, -9.5, 6} },
         { {"snowball", "egg", "brown_egg", "blue_egg"}, m = {0.01, -0.015, -0.05}, r = {-6, -5.5, 3} },
+        { {"totem_of_undying"}, m = {-0.06, nil, -0.045}, r = {-7.5, nil, nil} },
         -- Foods & Drinks
         { {"apple", "^chorus_fruit$"}, m = {-0.05, -0.01, -0.035}, r = {-5.5, -5.5, 3}, matches = true },
         { {"melon_slice"}, m = {-0.045, -0.03, -0.105}, r = {-5, -6, nil}, matches = true },
         { {"beef", "porkchop","mutton", "rotten_flesh"}, m = {-0.05, -0.005, -0.025}, r = {-5, -6, 3.5}, matches = true },
         { {"potato", "bread"}, m = {-0.05, -0.005, -0.035}, r = {-6, -5.5, 3.5}, matches = true },
         { {"_stew", "_soup", "bowl"}, m = {0.01, -0.015, -0.105}, r = {-7, -6.5, -1}, matches = true },
+        { {"bottle", "potion", "dragon_breath"}, m = {-0.055, nil, -0.035}, r = {-4.5, -7, 4}, matches = true },
         { {"carrot", "golden_carrot"}, m = {-0.045, -0.085, -0.08}, r = {-9.5, -9.5, 6} },
         { {"spider_eye"}, m = {-0.07, -0.14, -0.115}, r = {-6, -6.5, 3} },
         { {"sweet_berries"}, m = {0.025, 0.085, -0.12}, r = {-5.5, -4.5, 7.5} },
@@ -527,7 +523,6 @@ if w3di then
         { {"cookie"}, m = {-0.06, -0.005, -0.02}, r = {-5, -5.5, 3.5} },
         { {"cake"}, m = {-0.03, 0.125, -0.085}, r = {3.5, -22.5, 3}, s = {0.9} },
         { {"pumpkin_pie"}, m = {-0.125, nil, 0.01}, r = {-7, -6, 3} },
-        { {"bottle", "potion", "dragon_breath"}, m = {-0.055, nil, -0.035}, r = {-4.5, -7, 4}, matches = true },
         -- Ingredients
         { {"coal$"}, m = {-0.045, nil, nil}, r = {-4.5, -11, 4}, matches = true },
         { {"raw_"}, m = {-0.045, nil, -0.035}, r = {-6, -6.5, 4.5}, matches = true },

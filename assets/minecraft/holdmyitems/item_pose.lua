@@ -126,35 +126,40 @@ local itemLists = {
         "snowball", "^egg$", "brown_egg", "blue_egg", "nautilus_armor",
         -- Foods
         "apple", "chorus_fruit", "melon_slice", "carrot", "potato", "^beetroot$",
-        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$", 
-        "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken", 
-        "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$", 
+        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
+        "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
+        "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
         "^dried_kelp$", "^honeycomb$", "_berries", "bowl", "bottle", "potion",
         -- Ingredients
-        "coal$", "raw_", "^emerald$", "^lapis_lazuli$", "^diamond$", "quartz$", "_shard", "netherite_scrap", "flint", 
-        "wheat", "feather", "^leather$", "rabbit_hide", "resin_clump", "ink_sac", "_scute", "slime_ball", "clay_ball", 
+        "coal$", "raw_", "^emerald$", "^lapis_lazuli$", "^diamond$", "quartz$", "_shard", "netherite_scrap", "flint",
+        "wheat", "feather", "^leather$", "rabbit_hide", "resin_clump", "ink_sac", "_scute", "slime_ball", "clay_ball",
         "prismarine_crystals", "nautilus_shell", "heart_of_the_sea", "phantom_membrane", "_key", "ghast_tear",
         "nether_star", "shulker_shell", "popped_chorus_fruit", "disc_fragment_5", "brick$", 
-        "paper", "firework_star", "glowstone_dust", "book$", "gunpowder", "fermented_spider_eye", "blaze_powder", 
-        "^sugar$", "glistering_melon_slice", "magma_cream", "_nugget", "_ingot", "^stick$", "bone", "_dye", 
+        "paper", "firework_star", "glowstone_dust", "book$", "gunpowder", "fermented_spider_eye", "blaze_powder",
+        "^sugar$", "glistering_melon_slice", "magma_cream", "_nugget", "_ingot", "^stick$", "bone", "_dye",
         "dragon_breath", "rabbit_foot", "banner_pattern", "pottery_sherd", "smithing_template"
+    },
+    spawnEggsAdjust = {
+        "cow", "camel", "donkey", "horse", "mule", "llama", "panda", "polar_bear", "cod", "dolphin", "squid", "nautilus",
+        "salmon", "tadpole", "tropical_fish", "mooshroom", "sniffer", "iron_golem", "creaking", "guardian", "slime",
+        "warden", "ravager", "ghast", "hoglin", "magma_cube", "strider", "zoglin", "enderman"
     },
     except = {
         "pink_petals", "wildflowers", "leaf_litter", "bucket", "fishing_rod", "shears", "rail", "fence", "wall",
         "bed_", "_banner$", "candle", "glow_lichen", "sniffer_egg", "sculk_vein", "^torch$", "_torch",
         "hanging_sign", "golem_statue", "comparator", "conduit", "_head", "campfire", "anvil", "brewing_stand",
-        "repeater", "button", "hopper", "pickaxe", "axe", "shovel", "hoe", "sword", "_on_a_stick", 
-        "boat", "raft", "trident", "mace", "cake", "blaze_rod", "breeze_rod", "heavy_core", "item_frame", "painting", 
-        "^lantern$", "soul_lantern", "copper_lantern", "_head", "_skull", "pressure_plate", "trapdoor", "carpet", 
-        "bamboo", "^vine$", "frogspawn", "turtle_egg", "dried_ghast", "_spear"
+        "repeater", "button", "^hopper$", "pickaxe", "axe", "shovel", "hoe", "sword", "_on_a_stick",
+        "boat", "raft", "trident", "mace", "cake", "blaze_rod", "breeze_rod", "heavy_core", "item_frame", "painting",
+        "^lantern$", "soul_lantern", "copper_lantern", "_head", "_skull", "pressure_plate", "trapdoor", "carpet",
+        "bamboo", "^vine$", "frogspawn", "turtle_egg", "dried_ghast", "_spear", "^cauldron$"
     }
 }
 
 -- === ITEM TYPE CHECKING ===
-local isException   = matched(itemLists.hangingPlants) or matched(itemLists.except, true)
+local isException   = matched(itemLists.hangingPlants) or matched(itemLists.except, true) or IsItemCompat
 local is2D          = matched(itemLists.sprites2D, true) or itemName:match("spawn_egg")
-local general3D     = ((not isException and not is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain"}, true)) and not IsItemCompat
-local general2D     = not isException and is2D and not IsItemCompat
+local general2D     = not isException and is2D
+local general3D     = not (isException or is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain"}, true)
 
 -- === NOT RENDER AS BLOCK ===
 renderBlock(
@@ -167,9 +172,10 @@ if general3D then
     process(move, 0.05, -0.075, -0.1)
     process(rotate, -4, 18, -1)
 elseif general2D then
-    process(move, 0.035, 0.04, -0.075)
+    process(move, 0.03, 0.04, -0.075)
     process(rotate, -6.5, -5.5, -1)
 end
+
 if not AlexModel then
     process(move, 0.035, nil, nil)
 end
@@ -178,35 +184,39 @@ end
 pose({
     -- Building Blocks
     { {"_trapdoor", "_pressure_plate"}, m = {0.18, -0.08, -0.065}, r = {-7.5, -6, nil}, matches = true },
-    { {"doors"}, m = {-0.065, -0.32, 0.334}, r = {nil, -110.5, nil} },
+    { {"waxed.*door"}, m = {-0.4, -0.495, -0.12}, r = {8.5, 83, -14}, s = {1.15}, matches = true },
+    { {"doors"}, m = {0.01, -0.445, 0.345}, r = {2.5, -113, 3.5}, s = {1.15} },
     { {"bars"}, m = {nil, nil, -0.01} },
     { {"fences", "walls"}, m = {0.175, -0.085, -0.075}, r = {-3.5, -5.5, -1} },
     { {"fence_gates"}, m = {0.17, -0.185, -0.09}, r = {-4.5, -5, -1.5} },
     { {"chains"}, m = {0.06, nil, -0.01} },
 
     -- Colored Blocks
-    { {"banners"}, m = {0.045, 0.06, 0.03}, r = {-5, -95, nil} },
+    { {"_carpet"}, m = {0.18, -0.08, -0.065}, r = {-7.5, -6, nil}, matches = true },
+    { {"glass_pane"}, m = {-0.01, 0.01, nil}, s = {0.75}, matches = true },
+    { {"banners"}, m = {0.045, 0.06, 0.02}, r = {-5, -95, nil}, s = {1.25} },
     { {"beds"}, m = {-0.225, -0.015, -0.005}, r = {7.5, 95, nil} },
     { {"candles"}, m = {0.37, -0.175, -0.215}, r = {-5.5, -6.5, -1}, s = {2.2} },
-    { {"_carpet"}, m = {0.18, -0.08, -0.065}, r = {-7.5, -6, nil}, matches = true },
-    { {"glass_pane"}, m = {-0.025, 0.035, nil}, matches = true },
 
     -- Natural Blocks
     { itemLists.hangingPlants, m = {0.105, -0.59, -0.025} },
     { {"amethyst_bud", "amethyst_cluster"}, m = {0.04, nil, -0.005}, matches = true, condition = {itemName ~= "small_amethyst_bud"} },
     { {"_grass", "_roots", "nether_sprouts"}, m = {0.05, nil, nil}, matches = true, condition = {itemName ~= "grass_block"} },
     { {"fern", "pointed_dripstone"}, m = {0.06, nil, -0.01}, matches = true },
-    { {"_mushroom", "_fungus$"}, m = {0.07, nil, -0.02}, matches = true },
+    { {"_mushroom", "_fungus$"}, m = {0.08, nil, -0.04}, s = {1.3}, matches = true },
     { {"bush", "lilac", "peony", "pitcher_plant", "_coral$", "_coral_fan", "cobweb"}, m = {0.055, nil, -0.025}, matches = true },
     { {"torchflower"}, m = {0.01, 0.035, 0.07}, r = {nil, -35, nil} },
-    { {"small_flowers"}, m = {0.065, nil, -0.015} },
+    { {"allium", "tulip"}, m = {0.1, nil, -0.045}, s = {1.4}, matches = true },
+    { {"wither_rose"}, m = {0.08, nil, -0.065}, s = {1.4} },
+    { {"small_flowers"}, m = {0.09, nil, -0.055}, s = {1.4} },
     { {"saplings"}, m = {0.075, nil, -0.045}, s = {1.25} },
     { {"small_amethyst_bud"}, m = {nil, -0.03, 0.015} },
     { {"cactus_flower"}, m = {0.07, nil, -0.03}, s = {1.2} },
-    { {"bamboo"}, m = {0.4, -0.15, -0.25}, r = {-3.5, -4.5, nil}, s = {2.4, 1.5, 2.4} },
+    { {"bamboo"}, m = {0.49, -0.115, -0.26}, r = {-5, -5.5, -0.5}, s = {3, 1.2, 2.5} },
+    { {"sugar_cane"}, m = {-0.06, -0.07, nil} },
     { {"weeping_vines"}, m = {0.105, -0.24, -0.12}, r = {-3, nil, nil}, s = {1.6} },
     { {"twisting_vines"}, m = {0.085, nil, nil} },
-    { {"vine", "glow_lichen", "sculk_vein"}, m = {l == 1 and -0.1 or -0.07, -0.35, 0.01}, r = {-7.5, -96, -6.5}, s = {1, 1, 0.2} },
+    { {"vine", "glow_lichen", "sculk_vein"}, m = {-0.11, -0.245, 0.08}, r = {-5, 84.5, -1.5}, s = {1, 1, 0.3} },
     { {"sunflower"}, m = {l == 1 and -0.08 or -0.02, nil, l == 1 and 0.33 or -0.07}, r = {nil, l == 1 and -131.5 or 30, nil} },
     { {"small_dripleaf"}, m = {0.06, nil, -0.015} },
     { {"big_dripleaf"}, m = {0.065, nil, -0.09} },
@@ -215,7 +225,7 @@ pose({
     { {"turtle_egg"}, m = {0.25, -0.165, -0.19}, r = {-5.5, -5.5, -0.5}, s = {1.7} },
     { {"sniffer_egg"}, m = {0.175, -0.08, -0.05}, r = {-6.5, -5.5, -1} },
     { {"dried_ghast"}, m = {-0.2, -0.06, 0.27}, r = {-4, 175, nil}, s = {1.25} },
-    { {"parrot_food"}, m = {-0.04, -0.07, -0.01} },
+    { {"parrot_food"}, m = {-0.025, -0.07, -0.01} },
     { {"beetroot_seeds"}, m = {nil, 0.035, nil} },
     { {"torchflower_seeds"}, m = {nil, -0.03, nil} },
     { {"pitcher_pod"}, m = {-0.04, nil, -0.01} },
@@ -244,9 +254,13 @@ pose({
     { {"ender_eye", "ender_pearl"}, m = {-0.045, nil, 0.03} },
     { {"copper_golem_statues"}, m = {-0.005, 0.515, -0.385}, r = {175.5, -131.5, -3}, s = {1.4} },
     { {"lanterns"}, m = {0.035, -0.585, 0.095}, r = {-21.5, nil, nil} },
-    { {"item_frame", "glow_item_frame", "painting"}, m = {0.035, -0.565, 0.225}, r = {-25, nil, nil} },
-    { {"hanging_signs"}, m = {0.1, -0.685, 0.055}, r = {-12.5, -5.5, -1} },
+    { {"glow_item_frame"}, m = {nil, -0.53, 0.225}, r = {-37, nil, nil} },
+    { {"item_frame"}, m = {-0.01, -0.535, 0.175}, r = {-29, nil, nil} },
+    { {"painting"}, m = {-0.025, -0.62, 0.155}, r = {-25, nil, nil} },
+    { {"hanging_signs"}, m = {0.06, -0.745, 0.19}, r = {-29, -5.5, -1} },
     { {"bell"}, m = {-0.105, -0.61, 0.19}, r = {-18.5, -27.5, -7.5}, s = {1.2} },
+    { {"armor_stand"}, m = {0.015, 0.03, nil} },
+    { {"cauldron"}, m = {0.165, -0.16, -0.07}, r = {-5.5, -4.5, nil} },
 
     -- Redstone Blocks
     { {"minecart"}, m = {-0.055}, matches = true },
@@ -274,13 +288,13 @@ pose({
     { {"spyglass"}, m = {-0.12, nil, 0.015}, r = {nil, -24.5, nil} },
     { {"map", "paper"}, m = {nil, -0.035, nil} },
     { {"bookshelf_books"}, m = {-0.065, nil, nil} },
-    { {"wind_charge", "music_discs"}, m = {-0.015, -0.07, 0.02} },
+    { {"music_disc_11"}, m = {-0.01, -0.07, -0.005} },
+    { {"wind_charge", "music_discs"}, m = {-0.01, -0.07, 0.02} },
     { {"elytra"}, m = {nil, -0.07, nil} },
     { {"firework_rocket"}, m = {-0.06, nil, 0.025} },
     { {"saddle"}, m = {-0.06, -0.04, 0.01} },
     { {"boats", "chest_boats"}, m = {-0.04, 0.115, 0.025} },
     { {"goat_horn"}, m = {0.025, -0.04, nil} },
-    { {"music_disc_11"}, m = {nil, nil, -0.025} },
 
     -- Combat
     { {"horse_armor"}, m = {0.02, -0.04, nil}, matches = true },
@@ -324,8 +338,9 @@ pose({
     { {"nuggets"}, m = {0.02, -0.07, -0.01} },
     { {"iron_nugget"}, m = {-0.015, -0.035, nil} },
     { {"gold_nugget"}, m = {-0.025, nil, nil} },
-    { {"stick", "bone", "blaze_rod", "breeze_rod"}, m = {-0.01, -0.28, nil}, r = {15.5, nil, nil} },
-    { {"bone"}, m = {nil, -0.09, 0.015} },
+    { {"blaze_rod", "breeze_rod"}, m = {0.02, -0.24, -0.005}, r = {9, -7, nil} },
+    { {"stick"}, m = {-0.01, -0.28, nil}, r = {15.5, nil, nil} },
+    { {"bone"}, m = {nil, -0.39, nil}, r = {15.5, nil, nil} },
     { {"ink_sac", "glow_ink_sac"}, m = {nil, -0.075, -0.01} },
     { {"honeycomb"}, m = {0.01, -0.04, nil} },
     { {"resin_clump"}, m = {-0.01, -0.075, nil} },
@@ -343,6 +358,7 @@ pose({
     { {"smithing_template"}, m = {-0.02, nil, 0.02} },
 
     -- Spawn Eggs
+    { itemLists.spawnEggsAdjust, m = {-0.005, 0.03, nil}, matches = true },
     { {"_spawn_egg"}, m = {-0.01, -0.04, nil}, matches = true }
 })
 
