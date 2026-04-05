@@ -53,12 +53,15 @@ See the difference the **HMI Item Position Fix** makes when using popular 3D res
 
 To ensure correct positioning, follow this load order:
 
-1. **Other 3D Packs** (Fresh Foods, Seeds, Torches, etc.)
-2. **Actually 3D Stuff**
-3. **Weskerson's 3D Items**
-4. **Weskerson's Nature**
-5. **HMI Item Position Fix**
-6. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords)
+1. **Fyoncle's 3D Trims**
+2. **Other 3D Packs** (Fresh Foods, Seeds, Torches, etc.)
+3. **Actually 3D Stuff**
+4. **Weskerson's 3D Items**
+5. **Weskerson's Nature**
+6. **HMI Item Position Fix**
+7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords)
+
+> For some reason, `Fyoncle's 3D Trims` must always be placed above `Just 3D Armors`, `R&V Torches`, and `Refined Torches`. This is necessary to ensure that item positioning and physics do not break. As a precaution, always keep `Fyoncle's 3D Trims` at the very top of your load order.
 
 > For `NNE Action Swords` to work properly, its author requires you to replace the HMI `Example Pack` with their `[HMI] REANIMATED` version, which disables sword battle animations. Make sure to keep `[HMI] REANIMATED` below `HMI Item Position Fix` in the load order.
 

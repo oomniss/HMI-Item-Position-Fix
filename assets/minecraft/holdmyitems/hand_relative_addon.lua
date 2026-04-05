@@ -1,7 +1,10 @@
 -- by omnis._.
 
 local l           = context.mainHand and 1 or -1
+local d           = (context.bl and 1) or -0.43
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
+local isUsingItem = P:isUsingItem(context.player)
+local useAction   = I:getUseAction(context.item)
 
 -- === FUNCTION ===
 Positions = {} -- executed by item_pose
@@ -145,7 +148,7 @@ PackCompat = {
             "turtle_egg",
             -- Functional Blocks
             "^torch$", "soul_torch", "copper_torch", "^lantern$", "soul_lantern", "copper_lantern", "campfire", 
-            "end_crystal", "flower_pot", "armor_stand", "_sign", "ender_eye",
+            "end_crystal", "flower_pot", "armor_stand", "signs", "ender_eye",
             -- Redstone Blocks
             "redstone$", "repeater", "comparator", "lever",
             -- Tools
@@ -276,32 +279,36 @@ end
 if freshFoods then
     addPos({
         { {"_pressure_plate"}, m = {0.125, -0.02, 0.345}, r = {-119.5, -4.5, -7.5}, matches = true }, -- fresh foods changes the position of all items whose ID contains "plate", so this correction is necessary
-        { {"_soup", "_stew", "bowl"}, m = {0.07, -0.025, -0.03}, r = {1.5, -4.5, -1}, matches = true },
-        { {"beef", "porkchop"}, m = {0.06, 0.005, -0.13}, r = {-1.5, -5.5, -1}, s = {1.15}, matches = true },
-        { {"mutton"}, m = {0.025, 0.005, -0.13}, r = {-1.5, -5.5, -1}, s = {1.15}, matches = true },
-        { {"apple"}, m = {0.075, 0.015, -0.07}, r = {2, -0.5, nil}, matches = true },
-        { {"melon_slice"}, m = {0.03, nil, -0.055}, r = {2, -0.5, nil}, matches = true },
-        { {"potato"}, m = {0.025, -0.01, -0.105}, r = {-5, -5, nil}, s = {1.15}, matches = true },
-        { {"spider_eye"}, m = {-0.01, -0.13, -0.19}, r = {-5.5, 1.5, 34.5} },
-        { {"carrot", "golden_carrot"}, m = {-0.04, -0.035, -0.05}, r = {nil, -5, 3} },
-        { {"sweet_berries"}, m = {-0.035, nil, -0.055}, r = {nil, -4, nil} },
-        { {"glow_berries"}, m = {0.015, -0.055, -0.095} },
-        { {"chorus_fruit"}, m = {0.1, -0.055, -0.085}, r = {nil, -5.5, nil} },
-        { {"beetroot"}, m = {-0.01, -0.12, -0.165}, r = {1.5, -5.5, nil} },
-        { {"dried_kelp"}, m = {0.035, -0.025, -0.09}, r = {nil, 7.5, -1.5} },
-        { {"chicken", "cooked_chicken"}, m = {0.065, -0.04, -0.15} },
-        { {"rabbit"}, m = {0.1, -0.045, -0.095}, r = {nil, -6, nil} },
-        { {"cooked_rabbit"}, m = {-0.025, -0.11, -0.055}, r = {-0.5, -7.5, nil} },
-        { {"cod", "cooked_cod", "tropical_fish"}, m = {0.065, -0.04, -0.09}, r = {1.5, -5, -1.5} },
-        { {"salmon"}, m = {-0.005, -0.04, -0.13}, r = {1.5, -5, -1.5} },
-        { {"cooked_salmon"}, m = {-0.005, -0.04, -0.13}, r = {1.5, -5, -1.5} },
-        { {"pufferfish"}, m = {0.075, 0.005, -0.065}, r = {15, 7.5, 9} },
-        { {"bread"}, m = {0.07, -0.04, -0.085}, r = {1, nil, nil} },
-        { {"cookie"}, m = {0.07, 0.005, -0.075} },
-        { {"cake"}, m = {0.115, -0.04, nil}, r = {-6, -5, nil} },
-        { {"pumpkin_pie"}, m = {0.06, 0.02, -0.175}, r = {4.5, 3, 5.5} },
-        { {"rotten_flesh"}, m = {0.085, -0.19, -0.035}, r = {-40.5, nil, 3.5}, s = {1.15} },
     })
+    if not (isUsingItem and useAction == "eat") then
+        addPos({
+            { {"_soup", "_stew", "bowl"}, m = {0.07, -0.025, -0.03}, r = {1.5, -4.5, -1}, matches = true },
+            { {"beef", "porkchop"}, m = {0.06, 0.005, -0.13}, r = {-1.5, -5.5, -1}, s = {1.15}, matches = true },
+            { {"mutton"}, m = {0.025, 0.005, -0.13}, r = {-1.5, -5.5, -1}, s = {1.15}, matches = true },
+            { {"apple"}, m = {0.075, 0.015, -0.07}, r = {2, -0.5, nil}, matches = true },
+            { {"melon_slice"}, m = {0.03, nil, -0.055}, r = {2, -0.5, nil}, matches = true },
+            { {"potato"}, m = {0.025, -0.01, -0.105}, r = {-5, -5, nil}, s = {1.15}, matches = true },
+            { {"spider_eye"}, m = {-0.01, -0.13, -0.19}, r = {-5.5, 1.5, 34.5} },
+            { {"carrot", "golden_carrot"}, m = {-0.04, -0.035, -0.05}, r = {nil, -5, 3} },
+            { {"sweet_berries"}, m = {-0.035, nil, -0.055}, r = {nil, -4, nil} },
+            { {"glow_berries"}, m = {0.015, -0.055, -0.095} },
+            { {"chorus_fruit"}, m = {0.1, -0.055, -0.085}, r = {nil, -5.5, nil} },
+            { {"beetroot"}, m = {-0.01, -0.12, -0.165}, r = {1.5, -5.5, nil} },
+            { {"dried_kelp"}, m = {0.035, -0.025, -0.09}, r = {nil, 7.5, -1.5} },
+            { {"chicken", "cooked_chicken"}, m = {0.065, -0.04, -0.15} },
+            { {"rabbit"}, m = {0.1, -0.045, -0.095}, r = {nil, -6, nil} },
+            { {"cooked_rabbit"}, m = {-0.025, -0.11, -0.055}, r = {-0.5, -7.5, nil} },
+            { {"cod", "cooked_cod", "tropical_fish"}, m = {0.065, -0.04, -0.09}, r = {1.5, -5, -1.5} },
+            { {"salmon"}, m = {-0.005, -0.04, -0.13}, r = {1.5, -5, -1.5} },
+            { {"cooked_salmon"}, m = {-0.005, -0.04, -0.13}, r = {1.5, -5, -1.5} },
+            { {"pufferfish"}, m = {0.075, 0.005, -0.065}, r = {15, 7.5, 9} },
+            { {"bread"}, m = {0.07, -0.04, -0.085}, r = {1, nil, nil} },
+            { {"cookie"}, m = {0.07, 0.005, -0.075} },
+            { {"cake"}, m = {0.115, -0.04, nil}, r = {-6, -5, nil} },
+            { {"pumpkin_pie"}, m = {0.06, 0.02, -0.175}, r = {4.5, 3, 5.5} },
+            { {"rotten_flesh"}, m = {0.085, -0.19, -0.035}, r = {-40.5, nil, 3.5}, s = {1.15} },
+        })
+    end
 end
 
 if freshSeeds then
@@ -482,7 +489,7 @@ if w3di then
         { {"boats"}, r = {3.5, -8, -4.5} },
         -- Tools & Utilities
         { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil}, condition = {not just3Darmors} },
-        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, matches = true },
+        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, condition = {not refinedBuckets}, matches = true },
         { {"bundles"}, m = {-0.05, -0.015, -0.015}, r = {-6, -11, 2.5}, s = {0.9} },
         { {"music_discs"}, m = {-0.05, nil, -0.06}, r = {-5.5, -10.5, 2.5} },
         { {"disc_fragment_5"}, m = {-0.065, -0.045, -0.005}, r = {-5.5, -9.5, 5.5} },
@@ -578,8 +585,9 @@ ItemsUndoAdjusts = {
             { {"music_disc"}, s = {1/1.35}, r = {-50, -95, 50, "zyx"}, m = {0.13, 0.205, 0.08, "zyx"}, ops = "srm", matches = true }
         },
         bucket = {
-            { {"milk_bucket"}, m = {-0.175, -0.1, -0.125}, r = {-5.5, 180, -12}, s = {1/1.05} },
-            { {"bucket"}, m = {0.06, -0.03, -0.035}, r = {14, 6.5, 18.5}, s = {1/1.05}, matches = true }
+            { {"milk_bucket"}, m = {-0.1, -0.03, 0, "zxy"}, r = {-35, -10 * d, -10, "zyx"}, s = {1/1.05}, ops = "mrs", condition = {isUsingItem}, prox = true },
+            { {"milk_bucket"}, s = {1/1.05}, r = {209, -187, -100, "zyx"}, m = {0.01, -0.1, 0.15, "zyx"}, ops = "srm" },
+            { {"bucket"}, s = {1/1.05}, r = {-165, -25, -55, "yzx"}, m = {0.12, -0.08, 0.1, "zyx"}, ops = "srm", matches = true }
         },
         bundles = {
             { {"bundles"}, s = {1/1.3}, m = {0.05, 0.05, 0.01, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" }

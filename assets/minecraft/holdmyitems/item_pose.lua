@@ -97,9 +97,8 @@ local function pose(tables, force)
                                 end
                             end
                         end
+                        if not t.prox then return end
                     end
-                    local prox = t.prox ~= nil and t.prox
-                    if not prox then return end
                 end
             end
         end
@@ -250,6 +249,7 @@ pose({
     { {"scaffolding"}, m = {0.13, -0.265, 0.025}, r = {nil, -23, nil} },
     { {"flower_pot"}, m = {0.19, -0.035, 0.05}, r = {-1.5, -24, nil}, s = {1.4} },
     { {"wooden_shelves"}, m = {-0.315, -0.005, 0.28}, r = {0.5, 157, nil} },
+    { {"hanging_signs"}, m = {0.06, -0.745, 0.19}, r = {-29, -5.5, -1} },
     { {"signs"}, m = {-0.02, nil, 0.015} },
     { {"ender_eye", "ender_pearl"}, m = {-0.045, nil, 0.03} },
     { {"copper_golem_statues"}, m = {-0.005, 0.515, -0.385}, r = {175.5, -131.5, -3}, s = {1.4} },
@@ -257,7 +257,6 @@ pose({
     { {"glow_item_frame"}, m = {nil, -0.53, 0.225}, r = {-37, nil, nil} },
     { {"item_frame"}, m = {-0.01, -0.535, 0.175}, r = {-29, nil, nil} },
     { {"painting"}, m = {-0.025, -0.62, 0.155}, r = {-25, nil, nil} },
-    { {"hanging_signs"}, m = {0.06, -0.745, 0.19}, r = {-29, -5.5, -1} },
     { {"bell"}, m = {-0.105, -0.61, 0.19}, r = {-18.5, -27.5, -7.5}, s = {1.2} },
     { {"armor_stand"}, m = {0.015, 0.03, nil} },
     { {"cauldron"}, m = {0.165, -0.16, -0.07}, r = {-5.5, -4.5, nil} },
@@ -362,15 +361,6 @@ pose({
     { {"_spawn_egg"}, m = {-0.01, -0.04, nil}, matches = true }
 })
 
--- === PACK COMPATIBILITY ===
-if IsItemCompat then
-    Positions = Positions or {}
-    if Positions and next(Positions) then pose(Positions, true) end
-
-    ItemsUndoAdjusts = ItemsUndoAdjusts or {}
-    if ItemsUndoAdjusts and next(ItemsUndoAdjusts) then pose(ItemsUndoAdjusts, true) end
-end
-
 -- === PHYSICS AND ANIMATIONS ===
 -- Extracted from the HMI example_pack (item_pose.lua)
 -- Credits: thesapling, KillaMC, OrkaMC, cyber
@@ -444,6 +434,8 @@ global.sneak                = 0.0;
 global.bundleCounter        = 0.0;
 global.swingOHandPrev       = false;
 global.swingMHandPrev       = false;
+global.foodCount = 0.0;
+global.foodCountO = 0.0;
 
 local swing_rot
 local swing_sword_tilt
@@ -565,7 +557,6 @@ yawSpeedO = yawSpeedO * M:pow(DAMPING, dt)
 yawAngleO = yawAngleO + yawSpeedO * dt
 
 -- == RESOURCE PACKS ==
-
 local rvTorches             = ${rvTorches}
 local refinedTorches        = ${refinedTorches}
 local glowing3Darmors		= ${glowing3Darmors}
@@ -810,18 +801,6 @@ if itemName == "elytra" and glowing3Darmors and not w3di then
 end
 
 -- == EAT & DRINK ANIMATION ==
--- Animations Helpers
-local move = {
-    x = function(v) M:moveX(mat, v * l) end,
-    y = function(v) M:moveY(mat, v) end,
-    z = function(v) M:moveZ(mat, v) end
-}
-local rotate = {
-    x = function(v) M:rotateX(mat, v) end,
-    y = function(v) M:rotateY(mat, v * l) end,
-    z = function(v) M:rotateZ(mat, v * l) end
-}
-
 local function applyTransform(op, progress, exp, x, y, z)
     local t = M:pow(progress, exp)
 
@@ -831,7 +810,7 @@ local function applyTransform(op, progress, exp, x, y, z)
 end
 
 -- Animation
-local function eatDrinkAnimation(use, progress, movePos, rotatePos)
+local function eatDrinkAnimation(use, progress, movePos, rotatePos, scalePos)
     local function m(default, override)
         if override ~= nil then return override else return default end
     end
@@ -862,60 +841,31 @@ local function eatDrinkAnimation(use, progress, movePos, rotatePos)
         local dx = rotatePos and m(15, rotatePos[1]) or 15
         applyTransform(rotate, progress, 2,  dx,  nil,  nil)
     end
+
+    if scalePos then
+        local t = M:pow(progress, 1)
+        local sx = m(1, scalePos[1])
+        local sy = m(1, scalePos[2])
+        local sz = m(1, scalePos[3])
+        M:scale(mat, 1 + (sx - 1) * t, 1 + (sy - 1) * t, 1 + (sz - 1) * t)
+    end
 end
 local progress = context.mainHand and foodCount or foodCountO
 
 local specialCases = {
-    -- Without Packs
     {
-        check = function() return not (w3di or a3ds) and matched("goat_horn") end,
-        move = {nil, nil, nil}, rotate = {nil, -12, nil}
-    },
-    {
-        check = function() return not (freshFoods or w3di) and matched("sweet_berries") end,
-        move = {nil, nil, 0.05}, rotate = {nil, 10, nil}
-    },
-    {
-        check = function() return not (w3di or refinedBuckets) and matched("milk_bucket") end,
-        move = {0.15, 0.14, -0.18}, rotate = {nil, -60, 5}
-    },
-    {
-        check = function() return not (w3di or freshFoods) and itemName ~= "milk_bucket" end,
-        move = {-0.05, -0.07, 0.05}
-    },
-    -- With Packs
-    {
-        check = function() return freshFoods and w3di and matched({"_soup", "_stew"}, true) end,
-        move = {0.15, -0.05, -0.1}, rotate = {-5, -10, 30}
-    },
-    {
-        check = function() return freshFoods and w3di and matched("spider_eye") end,
-        move = {0.1, 0.05, 0.05}, rotate = {nil, nil, nil}
-    },
-	{
-		check = function() return w3di and refinedBuckets and matched("milk_bucket") end,
-		move = {-0.3, 0.2, 0.15}, rotate = {-20, -60, -10}
-	},
-	{
-		check = function() return not w3di and refinedBuckets and matched("milk_bucket") end,
-		move = {0.02, 0.06, -0.1}, rotate = {nil, -60, nil}
-	},
-    {
-		check = function() return w3di and matched("milk_bucket") end,
-		move = {nil, -0.05, -0.1}, rotate = {-10, -30, -55}
-	},
-    {
-		check = function() return w3di and not freshFoods and matched("sweet_berries") end,
-		move = {nil, nil, 0.05}
-	}
+        pack = function() return refinedBuckets and w3di end,
+        items = {"milk_bucket"},
+        move = {0.01, 0.17, -0.1}, scale = {0.8, 0.8, 0.8}
+    }
 }
 
 local caseMatched = false
 for _, case in ipairs(specialCases) do
-    if case.check() then
-        eatDrinkAnimation(useAction, progress, case.move, case.rotate)
+    if case.pack() and matched(case.items) then
+        eatDrinkAnimation(useAction, progress, case.move, case.rotate, case.scale)
         caseMatched = true
-		break
+        break
     end
 end
 
@@ -923,9 +873,33 @@ if not caseMatched and (useAction == "eat" or useAction == "drink" or useAction 
     eatDrinkAnimation(useAction, progress)
 end
 
-global.foodCount          = 0.0;
-global.foodCountO         = 0.0;
-local easedFoodCounter    = Easings:easeInQuart(context.mainHand and foodCount or foodCountO)
+global.foodCount    = 0.0;
+global.foodCountO   = 0.0;
+
+local easedFoodCounter = Easings:easeInQuart(context.mainHand and foodCount or foodCountO)
+
+if matched("bucket", true) then
+    if itemName == "milk_bucket" then
+        M:moveX(mat, -0.05 * l)
+        M:rotateX(mat, -8)
+        M:rotateY(mat, -10 * l)
+        M:rotateZ(mat, 6 * l)
+    end
+    M:moveY(mat, 0.025)
+    M:moveX(mat, -0 * l)
+    M:moveZ(mat, -0.1)
+    M:rotateY(mat, 180)
+    M:rotateX(mat, -82.5)
+    M:rotateZ(mat, -20 * l)
+    if itemName == "milk_bucket" then
+        M:rotateX(mat, -0 * easedFoodCounter)
+        M:rotateZ(mat, 30 * l * easedFoodCounter)
+        M:rotateY(mat, 0 * l * easedFoodCounter)
+        M:moveX(mat, 0 * l * easedFoodCounter)
+        M:moveY(mat, 0.1 * easedFoodCounter)
+        M:moveZ(mat, 0.02 * easedFoodCounter)
+    end
+end
 
 -- == BRUSH ANIMATION ==
 if useAction == "brush" then
@@ -1005,7 +979,7 @@ end
 local easedMapSmoother   = Easings:easeInOutBack(mapSmoother)
 local easedMapZoomer     = Easings:easeInOutBack(mapZoomer)
 
-if I:isOf(context.item, Items:get("minecraft:filled_map")) then
+if itemName == "filled_map" then
     M:rotateZ(mat, 5 * l * easedMapSmoother)
     M:rotateY(mat, (-40 - (20 * easedMapZoomer)) * l * easedMapSmoother)
     M:rotateZ(mat, 15 * l * easedMapSmoother)
@@ -1070,9 +1044,9 @@ end
 if context.mainHand then swingMHandPrev = context.swingMHand else swingOHandPrev = context.swingOHand end
 
 -- == SWING SPEED ==
-if isSpearTag then itemSwingSpeed:put(context.item, 15) end
-if isShovel then itemSwingSpeed:put(context.item, 14) end
-if itemName == "trident" or itemName == "mace" then itemSwingSpeed:put(context.item, 12) end
+if isSpearTag                                   then itemSwingSpeed:put(I:getName(context.item), 15) end
+if isShovel                                     then itemSwingSpeed:put(I:getName(context.item), 14) end
+if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getName(context.item), 12) end
 
 -- == TRIDENT AND SPEAR POSE ==
 if useAction == "trident" then
@@ -1128,23 +1102,6 @@ if isShovel then
 	M:rotateY(mat, 80 * l)
 end
 
-if itemName:match("bucket") and not (refinedBuckets and w3di) then
-	M:moveY(mat, 0.025)
-	M:moveX(mat, -0 * l)
-	M:moveZ(mat, -0.1)
-	M:rotateY(mat, 180)
-	M:rotateX(mat, -82.5)
-	M:rotateZ(mat, -20 * l)
-	if itemName == "milk_bucket" then
-		M:rotateX(mat, -0 * easedFoodCounter)
-		M:rotateZ(mat, 30 * l * easedFoodCounter)
-		M:rotateY(mat, 0 * l * easedFoodCounter)
-		M:moveX(mat, 0 * l * easedFoodCounter)
-		M:moveY(mat, 0.1 * easedFoodCounter)
-		M:moveZ(mat, 0.02 * easedFoodCounter)
-	end
-end
-
 -- === PACKS CORRECTIONS ===
 
 if w3di and a3ds and (itemName:match("_banner_pattern") or itemName == "name_tag") then
@@ -1165,4 +1122,13 @@ if rvTorches and matched("candle", true) then
     M:rotateX(mat, -8)
     M:rotateY(mat, -10 * l)
     M:rotateZ(mat, 6 * l)
+end
+
+-- === PACK COMPATIBILITY ===
+if IsItemCompat then
+    Positions = Positions or {}
+    if Positions and next(Positions) then pose(Positions, true) end
+
+    ItemsUndoAdjusts = ItemsUndoAdjusts or {}
+    if ItemsUndoAdjusts and next(ItemsUndoAdjusts) then pose(ItemsUndoAdjusts, true) end
 end
