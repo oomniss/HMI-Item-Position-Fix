@@ -205,5 +205,6 @@ end
 -- === INDIVIDUAL ADJUSTS ===
 pose({
     { {"weeping_vines", "hanging_roots", "pale_hanging_moss", "spore_blossom"}, m = {nil, 0.35, -0.05} },
-    { {"glow_item_frame"}, m = {0.14, nil, nil}, r = {25, nil, nil} }
+    { {"glow_item_frame"}, m = {0.14, nil, nil}, r = {25, nil, nil} },
+    { {"bucket"}, r = {10, -5, nil, "zyx"}, m = {0.1, nil, nil, "zyx"}, ops = "rms", condition = {not (w3di or refinedBuckets)}, matches = true }
 })

@@ -497,7 +497,7 @@ if w3di then
         { {"boats"}, r = {3.5, -8, -4.5} },
         -- Tools & Utilities
         { {"elytra"}, m = {nil, -0.32, nil}, r = {-131.5, nil, nil}, condition = {not just3Darmors} },
-        { {"bucket"}, m = {0.02, 0.05, -0.09}, r = {-94.5, -21, 180}, condition = {not refinedBuckets}, matches = true },
+        { {"bucket"}, m = {0.005, 0.15, -0.04}, r = {86, -151.5, -4}, s = {1.1}, condition = {not refinedBuckets}, matches = true },
         { {"bundles"}, m = {-0.05, -0.015, -0.015}, r = {-6, -11, 2.5}, s = {0.9} },
         { {"music_discs"}, m = {-0.05, nil, -0.06}, r = {-5.5, -10.5, 2.5} },
         { {"disc_fragment_5"}, m = {-0.065, -0.045, -0.005}, r = {-5.5, -9.5, 5.5} },

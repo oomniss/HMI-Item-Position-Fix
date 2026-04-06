@@ -273,7 +273,7 @@ pose({
     { {"rails"}, m = {0.165, -0.085, -0.09}, r = {-5.5, -5, -1.5} },
 
     -- Tools & Utilities
-    { {"bucket"}, m = {-0.045, -0.025, -0.03}, r = {nil, -7, nil}, s = {1.2}, matches = true },
+    { {"bucket"}, m = {0.01, -0.15, -0.15}, r = {nil, -7, nil}, s = {1.5}, matches = true },
     { {"fishing_rod", "_on_a_stick"}, m = {0.02, 0.04, -0.035}, r = {nil, -5.5, nil}, matches = true },
     { {"pickaxes", "axes", "hoes"}, m = {0.025, -0.115, -0.04}, r = {nil, -8.5, nil} },
     { {"shovels"}, m = {0.005, -0.185, 0.035}, r = {-4, 5.5, -7} },
@@ -558,22 +558,23 @@ yawSpeedO = yawSpeedO * M:pow(DAMPING, dt)
 yawAngleO = yawAngleO + yawSpeedO * dt
 
 -- == RESOURCE PACKS ==
-local rvTorches             = ${rvTorches}
-local refinedTorches        = ${refinedTorches}
-local glowing3Darmors		= ${glowing3Darmors}
-local glowing3Dtotem		= ${glowing3Dtotem}
-local a3ds					= ${a3ds}
-local w3di					= ${w3di}
-local refinedBuckets		= ${refinedBuckets}
-local freshFoods			= ${freshFoods}
-local better3Dbooks			= ${better3Dbooks}
-local bensBundle			= ${bensBundle}
-local fyoncle3Dtrims	    = ${fyoncle3Dtrims}
-local freshOres			    = ${freshOresIngots}
-local gousPoses			    = ${gousPoses}
-local nneSwords			    = ${nneSwords}
-local beashAnimations	    = ${beashAnimations}
-local torchesPack           = rvTorches or refinedTorches
+local rvTorches         = ${rvTorches}
+local refinedTorches    = ${refinedTorches}
+local glowing3Darmors   = ${glowing3Darmors}
+local glowing3Dtotem    = ${glowing3Dtotem}
+local a3ds              = ${a3ds}
+local w3di              = ${w3di}
+local refinedBuckets    = ${refinedBuckets}
+local freshFoods        = ${freshFoods}
+local better3Dbooks     = ${better3Dbooks}
+local bensBundle        = ${bensBundle}
+local fyoncle3Dtrims    = ${fyoncle3Dtrims}
+local freshOres         = ${freshOresIngots}
+local gousPoses         = ${gousPoses}
+local nneSwords         = ${nneSwords}
+local beashAnimations   = ${beashAnimations}
+local torchesPack       = rvTorches or refinedTorches
+local foodPack          = freshFoods or w3di
 
 -- == AXIS RULES ==
 local AxisRules = {
@@ -862,16 +863,20 @@ local specialCases = {
     {
         pack = function() return w3di and not refinedBuckets end,
         items = {"milk_bucket"},
-        move = {-0.1, 0.05, -0.08}, rotate = {-10, -90, 5}, scale = {0.8, 0.8, 0.8}
+        move = {-0.07, 0.05, -0.11}, rotate = {-5, -85, 5}, scale = {0.6, 0.6, 0.6}
     },
     {
         pack = function() return not (w3di or refinedBuckets) end,
         items = {"milk_bucket"},
-        move = {0.08, 0.15, -0.1}, rotate = {5, -45, 10}, scale = {0.75, 0.75, 0.75}
+        move = {-0.03, 0.15, -0.09}, rotate = {5, -40, 10}, scale = {0.55, 0.55, 0.55}
     },
     {
-        pack = function() return not (w3di or freshFoods) end,
+        pack = function() return not (w3di or freshFoods) and useAction == "eat" end,
         move = {nil, -0.05, 0.1}
+    },
+    {
+        pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
+        move = {-0.04, -0.015, nil}
     }
 }
 
@@ -1079,9 +1084,8 @@ end
 prevAge = P:getAge(context.player)
 
 -- == SOME POSITIONS ==
-local foodPack = matched(PackCompat.freshFoods[1], true) or matched(PackCompat.w3di.foods, true)
 if
-    itemName == "milk_bucket"
+    matched("bucket", true)
     or (isUsingItem and useAction == "eat" and foodPack)
 then
     M:moveX(mat, -0.05 * l)
@@ -1105,6 +1109,19 @@ if matched("bucket", true) then
         M:moveY(mat, 0.1 * easedFoodCounter)
         M:moveZ(mat, 0.02 * easedFoodCounter)
     end
+end
+
+if
+    I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_cold"))
+    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_warm"))
+    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_temperate"))
+then
+    M:moveY(mat, 0.025)
+    M:moveX(mat, -0 * l)
+    M:moveZ(mat, -0.1)
+    M:rotateY(mat, 180)
+    M:rotateX(mat, -82.5)
+    M:rotateZ(mat, -20 * l)
 end
 
 if itemName == "dragon_head" then
@@ -1146,7 +1163,7 @@ if itemName == "shears" and gousPoses then
     M:rotateZ(mat, 45)
 end
 
-if rvTorches and matched("candle", true) then -- verificar
+if rvTorches and matched("candle", true) then
     renderAsBlock:put(I:getName(context.item), false)
     M:moveX(mat, -0.05 * l)
     M:rotateX(mat, -8)
