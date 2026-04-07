@@ -1,6 +1,7 @@
 {
   expansions: {
     AlexSkinModel:      "HMIItemPositionFix.ItemsResourcePacksCompatibility.AlexSkinModel",
+    w3Dfoods:           "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DFoods",
     w3di:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DItems",
     a3ds:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Actually3DStuff",
     rvTorches:          "HMIItemPositionFix.ItemsResourcePacksCompatibility.RVTorches",

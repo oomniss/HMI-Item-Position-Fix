@@ -6,6 +6,7 @@
     ItemsResourcePacksCompatibility: {
       AlexSkinModel:                    false,
       WeskersonNature:                  false,
+      Weskerson3DFoods:                 false,
       Weskerson3DItems:                 false,
       Actually3DStuff:                  false,
       RVChestsAndBoxes:                 false,

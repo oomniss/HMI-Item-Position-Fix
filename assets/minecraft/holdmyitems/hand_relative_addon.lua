@@ -28,13 +28,11 @@ local function matched(items, matches)
         if itemName == i then
             return true
         end
-        if matches then
-            if itemName:match(i) then
-                return true
-            end
-            if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
-                return false
-            end
+        if matches and itemName:match(i) then
+            return true
+        end
+        if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
+            return false
         end
         return I:isIn(context.item, Tags:getFabricTag(i))
             or I:isIn(context.item, Tags:getVanillaTag(i))
@@ -158,7 +156,7 @@ PackCompat = {
             -- Combat
             "mace", "nautilus_armor", "totem_of_undying", "snowball", "^egg$", "brown_egg", "blue_egg",
             -- Foods & Potions
-            "apple", "^chorus_fruit$", "melon_slice", "^carrot$", "potato", "^beetroot$",
+            "apple", "^chorus_fruit$", "melon_slice", "^carrot$", "^golden_carrot$", "potato", "^beetroot$",
             "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
             "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
             "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
@@ -172,19 +170,21 @@ PackCompat = {
             -- Spawn Eggs
             "spawn_egg"
         }, matches = true,
-        foods = {
-            "apple", "^chorus_fruit$", "melon_slice", "^carrot$", "potato", "^beetroot$",
-            "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
-            "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
-            "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
-            "^dried_kelp$", "^honeycomb$", "_berries", "bowl", "potion", "cake",
-        }
-    }
+    },
+    w3Dfoods = {
+    {
+        "apple", "^chorus_fruit$", "^melon_slice$", "^carrot$", "^golden_carrot$", "potato", "^beetroot$",
+        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
+        "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
+        "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
+        "^dried_kelp$", "^honeycomb$", "_berries", "potion", "cake",
+    }, matches = true }
 }
 
 ActivePacks = {}
     local a3ds              = ${a3ds}               and (table.insert(ActivePacks, "a3ds") or true)
     local w3di              = ${w3di}               and (table.insert(ActivePacks, "w3di") or true)
+    local w3Dfoods          = ${w3Dfoods}           and (table.insert(ActivePacks, "w3Dfoods") or true)
     local wNature           = ${wNature}            and (table.insert(ActivePacks, "wNature") or true)
     local rvChests          = ${rvChests}           and (table.insert(ActivePacks, "rvChests") or true)
     local rvTorches         = ${rvTorches}          and (table.insert(ActivePacks, "rvTorches") or true)
@@ -282,6 +282,32 @@ if freshDiscs then
     })
 end
 
+if w3Dfoods then
+    addPos({
+        { PackCompat.w3Dfoods[1], r = {-5.5, -5, -1}, matches = true, prox = true },
+        { {"apple", "^beetroot$"}, m = {0.015, -0.005, -0.06}, matches = true },
+        { {"potato", "beef", "porkchop", "^bread$", "^rotten_flesh$"}, m = {0.02, nil, -0.045}, matches = true },
+        { {"carrot"}, m = {-0.075, -0.075, -0.085}, matches = true },
+        { {"mutton"}, m = {0.055, nil, -0.04}, matches = true },
+        { {"stew", "soup"}, m = {0.01, 0.105, 0.12}, r = {-68, nil, nil}, s = {1.05}, matches = true },
+        { {"chorus_fruit"}, m = {0.025, -0.005, -0.06} },
+        { {"melon_slice"}, m = {0.02, -0.045, -0.08} },
+        { {"sweet_berries"}, m = {0.02, 0.06, -0.07} },
+        { {"glow_berries"}, m = {0.035, 0.01, -0.07} },
+        { {"dried_kelp"}, m = {-0.005, -0.005, nil} },
+        { {"chicken", "cooked_chicken"}, m = {0.015, nil, -0.08} },
+        { {"rabbit", "cooked_rabbit"}, m = {0.02, nil, -0.04} },
+        { {"cod", "cooked_cod"}, m = {-0.03, nil, -0.06} },
+        { {"salmon", "cooked_salmon"}, m = {nil, nil, -0.06} },
+        { {"tropical_fish"}, m = {0.01, nil, -0.1} },
+        { {"pufferfish"}, m = {-0.005, nil, -0.01} },
+        { {"cake"}, m = {0.09, nil, nil} },
+        { {"pumpkin_pie"}, m = {0.03, -0.01, 0.055}, r = {nil, 40, nil} },
+        { {"spider_eye"}, m = {0.035, -0.01, -0.04} },
+        { {"cookie"}, m = {0.01, nil, nil} }
+    })
+end
+
 if freshFoods then
     addPos({
         -- fresh foods changes the position of all items whose ID contains "plate", so this correction is necessary
@@ -371,25 +397,6 @@ end
 if better3Dbooks then
     addPos({
         { {"book", "enchanted_book", "writable_book", "written_book"}, r = {-12.5, -15.5, nil} }
-    })
-end
-
-if wNature then
-    addPos({
-        { {"_mushroom$", "_fungus$"}, m = {0.245, -0.11, -0.135}, r = {-4, -5, nil}, s = {1.45}, matches = true },
-        { {"_tulip"}, m = {0.15, -0.065, -0.08}, matches = true },
-        { {"oak_sapling"}, m = {0.115, -0.075, -0.08}, r = {-3.5, nil, nil} },
-        { {"azalea", "flowering_azalea"}, m = {0.165, -0.075, -0.075}, r = {-5, -3.5, nil} },
-        { {"dead_bush"}, m = {0.22, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
-        { {"fern"}, m = {0.21, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
-        { {"dandelion"}, m = {0.16, -0.06, -0.11} },
-        { {"poppy"}, m = {0.06, nil, nil} },
-        { {"blue_orchid"}, m = {0.135, -0.06, -0.095} },
-        { {"allium"}, m = {-0.075, -0.055, -0.095}, r = {nil, 75.5, nil}, s = {0.9} },
-        { {"azure_bluet"}, m = {0.095, -0.06, -0.135}, r = {nil, 35.5, nil} },
-        { {"oxeye_daisy"}, m = {0.205, -0.075, -0.07}, r = {nil, -20.5, nil}, s = {1.25} },
-        { {"cornflower"}, m = {0.21, -0.055, -0.125}, s = {1.25} },
-        { {"lily_of_the_valley"}, m = {0.07, -0.09, -0.115}, r = {nil, 20, nil} }
     })
 end
 
@@ -573,6 +580,25 @@ if w3di then
             { {"pumpkin_pie"}, m = {-0.125, nil, 0.01}, r = {-7, -6, 3} },
         })
     end
+end
+
+if wNature then
+    addPos({
+        { {"_mushroom$", "_fungus$"}, m = {0.245, -0.11, -0.135}, r = {-4, -5, nil}, s = {1.45}, matches = true },
+        { {"_tulip"}, m = {0.15, -0.065, -0.08}, matches = true },
+        { {"oak_sapling"}, m = {0.115, -0.075, -0.08}, r = {-3.5, nil, nil} },
+        { {"azalea", "flowering_azalea"}, m = {0.165, -0.075, -0.075}, r = {-5, -3.5, nil} },
+        { {"dead_bush"}, m = {0.22, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
+        { {"fern"}, m = {0.21, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
+        { {"dandelion"}, m = {0.16, -0.06, -0.11} },
+        { {"poppy"}, m = {0.06, nil, nil} },
+        { {"blue_orchid"}, m = {0.135, -0.06, -0.095} },
+        { {"allium"}, m = {-0.075, -0.055, -0.095}, r = {nil, 75.5, nil}, s = {0.9} },
+        { {"azure_bluet"}, m = {0.095, -0.06, -0.135}, r = {nil, 35.5, nil} },
+        { {"oxeye_daisy"}, m = {0.205, -0.075, -0.07}, r = {nil, -20.5, nil}, s = {1.25} },
+        { {"cornflower"}, m = {0.21, -0.055, -0.125}, s = {1.25} },
+        { {"lily_of_the_valley"}, m = {0.07, -0.09, -0.115}, r = {nil, 20, nil} }
+    })
 end
 
 -- === UNDO ADJUSTS ===

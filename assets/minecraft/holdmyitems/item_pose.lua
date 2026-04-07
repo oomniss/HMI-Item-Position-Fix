@@ -14,13 +14,11 @@ local function matched(items, matches)
         if itemName == i then
             return true
         end
-        if matches then
-            if itemName:match(i) then
-                return true
-            end
-            if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
-                return false
-            end
+        if matches and itemName:match(i) then
+            return true
+        end
+        if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
+            return false
         end
         return I:isIn(context.item, Tags:getFabricTag(i))
             or I:isIn(context.item, Tags:getVanillaTag(i))
@@ -305,7 +303,7 @@ pose({
     { {"head_armor", "foot_armor"}, m = {nil, -0.11, -0.005} },
     { {"leg_armor"}, m = {nil, -0.035, -0.005} },
     { {"wolf_armor"}, m = {-0.005, -0.285, -0.015} },
-    { {"snowball", "egg", "brown_egg", "blue_egg"}, m = {-0.02, -0.045, 0.015} },
+    { {"snowball", "egg", "brown_egg", "blue_egg"}, m = {-0.015, -0.045, 0.015} },
     { {"arrows"}, m = {nil, nil, 0.02} },
     { {"bow"}, m = {-0.03, nil, 0.07}, r = {nil, -25.5, -10.5} },
     { {"crossbow"}, m = {-0.12, 0.08, 0.065}, r = {nil, -11, nil} },
@@ -563,13 +561,15 @@ local refinedTorches    = ${refinedTorches}
 local glowing3Darmors   = ${glowing3Darmors}
 local a3ds              = ${a3ds}
 local w3di              = ${w3di}
+local w3Dfoods          = ${w3Dfoods}
 local refinedBuckets    = ${refinedBuckets}
 local freshFoods        = ${freshFoods}
+local freshPlants       = ${freshPlants}
 local gousPoses         = ${gousPoses}
 local nneSwords         = ${nneSwords}
 local beashAnimations   = ${beashAnimations}
 local torchesPack       = rvTorches or refinedTorches
-local foodPack          = freshFoods or w3di
+local foodPack          = freshFoods or w3di or w3Dfoods
 
 -- == SWING ANIMATIONS ==
 if isPickaxe then
@@ -792,6 +792,17 @@ local specialCases = {
         items = {"milk_bucket"},
         move = {-0.07, 0.05, -0.11}, rotate = {-5, -85, 5}, scale = {0.6, 0.6, 0.6}
     },
+    {
+        pack = function() return w3Dfoods and not (w3di or freshFoods) end,
+        transforms = {
+            { {"apple", "chorus_fruit", "potato", "beetroot", "bread"}, m = {nil, nil, -0.05}, r = {0, 0, 0}, matches = true },
+            { {"cookie", "melon_slice", "glow_berries", "dried_kelp", "beef", "porkchop", "mutton", "rotten_flesh"}, m = {nil, 0.1, -0.05}, r = {0, 0, 0}, matches = true },
+            { {"soup", "stew"}, m = {nil, 0.12, -0.1}, r = {5, 0, 0}, matches = true },
+            { {"pumpkin_pie"}, m = {nil, 0.1, -0.15}, r = {0, 0, 0} },
+            { {"spider_eye"}, m = {0.05, nil, -0.05}, r = {0, 0, 0} },
+            { {"carrot", "golden_carrot"}, m = {0.05, 0.15, 0}, r = {0, 0, 0} },
+        }
+    },
     -- Without packs
     {
         pack = function() return not (w3di or refinedBuckets) end,
@@ -816,7 +827,17 @@ local specialCases = {
 local caseMatched = false
 for _, case in ipairs(specialCases) do
     if case.pack() then
-        if (case.items ~= nil and matched(case.items)) or case.items == nil then
+        if case.transforms then
+            for _, transform in ipairs(case.transforms) do
+                for _, item in ipairs(transform[1]) do
+                    if matched(item, transform.matches) then
+                        eatDrinkAnimation(useAction, progress, transform.m, transform.r, transform.s)
+                        caseMatched = true
+                        break
+                    end
+                end
+            end
+        elseif (case.items ~= nil and matched(case.items)) or case.items == nil then
             eatDrinkAnimation(useAction, progress, case.move, case.rotate, case.scale)
             caseMatched = true
             break

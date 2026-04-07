@@ -16,13 +16,11 @@ local function matched(items, matches)
         if itemName == i then
             return true
         end
-        if matches then
-            if itemName:match(i) then
-                return true
-            end
-            if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
-                return false
-            end
+        if matches and itemName:match(i) then
+            return true
+        end
+        if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
+            return false
         end
         return I:isIn(context.item, Tags:getFabricTag(i))
             or I:isIn(context.item, Tags:getVanillaTag(i))
@@ -91,6 +89,7 @@ end
 -- === PACKS COMPATIBILITY ===
 local a3ds              = ${a3ds}
 local w3di              = ${w3di}
+local w3Dfoods          = ${w3Dfoods}
 local just3Darmors      = ${just3Darmors}
 local glowing3Darmors   = ${glowing3Darmors}
 local glowing3Dtotem    = ${glowing3Dtotem}
@@ -178,6 +177,12 @@ if w3di then
 end
 
 -- == PACKS INDIVIDUAL ADJUSTS ==
+if w3Dfoods then
+    pose({
+        { PackCompat.w3Dfoods, r = {nil, nil, 10}, m = {0.05, -0.09, -0.09, "zyx"}, ops = "rms", matches = true },
+    })
+end
+
 if a3ds then
     pose({
         { {"lily_pad"}, m = {nil, 0.375, nil} }

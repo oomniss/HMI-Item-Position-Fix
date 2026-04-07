@@ -3,6 +3,7 @@
     AlexSkinModel:      "HMIItemPositionFix.ItemsResourcePacksCompatibility.AlexSkinModel",
     w3di:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DItems",
     a3ds:               "HMIItemPositionFix.ItemsResourcePacksCompatibility.Actually3DStuff",
+    w3Dfoods:           "HMIItemPositionFix.ItemsResourcePacksCompatibility.Weskerson3DFoods",
     rvTorches:          "HMIItemPositionFix.ItemsResourcePacksCompatibility.RVTorches",
     rvChests:           "HMIItemPositionFix.ItemsResourcePacksCompatibility.RVChestsAndBoxes",
     just3Darmors:       "HMIItemPositionFix.ItemsResourcePacksCompatibility.Just3DArmors",
