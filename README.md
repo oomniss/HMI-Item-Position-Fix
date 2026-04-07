@@ -61,7 +61,7 @@ To ensure correct positioning, follow this load order:
 6. **HMI Item Position Fix**
 7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords)
 
-> For some reason, `Fyoncle's 3D Trims` must always be placed above `Just 3D Armors`, `R&V Torches`, and `Refined Torches`. This is necessary to ensure that item positioning and physics do not break. As a precaution, always keep `Fyoncle's 3D Trims` at the very top of your load order.
+> For some reason, `Fyoncle's 3D Trims` must always be placed above `Just 3D Armors`, `R&V Torches`, `Refined Torches`, and `Fresh Foods`. This is necessary to ensure that item positioning and physics do not break. As a precaution, always keep `Fyoncle's 3D Trims` at the very top of your load order.
 
 > For `NNE Action Swords` to work properly, its author requires you to replace the HMI `Example Pack` with their `[HMI] REANIMATED` version, which disables sword battle animations. Make sure to keep `[HMI] REANIMATED` below `HMI Item Position Fix` in the load order.
 
@@ -87,5 +87,7 @@ For some reason, the clock model breaks when using `A3DS` together with `W3DI`. 
 ## The EMF Problem
 
 HMI may cause visual glitches when used together with the Entity Model Features (EMF) mod. To fix this, install Mod Menu, open the Mods menu, and locate EMF. In its options, navigate to the Models section and, under Player Settings, turn on "Prevent first person player animations".
+
+If you are using EMF version 3.0.12 or higher, you may encounter item misalignment. This is due to an incompatibility between HMI and EMF. To fix this, simply downgrade your EMF version to 3.0.11.
 
 > Found a bug or have a suggestion? Join our [Discord](https://discord.gg/teDctNyajx)!

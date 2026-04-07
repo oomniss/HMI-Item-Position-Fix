@@ -561,75 +561,15 @@ yawAngleO = yawAngleO + yawSpeedO * dt
 local rvTorches         = ${rvTorches}
 local refinedTorches    = ${refinedTorches}
 local glowing3Darmors   = ${glowing3Darmors}
-local glowing3Dtotem    = ${glowing3Dtotem}
 local a3ds              = ${a3ds}
 local w3di              = ${w3di}
 local refinedBuckets    = ${refinedBuckets}
 local freshFoods        = ${freshFoods}
-local better3Dbooks     = ${better3Dbooks}
-local bensBundle        = ${bensBundle}
-local fyoncle3Dtrims    = ${fyoncle3Dtrims}
-local freshOres         = ${freshOresIngots}
 local gousPoses         = ${gousPoses}
 local nneSwords         = ${nneSwords}
 local beashAnimations   = ${beashAnimations}
 local torchesPack       = rvTorches or refinedTorches
 local foodPack          = freshFoods or w3di
-
--- == AXIS RULES ==
-local AxisRules = {
-    {
-        pack = glowing3Darmors,
-        invertedItems = {"_helmet"},
-    },
-    {
-        pack = glowing3Dtotem,
-        invertedItems = {"totem_of_undying"},
-    },
-    {
-        pack = freshFoods,
-        invertedItems = {"cake", "pumpkin_pie", "bowl", "_stew", "_soup"},
-    },
-    {
-        pack = fyoncle3Dtrims,
-        invertedItems = {"_smithing_template"},
-    },
-    {
-        pack = w3di and freshOres,
-        invertedItems = {"netherite_scrap", "flint"},
-        noSwingItems = {"coal$"},
-    },
-    {
-        pack = w3di and bensBundle,
-        invertedItems = {"bundle"},
-    },
-    {
-        pack = better3Dbooks and w3di,
-        invertedItems = {"^book$", "enchanted_book", "writable_book", "written_book"},
-    },
-    {
-        pack = w3di and a3ds,
-        invertedItems = {
-            "shears", "ender_pearl", "ender_eye", "firework_rocket", "boats", "name_tag", "banner_pattern", "stick",
-            "blaze_rod", "breeze_rod", "totem_of_undying", "bone"
-        },
-    },
-}
-
-local invertedAxis = false
-local noSwingAnimation = false
-
-for _, rule in ipairs(AxisRules) do
-    local isInvertedAxis = rule.pack and matched(rule.invertedItems, true)
-    local isNoSwingAnimation = rule.pack and matched(rule.noSwingItems, true)
-    if isInvertedAxis then
-        invertedAxis = true
-        break
-    elseif isNoSwingAnimation then
-        noSwingAnimation = true
-        break
-    end
-end
 
 -- == SWING ANIMATIONS ==
 if isPickaxe then
@@ -678,16 +618,11 @@ end
 
 if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
 
-    if invertedAxis then
-        M:moveX(mat, -0.05 * swing_rot)
-        M:moveY(mat, -0.05 * swing_rot)
-    elseif not noSwingAnimation then
-        M:moveZ(mat, -0.05 * swing_rot)
-        M:moveY(mat, -0.05 * swing_rot)
-        M:rotateX(mat, 10 * swing_rot)
-        M:rotateX(mat, -30 * swing_rot)
-        M:rotateX(mat, -10 * swing_hit)
-    end
+    M:moveZ(mat, -0.05 * swing_rot)
+    M:moveY(mat, -0.05 * swing_rot)
+    M:rotateX(mat, 10 * swing_rot)
+    M:rotateX(mat, -30 * swing_rot)
+    M:rotateX(mat, -10 * swing_hit)
 
     if not isSword then
         if useAction == "trident" or useAction == "spear" then
@@ -711,7 +646,7 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
             M:moveY(mat, 0.05 * swing_hit)
             M:moveY(mat, 0.3 * swingOverall)
 
-        elseif not (invertedAxis or noSwingAnimation) then
+        else
             M:moveZ(mat, -0.05 * swing_rot)
             M:moveY(mat, -0.05 * swing_rot)
             M:rotateX(mat, -10 * swing_rot)
@@ -1179,7 +1114,7 @@ if glowing3Darmors then
         M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3), 0, 0.1, 0.1)
         M:rotateZ(mat, ywAngle * 0.5, -0.129, -0.004, 0.495)
     elseif matched("leg_armor") then
-        M:rotateZ(mat, M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3, 0, 0.44, 0.3)
+        M:rotateZ(mat, M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3, 0, 0.44, 0.55)
     elseif itemName == "elytra" and not w3di then
         M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5, 0, -0.13, 0)
 	    M:rotateZ(mat, ywAngle * -0.7, -0.1 * l, 0, 0.1)
