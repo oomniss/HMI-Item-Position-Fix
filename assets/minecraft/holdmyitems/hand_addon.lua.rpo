@@ -15,6 +15,7 @@
     refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",
     freshDiscs:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshMusicDiscs",
     better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
-    just3Darmors:       "HMIItemPositionFix.ResourcePacksCompatibility.Just3DArmors"
+    just3Darmors:       "HMIItemPositionFix.ResourcePacksCompatibility.Just3DArmors",
+    actionsStuffPoses:  "HMIItemPositionFix.General.ActionStuffToolsPoses"
   }
 }

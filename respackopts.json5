@@ -3,6 +3,14 @@
   version: 14,
   capabilities: ["FileFilter", "DirFilter"],
   conf: {
+    General: {
+      SkinModel: false,
+      ActionStuffToolsPoses: false,
+      InspectKeybind: {
+        type: "integer",
+        default: 74
+      }
+    },
     ResourcePacksCompatibility: {
       WeskersonNature: false,
       Weskerson3DFoods: false,
@@ -27,15 +35,6 @@
       GoussHandPoses: false,
       NNEActionSwords: false,
       BeashSwingAnimations: false
-    },
-    ExtraOptions: {
-      SkinModel: false
-    },
-    HMISettings: {
-      InspectKeybind: {
-        type: "integer",
-        default: 74
-      }
     }
   }
 }

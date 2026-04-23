@@ -228,11 +228,11 @@ IsItemCompat = getItemCompat()
 -- === INDIVIDUAL RESOURCE PACK ADJUST ===
 if classicToolsFusion then
     addPos{
-        { {"wooden_sword"}, m = {0.025, -0.03, 0.01}, r = {nil, -6.5, nil} },
-        { {"iron_sword", "golden_sword", "diamond_sword"}, m = {0.025, -0.04, -0.02}, r = {nil, -6.5, nil} },
-        { {"stone_sword"}, m = {0.025, -0.015, -0.02}, r = {nil, -6.5, nil} },
-        { {"copper_sword"}, m = {0.025, -0.085, -0.02}, r = {nil, -6.5, nil} },
-        { {"netherite_sword"}, m = {0.025, -0.01, -0.02}, r = {nil, -6.5, nil} },
+        { {"wooden_sword"}, m = {0.025, -0.03, 0.01}, r = {nil, -6.5, -1.5} },
+        { {"iron_sword", "golden_sword", "diamond_sword"}, m = {0.025, -0.04, -0.02}, r = {nil, -6.5, -1.5} },
+        { {"stone_sword"}, m = {0.025, -0.015, -0.02}, r = {nil, -6.5, -1.5} },
+        { {"copper_sword"}, m = {0.025, -0.085, -0.02}, r = {nil, -6.5, -1.5} },
+        { {"netherite_sword"}, m = {0.025, -0.01, -0.02}, r = {nil, -6.5, -1.5} },
         { {"wooden_spear", "stone_spear"}, m = {nil, nil, 0.04} },
         { {"copper_spear"}, m = {-0.015, -0.13, isUsingItem and 0 or 0.02} },
         { {"golden_spear", "diamond_spear"}, m = {nil, -0.165, nil} },

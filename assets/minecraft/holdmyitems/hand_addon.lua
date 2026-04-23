@@ -206,6 +206,22 @@ pose({
     { {"bucket"}, r = {10, -5, nil, "zyx"}, m = {0.1, nil, nil, "zyx"}, ops = "rms", condition = {not (w3di or refinedBuckets)}, matches = true }
 })
 
+-- === ACTIONS & STUFF POSES OPTIONS ===
+if ${actionsStuffPoses} then
+    if matched({"mace", "shovels", "pickaxes", "axes", "hoes", "swords", "trident"}) then
+        M:moveX(mat, -0.1 * l)
+        M:moveY(mat, -0.02 * l)
+        M:rotateX(mat, -9)
+        M:rotateZ(mat, 8 * l)
+    elseif matched("spears") then
+        M:moveZ(mat, 0.25)
+        M:moveX(mat, -0.2 * l)
+        M:moveY(mat, -0.02)
+        M:rotateZ(mat, 5 * l)
+        M:rotateY(mat, -5 * l)
+    end
+end
+
 -- === ANIMATIONS ===
 global.mainHandSwitch           = 0.0;
 global.offHandSwitch            = 0.0;

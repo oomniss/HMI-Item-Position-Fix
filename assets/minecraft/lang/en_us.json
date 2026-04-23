@@ -1,5 +1,7 @@
 {
     "rpo.HMIItemPositionFix": "HMI Item Position Fix",
-    "rpo.HMIItemPositionFix.ExtraOptions.SkinModel.true": "Alex",
-    "rpo.HMIItemPositionFix.ExtraOptions.SkinModel.false": "Steve"
+    "rpo.HMIItemPositionFix.General.SkinModel.true": "Alex",
+    "rpo.HMIItemPositionFix.General.SkinModel.false": "Steve",
+    "rpo.HMIItemPositionFix.General.ActionStuffToolsPoses": "Actions & Stuff Tools Poses",
+    "rpo.HMIItemPositionFix.General.ActionStuffToolsPoses.tooltip": "Actions & Stuff poses for shovels, pickaxes, axes, hoes, swords, spears, trident and mace"
 }
