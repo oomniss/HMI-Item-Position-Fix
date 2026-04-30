@@ -1,6 +1,4 @@
 {
-  condition: "!ResourcePacksCompatibility.HoldMyActions",
-  fallback: "assets/minecraft/holdmyitems/holdmyactions_compat/item_pose.lua",
   expansions: {
     rvTorches:          "HMIItemPositionFix.ResourcePacksCompatibility.RVTorches",
     refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",
@@ -21,6 +19,9 @@
     beashAnimations:    "HMIItemPositionFix.ResourcePacksCompatibility.BeashSwingAnimations",
 
     skinModel:          "HMIItemPositionFix.General.SkinModel",
-    inspectKeybind:     "HMIItemPositionFix.General.InspectKeybind"
+    inspectKeybind:     "HMIItemPositionFix.General.InspectKeybind",
+
+    trident_item_y:     "HMIItemPositionFix.General.useStyle1 ? -0.07 : 0.01",
+    trident_item_rx:    "HMIItemPositionFix.General.useStyle1 ? -60 : -45"
   }
 }

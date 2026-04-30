@@ -16,6 +16,8 @@
     freshDiscs:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshMusicDiscs",
     better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
     just3Darmors:       "HMIItemPositionFix.ResourcePacksCompatibility.Just3DArmors",
+    holdMyActions:      "HMIItemPositionFix.ResourcePacksCompatibility.HoldMyActions",
+
     actionsStuffPoses:  "HMIItemPositionFix.General.ActionStuffToolsPoses"
   }
 }

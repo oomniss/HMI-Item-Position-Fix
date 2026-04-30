@@ -3,5 +3,6 @@
     "rpo.HMIItemPositionFix.General.SkinModel.true": "Alex",
     "rpo.HMIItemPositionFix.General.SkinModel.false": "Steve",
     "rpo.HMIItemPositionFix.General.ActionStuffToolsPoses": "Actions & Stuff Tools Poses",
-    "rpo.HMIItemPositionFix.General.ActionStuffToolsPoses.tooltip": "Actions & Stuff poses for shovels, pickaxes, axes, hoes, swords, spears, trident and mace"
+    "rpo.HMIItemPositionFix.General.ActionStuffToolsPoses.tooltip": "Actions & Stuff poses for shovels, pickaxes, axes, hoes, swords, spears, trident and mace",
+    "rpo.HMIItemPositionFix.General.useStyle1.tooltip": "This option will only take effect if Hold My Actions is enabled."
 }

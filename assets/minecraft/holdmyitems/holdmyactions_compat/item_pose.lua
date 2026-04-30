@@ -400,50 +400,35 @@ local poses = {
     spawn_eggs_adjust           = { m = {-0.005, 0.03, nil} },
     spawn_eggs                  = { m = {-0.01, -0.04, nil} }
 }
-
 if not IsItemCompat then
     local entry = poses[itemName] or poses[getTag()]
     if entry then
-        debugger:out("teste")
         if entry.m then move(entry.m[1], entry.m[2], entry.m[3])   end
         if entry.r then rotate(entry.r[1], entry.r[2], entry.r[3]) end
         if entry.s then scale(entry.s[1], entry.s[2], entry.s[3])  end
     end
 end
 
--- === PHYSICS AND ANIMATIONS ===
--- Extracted from the HMI example_pack (item_Pose.lua)
--- Credits: thesapling, OrkaMC, cyber, Axolotl
+-- === HOLD MY ACTIONS ===
+-- Extracted from the Hold My Actions resource pack (item_Pose.lua)
+-- Credits: ZAIFIX
 
-global.brushSpeedM          = 0;
-global.brushSpeedO          = 0;
-global.brushAngleM          = 0;
-global.brushAngleO          = 0;
-global.tridentM             = 0;
-global.tridentMO            = 0;
-global.tridentJ             = 0;
-global.tridentJO            = 0;
-global.spearCounterM        = 0;
-global.spearUsageTime       = 0;
-global.canDismountCounter   = 0;
-global.canKnockbackCounter  = 0;
-global.spearCounterO        = 0;
-global.canDismountCounterO  = 0;
-global.canKnockbackCounterO = 0;
-global.hitImpactCounter     = 0;
-global.hitImpactCounterO    = 0;
-global.riptideCounter       = 0;
-global.riptideCounterO      = 0;
-global.swingCountPrev       = 0;
 global.crossBowM            = 0.0;
+global.swordAttack2         = 0;
+global.swordAttack          = 0;
 global.crossBowSecM         = 0.0;
 global.crossBowO            = 0.0;
 global.crossBowSecO         = 0.0;
 global.walk                 = 0.0;
+global.blockRender          = true;
 global.walkSmoother         = 0.0;
 global.swimSmoother         = 0.0;
 global.swimCounter          = 0.0;
 global.mainHandSwitch       = 0.0;
+global.offHandSwitch        = 0.0;
+global.swingCountPrev       = 0;
+global.swingOHandPrev       = false;
+global.swingMHandPrev       = false;
 global.inspectionCounter    = 0.0;
 global.inspectionSpin       = 0.0;
 global.prevAge              = 0.0;
@@ -470,6 +455,7 @@ global.yawAngleO            = 0.0;
 global.prevYaw              = 0.0;
 global.yawSpeed             = 0.0;
 global.yawAngle             = 0.0;
+global.mainHandSwitch       = 0.0;
 global.offHandSwitch        = 0.0;
 global.foodCount            = 0.0;
 global.foodCountSec         = 0.0;
@@ -482,37 +468,40 @@ global.shieldM              = 0.0;
 global.shieldO              = 0.0;
 global.sneak                = 0.0;
 global.bundleCounter        = 0.0;
-global.swingOHandPrev       = false;
-global.swingMHandPrev       = false;
-global.foodCount            = 0.0;
-global.foodCountO           = 0.0;
-global.swordSwingCycle      = 0;
-global.swordAttack          = false;
+global.brushSpeedM          = 0;
+global.brushSpeedO          = 0;
+global.brushAngleM          = 0;
+global.brushAngleO          = 0;
+global.tridentM             = 0;
+global.tridentMO            = 0;
+global.tridentJ             = 0;
+global.tridentJO            = 0;
+global.spearCounterM        = 0;
+global.spearUsageTime       = 0;
+global.canDismountCounter   = 0;
+global.canKnockbackCounter  = 0;
+global.spearCounterO        = 0;
+global.canDismountCounterO  = 0;
+global.canKnockbackCounterO = 0;
+global.hitImpactCounter     = 0;
+global.hitImpactCounterO    = 0;
 
-local swing_rot
-local swing_sword_tilt
-local swing_hit_second
 local GRAVITY               = 0.04
 local DAMPING               = 0.85
 local INTENSITY             = 0.15
-local dt                    = context.deltaTime * 30
-local playerSpeed           = P:getSpeed(context.player)
-local playerPitch           = P:getPitch(context.player)
-local playerYaw             = P:getYaw(context.player)
-local playerAge             = P:getAge(context.player)
-local sp                    = I:getUseAction(P:getMainItem(context.player)) == "spear" and 1 or 0
-local spo                   = I:getUseAction(P:getOffhandItem(context.player)) == "spear" and 1 or 0
+local sp                    = I:getUseAction(P:getMainItem(context.player)) == "spear" and 1 or 0;
+local spo                   = I:getUseAction(P:getOffhandItem(context.player)) == "spear" and 1 or 0;
 local sc                    = context.mainHand and spearCounterM or spearCounterO
 local scd                   = context.mainHand and canDismountCounter or canDismountCounterO
 local sck                   = context.mainHand and canKnockbackCounter or canKnockbackCounterO
 local sw                    = context.mainHand and mainHandSwitch or offHandSwitch
 local mat                   = context.matrices
 local hic                   = context.mainHand and Easings:easeInOutSine(hitImpactCounter) or hitImpactCounterO
-local ywAngle               = (context.mainHand and yawAngle) or yawAngleO
-local ptAngle               = (context.mainHand and pitchAngle) or pitchAngleO
-local swing                 = M:sin(context.swingProgress * 3.14)
-local swing_hit             = M:sin(M:clamp(context.swingProgress, 0.16561, 0.49422) * 4.78 * 2 + 4.7)
-local swingOverall          = M:sin(context.swingProgress * 3.14)
+local dt                    = context.deltaTime * 30
+local playerSpeed           = P:getSpeed(context.player)
+local playerPitch           = P:getPitch(context.player)
+local playerYaw             = P:getYaw(context.player)
+local playerAge             = P:getAge(context.player)
 local useAction             = I:getUseAction(context.item)
 local isUsingItem           = P:isUsingItem(context.player)
 
@@ -555,25 +544,12 @@ local function particle(x, y, z, texture, size, tick)
 	)
 end
 
-local moves = {
-    x = function(v) M:moveX(context.matrices, v * l) end,
-    y = function(v) M:moveY(context.matrices, v) end,
-    z = function(v) M:moveZ(context.matrices, v) end
-}
-local rotates = {
-    x = function(v) M:rotateX(context.matrices, v) end,
-    y = function(v) M:rotateY(context.matrices, v * l) end,
-    z = function(v) M:rotateZ(context.matrices, v * l) end
-}
-
 -- == CALC ==
 local isSword        = matched({"swords"})
 local isShovel       = matched({"shovels"})
 local isAxe          = matched({"axes"})
 local isHangingSign  = matched({"hanging_signs"})
 local isPickaxe      = matched({"pickaxes"})
-local isNugget       = matched({"nuggets"})
-local isMusicDisc    = matched({"music_discs"})
 local isSpearTag     = matched({"spears"})
 local isSkull        = matched({"skulls"})
 
@@ -620,6 +596,9 @@ yawSpeedO = yawSpeedO - GRAVITY * yawAngleO * dt
 yawSpeedO = yawSpeedO * M:pow(DAMPING, dt)
 yawAngleO = yawAngleO + yawSpeedO * dt
 
+local ywAngle = (context.mainHand and yawAngle) or yawAngleO
+local ptAngle = (context.mainHand and pitchAngle) or pitchAngleO
+
 -- == RESOURCE PACKS ==
 local rvTorches         = ${rvTorches}
 local refinedTorches    = ${refinedTorches}
@@ -636,27 +615,33 @@ local beashAnimations   = ${beashAnimations}
 local torchesPack       = rvTorches or refinedTorches
 local foodPack          = freshFoods or w3di or w3Dfoods
 
--- == SWING ANIMATIONS ==
+-- == SWING ANIMATION ==
 if isPickaxe then
     context.swingProgress = easeCustom(context.swingProgress)
 else
     context.swingProgress = easeCustomSec(context.swingProgress)
 end
 
+local swing_rot
 if context.swingProgress < 0.70016 then
     swing_rot = M:sin(M:clamp(context.swingProgress, 0, 0.308) * 5.1)
 else
     swing_rot = M:sin(M:clamp(context.swingProgress, 0.70016, 1) * 5.1 - 2)
 end
 
+local swing_sword_tilt
 if context.swingProgress < 0.65245 then
     swing_sword_tilt = M:sin(M:clamp(context.swingProgress, 0, 0.16675) * 3.14 * 3)
 else
     swing_sword_tilt = M:sin(M:clamp(context.swingProgress, 0.65245, 1) * 4.4 - 1.3)
 end
 
-swing_rot = swing_rot * swing_rot * swing_rot
+swing_rot             = swing_rot * swing_rot * swing_rot
+local swing           = M:clamp(M:sin(context.swingProgress * 4.78), 0, 1)
+local swing_hit       = M:sin(M:clamp(context.swingProgress, 0.16561, 0.49422) * 4.78 * 2 + 4.7)
+local swingOverall    = M:sin(context.swingProgress * 3.14)
 
+local swing_hit_second
 if context.swingProgress < 0.65594 then
     swing_hit_second = M:sin(M:clamp(context.swingProgress, 0.16561, 0.32991) * 4.78 * 2 + 4.7)
 else
@@ -665,31 +650,25 @@ end
 
 if useAction == "spear" then
     M:rotateZ(mat, 180 * l)
-
     M:rotateZ(mat, -180 * Easings:easeInOutBack(M:clamp(sw * 2, 0, 1)) * l)
     M:moveZ(mat, -0.2 * Easings:easeInOutSine(Easings:easeInOutBack(sc * 0.8)))
-
     M:moveY(mat, -0.05 * Easings:easeInOutBack(scd))
-
     M:rotateX(mat, -70 * Easings:easeInOutBack(sc * 0.8))
     M:rotateX(mat, -8 * Easings:easeInOutBack(scd))
     M:rotateY(mat, 60 * Easings:easeInOutBack(sc * 0.8) * l)
     M:rotateY(mat, -30 * Easings:easeInOutBack(scd) * l)
-
     M:rotateY(mat, -60 * Easings:easeOutBack(sck) * sck * l)
-
     M:moveY(mat, -0.25 * M:clamp(M:sin(Easings:easeInOutSine(hic) * 6.28), 0, 1))
 end
 
-if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
-
+if (useAction ~= "block" and useAction ~= "crossbow") or isSword or itemName == "stick" then
     M:moveZ(mat, -0.05 * swing_rot)
     M:moveY(mat, -0.05 * swing_rot)
     M:rotateX(mat, 10 * swing_rot)
     M:rotateX(mat, -30 * swing_rot)
     M:rotateX(mat, -10 * swing_hit)
 
-    if not isSword then
+    if not (isSword or itemName == "stick") then
         if useAction == "trident" or useAction == "spear" then
             M:moveZ(mat, -0.1 * swing_rot)
             M:moveY(mat, -0.05 * swing_rot)
@@ -710,7 +689,6 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
 
             M:moveY(mat, 0.05 * swing_hit)
             M:moveY(mat, 0.3 * swingOverall)
-
         else
             M:moveZ(mat, -0.05 * swing_rot)
             M:moveY(mat, -0.05 * swing_rot)
@@ -720,22 +698,32 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
     end
 
     if isShovel then
+        local mace_followUp = M:clamp((context.swingProgress - 0.5) * 20, 0, 1) * M:clamp((1 - context.swingProgress) * 4, 0, 1)
         M:moveY(mat, 0.12 * swing_sword_tilt)
-        M:moveZ(mat, -0.05 * swing_sword_tilt)
+        M:moveZ(mat, 0.1 * swing_sword_tilt)
+        M:moveY(mat, 0.2 * swing_sword_tilt)
+        M:moveZ(mat, -0.4 * swing_sword_tilt)
         M:rotateX(mat, 10 * swing_sword_tilt)
+        M:moveZ(mat, 0.1 * swing_sword_tilt)
         M:rotateX(mat, -30 * swingOverall)
+        M:rotateX(mat, -20 * swing_rot)
+        M:rotateX(mat, -40 * swing_hit_second)
+        M:rotateX(mat, -30 * swing_hit_second)
         M:rotateX(mat, 20 * swing_rot)
-        M:rotateX(mat, 10 * swing_hit_second)
+        M:rotateX(mat, 50 * swing_rot)
+        M:rotateX(mat, 30 * mace_followUp)
     end
-
-    if isSword and not (beashAnimations or nneSwords or context.interact) then
-        M:sin(context.swingProgress * 3.14)
-        M:moveY(mat, -0.1 * Easings:easeInOutBack(swing))
-        M:rotateX(mat, -60 * Easings:easeInOutBack(swing))
-    end
-
-    if useAction == "bow" then
-        M:moveX(mat, -0.065 * l)
+    if isSword or itemName == "stick" then
+        swing = M:sin(context.swingProgress * 3.14)
+        if nneSwingMode == 2 and swordAttack then
+            M:moveY(mat, -0.1 * Easings:easeInOutBack(swing))
+            M:moveZ(mat, 0.3 * Easings:easeInOutBack(swing))
+            M:rotateX(mat, -30 * Easings:easeInOutBack(swing))
+        else
+            M:moveZ(mat, -0.05 * Easings:easeInOutBack(swing))
+            M:moveY(mat, ${trident_item_y} * Easings:easeInOutBack(swing))
+            M:rotateX(mat, ${trident_item_rx} * Easings:easeInOutBack(swing))
+        end
     end
 end
 
@@ -794,124 +782,37 @@ else
 	end
 end
 
--- == EAT & DRINK ANIMATION ==
-local function applyTransform(op, progress, exp, x, y, z)
-    local t = M:pow(progress, exp)
-
-    if x then op.x(x * t) end
-    if y then op.y(y * t) end
-    if z then op.z(z * t) end
-end
-
--- Animation
-local function eatDrinkAnimation(use, progress, movePos, rotatePos, scalePos)
-    local function m(default, override)
-        if override ~= nil then return override else return default end
+-- == EAT AND DRINK ANIMATION ==
+if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and context.mainHand then
+    M:moveX(mat, -0.1 * l * foodCount)
+    M:moveY(mat, 0.1 * l * foodCount)
+    M:moveZ(mat, 0.05 * foodCount)
+    if useAction == "eat" or useAction == "toot_horn" then
+        M:rotateX(mat, -23 * foodCount * foodCount)
+        M:rotateZ(mat, -25 * l * foodCount * foodCount)
     end
+    M:rotateY(mat, -50 * l * foodCount * foodCount)
 
-    local moveVals = {
-        x = movePos and m(nil, movePos[1]) or nil,
-        y = movePos and m(nil, movePos[2]) or nil,
-        z = movePos and m(-0.05, movePos[3]) or -0.05
-    }
-    local rotateVals = {
-        x = rotatePos and m(nil, rotatePos[1]) or nil,
-        y = rotatePos and m(-50, rotatePos[2]) or -50,
-        z = rotatePos and m(nil, rotatePos[3]) or nil
-    }
-
-    applyTransform(moves, progress, 1, 0.02, moveVals.y, moveVals.z)
-    applyTransform(moves, progress, 1, moveVals.x, nil, nil)
-
-    if use == "eat" or use == "toot_horn" then
-        local ex = rotatePos and m(-23, rotatePos[1]) or -23
-        local ez = rotatePos and m(-12, rotatePos[3]) or -12
-        applyTransform(rotates, progress, 2,  ex,  nil,  ez)
-    end
-
-    applyTransform(rotates, progress, 2,  rotateVals.x,  rotateVals.y,  rotateVals.z)
-
-    if use == "drink" then
-        local dx = rotatePos and m(15, rotatePos[1]) or 15
-        applyTransform(rotates, progress, 2,  dx,  nil,  nil)
-    end
-
-    if scalePos then
-        local t = M:pow(progress, 1)
-        local sx = m(1, scalePos[1])
-        local sy = m(1, scalePos[2])
-        local sz = m(1, scalePos[3])
-        M:scale(mat, 1 + (sx - 1) * t, 1 + (sy - 1) * t, 1 + (sz - 1) * t)
-    end
-end
-local progress = context.mainHand and foodCount or foodCountO
-
-local specialCases = {
-    {
-        pack = function() return refinedBuckets and w3di end,
-        items = {"milk_bucket"},
-        move = {0.01, 0.17, -0.1}, scale = {0.8, 0.8, 0.8}
-    },
-    {
-        pack = function() return w3di and not refinedBuckets end,
-        items = {"milk_bucket"},
-        move = {-0.07, 0.05, -0.11}, rotate = {-5, -85, 5}, scale = {0.6, 0.6, 0.6}
-    },
-    {
-        pack = function() return w3Dfoods and not (w3di or freshFoods) end,
-        transforms = {
-            { {"apple", "chorus_fruit", "potato", "beetroot", "bread"}, m = {nil, nil, -0.05}, r = {0, 0, 0}, matches = true },
-            { {"cookie", "melon_slice", "glow_berries", "dried_kelp", "beef", "porkchop", "mutton", "rotten_flesh"}, m = {nil, 0.1, -0.05}, r = {0, 0, 0}, matches = true },
-            { {"soup", "stew"}, m = {nil, 0.12, -0.1}, r = {5, 0, 0}, matches = true },
-            { {"pumpkin_pie"}, m = {nil, 0.1, -0.15}, r = {0, 0, 0} },
-            { {"spider_eye"}, m = {0.05, nil, -0.05}, r = {0, 0, 0} },
-            { {"carrot", "golden_carrot"}, m = {0.05, 0.15, 0}, r = {0, 0, 0} },
-        }
-    },
-    -- Without packs
-    {
-        pack = function() return not (w3di or refinedBuckets) end,
-        items = {"milk_bucket"},
-        move = {-0.03, 0.15, -0.09}, rotate = {5, -40, 10}, scale = {0.55, 0.55, 0.55}
-    },
-    {
-        pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
-        move = {-0.04, -0.015, nil}
-    },
-    {
-        pack = function() return not (w3di or freshFoods) end,
-        items = {"sweet_berries"},
-        move = {nil, nil, 0.05}, rotate = {nil, 10, nil}
-    },
-    {
-        pack = function() return not (w3di or freshFoods) and useAction == "eat" end,
-        move = {nil, -0.05, 0.1}
-    }
-}
-
-local caseMatched = false
-for _, case in ipairs(specialCases) do
-    if case.pack() then
-        if case.transforms then
-            for _, transform in ipairs(case.transforms) do
-                for _, item in ipairs(transform[1]) do
-                    if matched(item, transform.matches) then
-                        eatDrinkAnimation(useAction, progress, transform.m, transform.r, transform.s)
-                        caseMatched = true
-                        break
-                    end
-                end
-            end
-        elseif (case.items ~= nil and matched(case.items)) or case.items == nil then
-            eatDrinkAnimation(useAction, progress, case.move, case.rotate, case.scale)
-            caseMatched = true
-            break
-        end
+    if useAction == "drink" then
+        M:rotateX(mat, 15 * foodCount * foodCount)
+	M:moveZ(mat, -0.1 * foodCount)
+	M:moveZ(mat, -0.1 * foodCount)
     end
 end
 
-if not caseMatched and (useAction == "eat" or useAction == "drink" or useAction == "toot_horn") then
-    eatDrinkAnimation(useAction, progress)
+if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and not context.mainHand then
+    M:moveX(mat, 0.02 * l * foodCountO)
+    M:moveZ(mat, -0.05 * foodCountO)
+    if useAction == "eat" or useAction == "toot_horn" then
+        M:rotateX(mat, -23 * foodCountO * foodCountO)
+        M:rotateZ(mat, -12 * l * foodCountO * foodCountO)
+    end
+    M:rotateY(mat, -50 * l * foodCountO * foodCountO)
+
+    if useAction == "drink" then
+        M:rotateX(mat, 15 * foodCountO * foodCountO)
+	M:moveZ(mat, -0.1 * foodCountO)
+    end
 end
 
 global.foodCount    = 0.0;
@@ -920,18 +821,17 @@ global.foodCountO   = 0.0;
 local easedFoodCounter = Easings:easeInQuart(context.mainHand and foodCount or foodCountO)
 
 -- == BRUSH ANIMATION ==
-if useAction == "brush" then
-	if context.mainHand then
-		M:moveZ(mat, -0.03 	* Easings:easeInOutBack(brushCounter))
-		M:rotateX(mat, -30 	* Easings:easeInOutBack(brushCounter))
-		M:rotateZ(mat, 15 	* l * M:sin((foodCountSec - 0.5) * 4.14) * Easings:easeInOutBack(brushCounter))
-		M:rotateZ(mat, l 	* brushAngleM)
-	else
-		M:moveZ(mat, -0.03 	* Easings:easeInOutBack(brushCounterO))
-		M:rotateX(mat, -30 	* Easings:easeInOutBack(brushCounterO))
-		M:rotateZ(mat, 15 	* l * M:sin((foodCountSecO - 0.5) * 4.14) * Easings:easeInOutBack(brushCounterO))
-		M:rotateZ(mat, l 	* brushAngleO)
-	end
+if useAction == "brush" and context.mainHand then
+    M:moveZ(mat, -0.03 * Easings:easeInOutBack(brushCounter))
+    M:rotateX(mat, -30 * Easings:easeInOutBack(brushCounter))
+    M:rotateZ(mat, 15 * l * M:sin((foodCountSec - 0.5) * 4.14) * Easings:easeInOutBack(brushCounter))
+    M:rotateZ(mat, l * brushAngleM)
+end
+if useAction == "brush" and not context.mainHand then
+    M:moveZ(mat, -0.03 * Easings:easeInOutBack(brushCounterO))
+    M:rotateX(mat, -30 * Easings:easeInOutBack(brushCounterO))
+    M:rotateZ(mat, 15 * l * M:sin((foodCountSecO - 0.5) * 4.14) * Easings:easeInOutBack(brushCounterO))
+    M:rotateZ(mat, l * brushAngleO)
 end
 
 -- == FALL ANIMATION ==
@@ -957,10 +857,7 @@ if itemName == "magma_cream" then
 end
 
 -- == SWITCH ANIMATION ==
-local activeSwitch              = context.mainHand and mainHandSwitch or offHandSwitch
-local switchEvent               = context.mainHand and mainHandSwitchEvent or offHandSwitchEvent
-local switchAnimationVariable   = Easings:easeInBack(M:sin(M:clamp(activeSwitch, 0.09723, 0.60632) * 5.346 - 0.1))
-
+local switchAnimationVariable = Easings:easeInBack(M:sin(M:clamp((context.mainHand and mainHandSwitch) or offHandSwitch, 0.09723, 0.60632) * 3.24 * 1.65 - 0.1))
 if
 	(
 		matched({"bundles", "skulls", "music_discs", "nuggets", "ender_pearl", "ender_eye"})
@@ -969,28 +866,29 @@ if
 	) and useAction ~= "trident"
 then
     M:rotateX(mat, -10 * switchAnimationVariable)
-    M:moveY(mat,  0.62 * switchAnimationVariable)
-    M:moveY(mat,  M:clamp(0.1 * fall, 0, 255))
+    M:moveY(mat, 0.62 * switchAnimationVariable)
+    M:moveY(mat, M:clamp(0.1 * fall, 0, 255))
 
-    local eased = Easings:easeInOutBack(M:clamp(activeSwitch * 1.65, 0, 1))
+    local switchEvent = (context.mainHand and mainHandSwitchEvent) or offHandSwitchEvent
 
-    if isNugget then
-        if switchEvent then S:playSound("entity.experience_orb.pickup", 0.3) end
+    if I:isIn(context.item, Tags:getFabricTag("nuggets")) then
+        if switchEvent then
+            S:playSound("entity.experience_orb.pickup", 0.3)
+        end
         M:moveY(mat, -0.07)
         M:rotateX(mat, 360 * Easings:easeInOutBack((context.mainHand and M:clamp(mainHandSwitch * 1.65, 0, 1)) or M:clamp(offHandSwitch * 1.65, 0, 1)), 0, 0.1, 0)
-    elseif isMusicDisc then
-        if switchEvent then S:playSound("entity.context.player.attack.weak", 0.3) end
-        M:rotateZ(mat, 360 * eased, -0.1 * l, 0.25, 0)
-
+    elseif I:isIn(context.item, Tags:getFabricTag("music_discs")) then
+        if switchEvent then
+            S:playSound("entity.context.player.attack.weak", 0.3)
+        end
+        M:rotateZ(mat, 360 * Easings:easeInOutBack((context.mainHand and M:clamp(mainHandSwitch * 1.65, 0, 1)) or M:clamp(offHandSwitch * 1.65, 0, 1)), -0.1 * l, 0.25, 0)
     else
-        if switchEvent then S:playSound("entity.context.player.attack.weak", 0.3) end
-        local clampedSwitch = M:clamp(activeSwitch * 1.2, 0, 1)
-        M:rotateZ(mat, -7 * l * M:sin(M:clamp(clampedSwitch, 0.0943, 0.66791) * 10.605 - 0.8))
+        if switchEvent then
+            S:playSound("entity.context.player.attack.weak", 0.3)
+        end
+        local clampedSwitch = (context.mainHand and M:clamp(mainHandSwitch * 1.2, 0, 1)) or M:clamp(offHandSwitch * 1.2, 0, 1)
+        M:rotateZ(mat, -7 * l * M:sin(M:clamp(clampedSwitch, 0.0943, 0.66791) * 7.07 * 1.5 - 0.8))
     end
-end
-
-if (context.mainHand and mainHandSwitchEvent) or offHandSwitchEvent then
-    S:playSound("context.item.armor.equip_leather", 0.2)
 end
 
 -- == MAP ANIMATION ==
@@ -1009,6 +907,10 @@ if itemName == "filled_map" then
     M:rotateX(mat, -40 * smoother)
     M:rotateY(mat, -10 * l * smoother)
     M:rotateZ(mat, 5 * l * smoother)
+end
+
+if (context.mainHand and mainHandSwitchEvent) or offHandSwitchEvent then
+    S:playSound("context.item.armor.equip_leather", 0.2)
 end
 
 -- == GLOW AND PARTICLES ==
@@ -1061,15 +963,32 @@ if itemName == "pink_petals" or itemName == "wildflowers" or itemName == "leaf_l
 end
 if context.mainHand then swingMHandPrev = context.swingMHand else swingOHandPrev = context.swingOHand end
 
+-- == INSPECT ANIMATION ==
+if KeyBindManager:isKeyPressed(${inspectKeybind} ~= 0 and ${inspectKeybind} or 67) then
+    inspectionSpin = inspectionSpin + 0.025 * context.deltaTime * 30
+else
+    inspectionSpin = 0
+end
+inspectionSpin = M:clamp(inspectionSpin, 0, 1)
+
+if (isSword or isPickaxe or I:isIn(context.item, Tags:getVanillaTag("axes")) or useAction == "trident" or itemName == "stick") and context.mainHand then
+    M:moveX(mat, -0.2 * l * inspectionCounter)
+    M:rotateX(mat, -360 * Easings:easeInOutBack(inspectionSpin), 0, 0, 0.15)
+end
+prevAge = P:getAge(context.player)
+
 -- == SWING SPEED ==
 if isSpearTag                                   then itemSwingSpeed:put(I:getName(context.item), 15) end
 if isShovel                                     then itemSwingSpeed:put(I:getName(context.item), 14) end
 if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getName(context.item), 12) end
 
 -- == TRIDENT AND SPEAR POSE ==
-if useAction == "trident" then
+global.riptideCounter = 0;
+global.riptideCounterO = 0;
+
+if I:getUseAction(context.item) == "trident" then
     M:rotateY(mat, 60 * l)
-    M:moveZ(mat, -0.025)
+    M:moveZ(mat, -0.035)
     M:moveX(mat, -0.015 * l)
     M:rotateY(mat, -90 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
     M:rotateX(mat, 180 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
@@ -1091,19 +1010,12 @@ local bc           = context.mainHand and easedBowSec or easedBowSecO
 usingItem:put("minecraft:bow",    bc >= 0.1)
 useDuration:put("minecraft:bow",  Easings:cubicEase(bc) * 20)
 
--- == INSPECT ANIMATION ==
-if KeyBindManager:isKeyPressed(${inspectKeybind} ~= 0 and ${inspectKeybind} or 67) then
-    inspectionSpin = inspectionSpin + 0.025 * dt
+if bc < 0.1 then
+    usingItem:put("minecraft:bow", false)
 else
-    inspectionSpin = 0
+    usingItem:put("minecraft:bow", true)
 end
-inspectionSpin = M:clamp(inspectionSpin, 0, 1)
-
-if isSword or isPickaxe or isAxe or useAction == "trident" and context.mainHand then
-    M:moveX(mat, -0.2 * l * inspectionCounter)
-    M:rotateX(mat, -360 * Easings:easeInOutBack(inspectionSpin), 0, 0, 0.15)
-end
-prevAge = P:getAge(context.player)
+useDuration:put("minecraft:bow", Easings:cubicEase(bc) * 20)
 
 -- == SOME POSITIONS ==
 if
@@ -1133,7 +1045,18 @@ if matched("bucket", true) then
     end
 end
 
-
+if
+    I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_cold"))
+    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_warm"))
+    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_temperate"))
+then
+    M:moveY(mat, 0.025)
+    M:moveX(mat, -0 * l)
+    M:moveZ(mat, -0.1)
+    M:rotateY(mat, 180)
+    M:rotateX(mat, -82.5)
+    M:rotateZ(mat, -20 * l)
+end
 
 if itemName == "dragon_head" then
 	M:moveY(mat, 0.25)
@@ -1153,6 +1076,17 @@ if isShovel then
 end
 
 -- === PACK COMPATIBILITY ===
+local moves = {
+    x = function(v) M:moveX(context.mat, v * l) end,
+    y = function(v) M:moveY(context.mat, v) end,
+    z = function(v) M:moveZ(context.mat, v) end
+}
+local rotates = {
+    x = function(v) M:rotateX(context.mat, v) end,
+    y = function(v) M:rotateY(context.mat, v * l) end,
+    z = function(v) M:rotateZ(context.mat, v * l) end
+}
+
 local function process(ops, dataORx, default_y, default_z)
     if type(dataORx) ~= "table" then
         if dataORx   then ops.x(dataORx)    end
@@ -1184,9 +1118,9 @@ local function pose(tables, force)
                             if op == "r" and t.r then process(rotates, t.r) end
                             if op == "s" and t.s then
                                 if t.s[2] == nil and t.s[3] == nil then
-                                    M:scale(context.matrices, t.s[1], t.s[1], t.s[1])
+                                    M:scale(context.mat, t.s[1], t.s[1], t.s[1])
                                 else
-                                    M:scale(context.matrices, t.s[1], t.s[2], t.s[3])
+                                    M:scale(context.mat, t.s[1], t.s[2], t.s[3])
                                 end
                             end
                         end
@@ -1252,3 +1186,4 @@ if itemName == "bell" and a3ds then
     M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
     M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
 end
+

@@ -1,5 +1,26 @@
 {
   expansions: {
-    skinModel:          "HMIItemPositionFix.General.SkinModel"
+    w3di:               "HMIItemPositionFix.ResourcePacksCompatibility.Weskerson3DItems",
+    a3ds:               "HMIItemPositionFix.ResourcePacksCompatibility.Actually3DStuff",
+    w3Dfoods:           "HMIItemPositionFix.ResourcePacksCompatibility.Weskerson3DFoods",
+    rvTorches:          "HMIItemPositionFix.ResourcePacksCompatibility.RVTorches",
+    rvChests:           "HMIItemPositionFix.ResourcePacksCompatibility.RVChestsAndBoxes",
+    just3Darmors:       "HMIItemPositionFix.ResourcePacksCompatibility.Just3DArmors",
+    glowing3Darmors:    "HMIItemPositionFix.ResourcePacksCompatibility.Glowing3DArmors",
+    glowing3Dtotem:     "HMIItemPositionFix.ResourcePacksCompatibility.Glowing3DTotem",
+    bensBundle:         "HMIItemPositionFix.ResourcePacksCompatibility.BensBundle",
+    freshFlowersPlants: "HMIItemPositionFix.ResourcePacksCompatibility.FreshFlowersAndPlants",
+    freshFoods:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshFoods",
+    freshOresIngots:    "HMIItemPositionFix.ResourcePacksCompatibility.FreshOresAndIngots",
+    freshSeeds:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshSeeds",
+    refinedBuckets:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedBuckets",
+    refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",
+    freshDiscs:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshMusicDiscs",
+    wNature:            "HMIItemPositionFix.ResourcePacksCompatibility.WeskersonNature",
+    better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
+    fyoncle3Dtrims:     "HMIItemPositionFix.ResourcePacksCompatibility.Fyoncle3DTrims",
+    gousPoses:          "HMIItemPositionFix.ResourcePacksCompatibility.GoussHandPoses",
+    classicToolsFusion: "HMIItemPositionFix.ResourcePacksCompatibility.ClassicToolsFusion",
+    holdMyActions:      "HMIItemPositionFix.ResourcePacksCompatibility.HoldMyActions"
   }
 }

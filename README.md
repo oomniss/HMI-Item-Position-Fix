@@ -30,10 +30,11 @@ This pack includes full compatibility support for the most popular 3D resource p
 | ✅     | **Fresh Music Discs**            | ---                                                                                                                   |
 | ✅     | **Ben's Bundle**                 | ---                                                                                                                   |
 | ✅     | **Fyoncle's 3D Trims**           | ---                                                                                                                   |
-| ✅     | *Classic Tools Fusion**           | ---                                                                                                                   |
+| ✅     | **Classic Tools Fusion**         | ---                                                                                                                   |
 | ✅     | **Gous's Hand Poses**            | Currently incompatible with W3DI; Limited compatibility with A3DS                                                     |
 | ✅     | **NNE Action Swords**            | Incompatible with Beash's Swing Animations                                                                            |
 | ✅     | **Beash's Swing Animations**     | Incompatible with NNE Action Swords                                                                                   |
+| ✅     | **Hold My Actions**              | Incompatible with NNE Action Swords and Beash's Swing Animations (?)                                                  |
 
 # 📸 Visual Demonstration
 

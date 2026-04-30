@@ -9,6 +9,10 @@
       InspectKeybind: {
         type: "integer",
         default: 74
+      },
+      useStyle1: {
+        type: "boolean",
+        default: false
       }
     },
     ResourcePacksCompatibility: {
@@ -34,7 +38,8 @@
       ClassicToolsFusion: false,
       GoussHandPoses: false,
       NNEActionSwords: false,
-      BeashSwingAnimations: false
+      BeashSwingAnimations: false,
+      HoldMyActions: false
     }
   }
 }

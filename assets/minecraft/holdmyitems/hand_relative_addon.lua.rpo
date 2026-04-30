@@ -20,6 +20,7 @@
     better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
     fyoncle3Dtrims:     "HMIItemPositionFix.ResourcePacksCompatibility.Fyoncle3DTrims",
     gousPoses:          "HMIItemPositionFix.ResourcePacksCompatibility.GoussHandPoses",
-    classicToolsFusion: "HMIItemPositionFix.ResourcePacksCompatibility.ClassicToolsFusion"
+    classicToolsFusion: "HMIItemPositionFix.ResourcePacksCompatibility.ClassicToolsFusion",
+    holdMyActions:      "HMIItemPositionFix.ResourcePacksCompatibility.HoldMyActions"
   }
 }
