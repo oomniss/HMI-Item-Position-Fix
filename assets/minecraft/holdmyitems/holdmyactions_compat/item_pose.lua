@@ -1075,115 +1075,162 @@ if isShovel then
 	M:rotateY(mat, 80 * l)
 end
 
--- === PACK COMPATIBILITY ===
-local moves = {
-    x = function(v) M:moveX(context.mat, v * l) end,
-    y = function(v) M:moveY(context.mat, v) end,
-    z = function(v) M:moveZ(context.mat, v) end
-}
-local rotates = {
-    x = function(v) M:rotateX(context.mat, v) end,
-    y = function(v) M:rotateY(context.mat, v * l) end,
-    z = function(v) M:rotateZ(context.mat, v * l) end
-}
+-- === HOLD MY ACTIONS ITEM_ADDON DEPOSITION ===
+if not I:isEmpty(context.item) and not I:isBlock(context.item) and context.mainHand then
+	if not I:isIn(context.item, Tags:getVanillaTag("swords")) and not I:isIn(context.item, Tags:getVanillaTag("shovels")) and not I:isIn(context.item, Tags:getVanillaTag("pickaxes")) and not I:isIn(context.item, Tags:getVanillaTag("axes")) and not I:isIn(context.item, Tags:getVanillaTag("hoes")) and not I:isOf(context.item, Items:get("minecraft:mace")) and not I:isOf(context.item, Items:get("minecraft:trident")) and not I:isOf(context.item, Items:get("minecraft:stick")) and not I:isOf(context.item, Items:get("minecraft:bamboo")) and not I:isOf(context.item, Items:get("minecraft:bone")) then
+        M:moveZ(context.matrices, 0.1)
+        M:moveX(context.matrices, -0.073)
+        M:rotateY(context.matrices, -5)
+        M:rotateZ(context.matrices, 7)
 
-local function process(ops, dataORx, default_y, default_z)
-    if type(dataORx) ~= "table" then
-        if dataORx   then ops.x(dataORx)    end
-        if default_y then ops.y(default_y)  end
-        if default_z then ops.z(default_z)  end
-        return
-    end
-    local order = dataORx[4] or "xyz"
-    for i = 1, 3 do
-        local axis = order:sub(i, i):lower()
-        local val  = dataORx[i]
-        if val and ops[axis] then ops[axis](val) end
-    end
-end
-
-local function pose(tables, force)
-    for _, t in ipairs(tables) do
-        if (t.condition ~= nil and t.condition[1]) or t.condition == nil then
-            for _, i in ipairs(t[1]) do
-                if matched(i, t.matches) then
-                    if not IsItemCompat or force then
-                        if t.renderAsBlock ~= nil then
-                            renderBlock(t.renderAsBlock, t[1], force)
-                        end
-                        local opsOrder = t.ops or "mrs"
-                        for j = 1, #opsOrder do
-                            local op = opsOrder:sub(j, j):lower()
-                            if op == "m" and t.m then process(moves, t.m) end
-                            if op == "r" and t.r then process(rotates, t.r) end
-                            if op == "s" and t.s then
-                                if t.s[2] == nil and t.s[3] == nil then
-                                    M:scale(context.mat, t.s[1], t.s[1], t.s[1])
-                                else
-                                    M:scale(context.mat, t.s[1], t.s[2], t.s[3])
-                                end
-                            end
-                        end
-                        if not t.prox then return end
-                    end
-                end
-            end
+        if getTag() ~= "shovels" then
+            M:moveX(context.matrices, -0.015)
+            M:moveY(context.matrices, 0.005)
+            M:moveZ(context.matrices, 0.115)
+            M:rotateX(context.matrices, 8)
+            M:rotateY(context.matrices, 4.5)
+            M:rotateZ(context.matrices, -2)
         end
-    end
+
+        if itemName == "totem_of_undying" then
+            M:moveY(context.matrices, -0.065)
+        end
+	end
 end
 
-if IsItemCompat then
-    Positions = Positions or {}
-    if Positions and next(Positions) then pose(Positions, true) end
-
-    ItemsUndoAdjusts = ItemsUndoAdjusts or {}
-    if ItemsUndoAdjusts and next(ItemsUndoAdjusts) then pose(ItemsUndoAdjusts, true) end
+if not I:isEmpty(context.item) and not I:isBlock(context.item) and not context.mainHand then
+	if not I:isIn(context.item, Tags:getVanillaTag("swords")) and not I:isIn(context.item, Tags:getVanillaTag("shovels")) and not I:isIn(context.item, Tags:getVanillaTag("pickaxes")) and not I:isIn(context.item, Tags:getVanillaTag("axes")) and not I:isIn(context.item, Tags:getVanillaTag("hoes")) and not I:isOf(context.item, Items:get("minecraft:mace")) and not I:isOf(context.item, Items:get("minecraft:trident")) and not I:isOf(context.item, Items:get("minecraft:stick")) and not I:isOf(context.item, Items:get("minecraft:bamboo")) and not I:isOf(context.item, Items:get("minecraft:bone")) then
+	M:moveZ(context.matrices, 0.1)
+	M:moveX(context.matrices, 0.073)
+	M:rotateY(context.matrices, 5)
+	M:rotateZ(context.matrices, -7)
+	end
 end
 
--- == Packs Corrections ==
-if w3di and a3ds and (itemName:match("_banner_pattern") or itemName == "name_tag") then
-    M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5), 0, -0.13, 0)
+if context.mainHand then
+	if I:isIn(context.item, Tags:getVanillaTag("swords")) or I:isIn(context.item, Tags:getVanillaTag("pickaxes")) or I:isIn(context.item, Tags:getVanillaTag("axes")) or I:isIn(context.item, Tags:getVanillaTag("hoes")) or I:isOf(context.item, Items:get("minecraft:stick")) then
+	M:scale(context.matrices, 1/1.2, 1/1.2, 1/1.2)
+	M:rotateX(context.matrices, 0)
+	M:rotateY(context.matrices, 5.5)
+	M:moveZ(context.matrices, 0.06)
+	M:moveY(context.matrices, 0.035)
+	M:moveX(context.matrices, -0.025)
+	M:rotateZ(context.matrices, 2)
+	end
 end
 
-if itemName == "shears" and gousPoses then
-    if not context.bl then
-        M:moveZ(mat, 0.1)
-        M:rotateY(mat, 180)
-    end
-    M:rotateZ(mat, 45)
+if not context.mainHand then
+	if I:isIn(context.item, Tags:getVanillaTag("swords")) or I:isIn(context.item, Tags:getVanillaTag("pickaxes")) or I:isIn(context.item, Tags:getVanillaTag("axes")) or I:isIn(context.item, Tags:getVanillaTag("hoes")) or I:isOf(context.item, Items:get("minecraft:stick")) then
+	M:scale(context.matrices, 1/1.1, 1/1.1, 1/1.1)
+	M:rotateX(context.matrices, -5)
+	M:rotateY(context.matrices, -8)
+	M:moveZ(context.matrices, 0.05)
+	M:moveY(context.matrices, 0.028)
+	M:moveX(context.matrices, 0.025)
+	M:rotateZ(context.matrices, 0)
+	end
 end
 
-if rvTorches and matched("candle", true) then
-    renderAsBlock:put(I:getName(context.item), false)
-    M:moveX(mat, -0.05 * l)
-    M:rotateX(mat, -8)
-    M:rotateY(mat, -10 * l)
-    M:rotateZ(mat, 6 * l)
+
+-- Fixes
+
+if I:isOf(context.item, Items:get("minecraft:mace")) then
+	M:scale(context.matrices, 1/1.1, 1/1.1, 1/1.1)
+	M:moveZ(context.matrices, 0.05)
+	M:moveY(context.matrices, -0.05)
+	M:moveX(context.matrices, 0)
+	M:rotateX(context.matrices, 5)
+	M:rotateY(context.matrices, 5.5)
+	M:rotateZ(context.matrices, 0)
 end
 
-if (torchesPack or w3di) and matched("lanterns") then
-    M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, 0, 0.4, 0)
-    M:rotateZ(mat, ywAngle * -1, 0, 0.4, 0)
+if context.mainHand and I:isIn(context.item, Tags:getVanillaTag("shovels")) then
+	M:scale(context.matrices, 1/1.2, 1/1.2, 1/1.2)
+	M:rotateZ(context.matrices, 4)
+	M:rotateY(context.matrices, -4)
+	M:rotateX(context.matrices, -10)
+	M:moveY(context.matrices, 0.08)
+	M:moveZ(context.matrices, 0.08)
+	M:moveX(context.matrices, 0.02)
 end
 
-if glowing3Darmors then
-    if matched("chest_armor") then
-        M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3), 0, 0.1, 0.1)
-        M:rotateZ(mat, ywAngle * 0.5, -0.129, -0.004, 0.495)
-    elseif matched("leg_armor") then
-        M:rotateZ(mat, M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3, 0, 0.44, 0.55)
-    elseif itemName == "elytra" and not w3di then
-        M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5, 0, -0.13, 0)
-	    M:rotateZ(mat, ywAngle * -0.7, -0.1 * l, 0, 0.1)
-    end
+if not context.mainHand and I:isIn(context.item, Tags:getVanillaTag("shovels")) then
+	M:scale(context.matrices, 1/1.2, 1/1.2, 1/1.2)
+	M:rotateY(context.matrices, 4)
+	M:moveZ(context.matrices, -0.06)
+	M:rotateX(context.matrices, -15)
+	M:moveY(context.matrices, -0.08)
+	M:moveX(context.matrices, -0.02)
 end
 
-if itemName == "bell" and a3ds then
-    M:moveX(mat, 0.15 * l)
-    M:moveY(mat, -0.05)
-    M:moveZ(mat, -0.1)
-    M:scale(mat, 1.2, 1.2, 1.2)
-    M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
-    M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
+if I:isOf(context.item, Items:get("minecraft:trident")) and context.mainHand then
+	M:moveX(context.matrices, 0.1)
+	M:moveZ(context.matrices, -0.1)
+	else if I:isOf(context.item, Items:get("minecraft:trident")) then
+	M:moveX(context.matrices, -0.1)
+	M:moveZ(context.matrices, -0.1)
+	end
 end
 
+if I:isOf(context.item, Items:get("minecraft:mace")) and context.mainHand then
+	M:moveX(context.matrices, -0.05)
+	else if I:isOf(context.item, Items:get("minecraft:mace")) then
+	M:moveX(context.matrices, 0.05)
+	end
+end
+
+-- Buckets
+if context.mainHand then
+if I:isOf(context.item, Items:get("minecraft:axolotl_bucket")) or I:isOf(context.item, Items:get("minecraft:milk_bucket")) or I:isOf(context.item, Items:get("minecraft:salmon_bucket")) or I:isOf(context.item, Items:get("minecraft:cod_bucket")) or I:isOf(context.item, Items:get("minecraft:tropical_fish_bucket")) or I:isOf(context.item, Items:get("minecraft:tadpole_bucket")) or I:isOf(context.item, Items:get("minecraft:pufferfish_bucket")) or I:isOf(context.item, Items:get("minecraft:water_bucket")) or I:isOf(context.item, Items:get("minecraft:lava_bucket")) then
+		M:rotateZ(context.matrices, 4)
+		M:rotateY(context.matrices, 12)
+		M:moveY(context.matrices, -0.15)
+		M:moveZ(context.matrices, -0.029)
+		M:moveX(context.matrices, 0.2)
+		end
+end
+
+if not context.mainHand then
+if I:isOf(context.item, Items:get("minecraft:axolotl_bucket")) or I:isOf(context.item, Items:get("minecraft:milk_bucket")) or I:isOf(context.item, Items:get("minecraft:salmon_bucket")) or I:isOf(context.item, Items:get("minecraft:cod_bucket")) or I:isOf(context.item, Items:get("minecraft:tropical_fish_bucket")) or I:isOf(context.item, Items:get("minecraft:tadpole_bucket")) or I:isOf(context.item, Items:get("minecraft:pufferfish_bucket")) or I:isOf(context.item, Items:get("minecraft:water_bucket")) or I:isOf(context.item, Items:get("minecraft:lava_bucket")) then
+		M:rotateZ(context.matrices, 4)
+		M:rotateY(context.matrices, -12)
+		M:moveY(context.matrices, -0.17)
+		M:moveZ(context.matrices, -0.09)
+		M:moveX(context.matrices, -0.1)
+	end
+end
+
+if context.mainHand and I:isOf(context.item, Items:get("minecraft:powder_snow_bucket")) then
+		M:rotateX(context.matrices, 4)
+		M:rotateZ(context.matrices, 12)
+		M:moveX(context.matrices, 0.1)
+		M:moveZ(context.matrices, 0.11)
+		M:moveY(context.matrices, -0.23)
+	else if I:isOf(context.item, Items:get("minecraft:powder_snow_bucket")) then
+		M:rotateX(context.matrices, 4)
+		M:rotateZ(context.matrices, -8)
+		M:moveX(context.matrices, -0.06)
+		M:moveZ(context.matrices, 0.06)
+		M:moveY(context.matrices, -0.26)
+	end
+end
+
+-- Spears
+
+if I:isIn(context.item, Tags:getVanillaTag("spears")) and context.mainHand then
+	M:rotateZ(context.matrices, -10)
+	M:rotateX(context.matrices, -10)
+	M:rotateY(context.matrices, 0)
+	M:moveX(context.matrices, 0.060)
+	M:moveY(context.matrices, 0.080)
+	M:moveZ(context.matrices, -0.060)
+end
+
+if I:isIn(context.item, Tags:getVanillaTag("spears")) and not context.mainHand then
+	M:rotateZ(context.matrices, 10)
+	M:rotateX(context.matrices, -10)
+	M:rotateY(context.matrices, 0)
+	M:moveX(context.matrices, -0.1)
+	M:moveY(context.matrices, 0.05)
+	M:moveZ(context.matrices, -0.2)
+end

@@ -2,9 +2,53 @@
 
 local l           = context.mainHand and 1 or -1
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
-local AlexModel   = ${skinModel}
+local skinModel   = (${skinModel} and "Alex") or "Steve"
 
--- == MATCH ITEM ==
+-- === GET TAG ===
+local function getTag()
+    for _, tag in ipairs(ItemsTag.default) do
+        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
+            return tag
+        end
+    end
+    for _, tagSource in ipairs({ItemsTag.tables, ItemsTag.registry}) do
+        for tag, matches in pairs(tagSource) do
+            for _, item in ipairs(matches) do
+                if itemName:match(item) then
+                    return tag
+                end
+            end
+        end
+    end
+end
+local tag = getTag()
+
+-- === COMPATIBILITY CHECKING ===
+local itemCompatCache = { [0] = {}, [1] = {} }
+local function getItemCompat()
+    if itemCompatCache[0][itemName] then
+        return false
+    end
+    if itemCompatCache[1][itemName] then
+        return true
+    end
+
+    for _, rp in ipairs(ActivePacks) do
+        if PackCompat[rp] then
+            for _, item in ipairs(PackCompat[rp]) do
+                if item == tag or item == itemName then
+                    itemCompatCache[1][itemName] = rp
+                    return true
+                end
+            end
+        end
+    end
+    itemCompatCache[0][itemName] = true
+    return false
+end
+ItemCompat = getItemCompat()
+
+-- === MATCH ITEM ===
 local function matched(items, matches)
     local list = type(items) == "table" and items or {items}
 
@@ -28,13 +72,9 @@ local function matched(items, matches)
     return false
 end
 
--- == RENDER AS BLOCK ==
-local function renderBlock(render, items, force)
-    if force then
-        renderAsBlock:put(I:getName(context.item), render)
-        return
-    end
-    if IsItemCompat then return end
+-- === RENDER AS BLOCK ===
+local function renderBlock(render, items)
+    if ItemCompat then return end
 
     for _, i in ipairs(items) do
         if matched(i) then
@@ -44,7 +84,7 @@ local function renderBlock(render, items, force)
     end
 end
 
--- == POSITION PROCESSING ==
+-- === POSITION PROCESSING ===
 local function move(x, y, z)
     M:moveX(context.matrices, (x or 0) * l)
     M:moveY(context.matrices, y or 0)
@@ -63,133 +103,19 @@ local function scale(x, y, z)
     end
 end
 
--- == ITEMS LISTS ==
-local itemLists = {
-    hangingPlants = {"spore_blossom", "hanging_roots", "pale_hanging_moss", "weeping_vines"},
-    sprites2D = {
-        -- Colored Blocks
-        "glass_pane",
-        -- Natural Blocks
-        "small_amethyst_bud", "pitcher_pod", "lily_pad", "_seeds", "_bars", "sugar_cane",
-        -- Functional Blocks
-        "armor_stand", "glow_item_frame", "ender_eye", "fire_charge", "name_tag", "lead", "ladder", "sign",
-        -- Redstone Blocks
-        "^redstone$", "string", "tripwire_hook", "minecart",
-        -- Tools
-        "bundle", "compass", "^map$", "wind_charge", "ender_pearl", "_harness",
-        "elytra", "saddle", "goat_horn", "firework_rocket", "brush", "clock", "music_disc",
-        -- Combat
-        "wolf_armor", "totem_of_undying", "arrow", "_helmet", "_chestplate", "leggings", "boots", "horse_armor",
-        "snowball", "^egg$", "brown_egg", "blue_egg", "nautilus_armor",
-        -- Foods
-        "apple", "chorus_fruit", "melon_slice", "carrot", "potato", "^beetroot$",
-        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
-        "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
-        "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
-        "^dried_kelp$", "^honeycomb$", "_berries", "bowl", "bottle", "potion",
-        -- Ingredients
-        "coal$", "^emerald$", "^lapis_lazuli$", "^diamond$", "quartz$", "_shard", "netherite_scrap", "flint",
-        "wheat", "feather", "^leather$", "rabbit_hide", "resin_clump", "ink_sac", "_scute", "slime_ball", "clay_ball",
-        "prismarine_crystals", "nautilus_shell", "heart_of_the_sea", "phantom_membrane", "_key", "ghast_tear",
-        "nether_star", "shulker_shell", "popped_chorus_fruit", "disc_fragment_5", "brick$", "^raw_iron$", "^raw_gold$",
-        "^raw_copper$", "paper", "firework_star", "glowstone_dust", "book$", "gunpowder", "fermented_spider_eye",
-        "^sugar$", "glistering_melon_slice", "magma_cream", "_nugget", "_ingot", "^stick$", "bone", "_dye", "blaze_powder",
-        "dragon_breath", "rabbit_foot", "banner_pattern", "pottery_sherd", "smithing_template"
-    },
-    spawnEggsAdjust = {
-        "cow", "camel", "donkey", "horse", "mule", "llama", "panda", "polar_bear", "cod", "dolphin", "squid", "nautilus",
-        "salmon", "tadpole", "tropical_fish", "mooshroom", "sniffer", "iron_golem", "creaking", "guardian", "slime",
-        "warden", "ravager", "ghast", "hoglin", "magma_cube", "strider", "zoglin", "enderman"
-    },
-    except = {
-        "pink_petals", "wildflowers", "leaf_litter", "bucket", "fishing_rod", "shears", "rail", "fence", "wall",
-        "bed_", "_banner$", "candle", "glow_lichen", "sniffer_egg", "sculk_vein", "^torch$", "_torch",
-        "hanging_sign", "golem_statue", "comparator", "conduit", "campfire", "anvil", "brewing_stand",
-        "repeater", "button", "^hopper$", "pickaxe", "axe", "shovel", "hoe", "sword", "_on_a_stick",
-        "boat", "raft", "trident", "mace", "cake", "blaze_rod", "breeze_rod", "heavy_core", "item_frame", "painting",
-        "^lantern$", "soul_lantern", "copper_lantern", "_head", "_skull", "pressure_plate", "trapdoor", "carpet",
-        "bamboo", "^vine$", "frogspawn", "turtle_egg", "dried_ghast", "_spear", "^cauldron$"
-    }
-}
-
--- == TAGS ==
-local tags = {
-    default = {
-        "doors", "bars", "fences", "walls", "fence_gates", "chains", "trapdoors", "glass_panes", "banners",
-        "beds", "candles", "small_flowers", "saplings", "parrot_food", "lightning_rods", "shulker_boxes",
-        "wooden_shelves", "hanging_signs", "signs", "copper_golem_statues", "lanterns", "buttons", "rails",
-        "chiseled_bookshelf", "pickaxes", "axes", "hoes", "shovels", "bundles", "bookshelf_books", "music_discs",
-        "boats", "chest_boats", "swords", "head_armor", "chest_armor", "leg_armor", "foot_armor", "arrows",
-        "ingots", "raw_materials", "nuggets", "smithing_template"
-    },
-    registry = {
-        pressure_plates   = {"_pressure_plate"},
-        carpets           = {"_carpet"},
-        amethyst_cristals = {"amethyst_bud", "amethyst_cluster"},
-        small_plants      = {"_grass", "_roots", "nether_sprouts"},
-        mushrooms         = {"_mushroom", "_fungus$"},
-        corals            = {"_coral$", "_coral_fan"},
-        bushes            = {"bush"},
-        tulips            = {"tulip"},
-        ground_cover      = {"pink_petals", "wildflowers", "leaf_litter"},
-        froglights        = {"froglight"},
-        campfires         = {"campfire"},
-        torches           = {"^torch$", "soul_torch", "copper_torch", "redstone_torch"},
-        furnaces          = {"^furnace$", "blast_furnace", "smoker"},
-        anvils            = {"anvil"},
-        ender_items       = {"ender_eye", "ender_pearl"},
-        minecarts         = {"minecart"},
-        pistons           = {"piston"},
-        ejectors          = {"dropper", "dispenser", "crafter"},
-        horse_armors      = {"horse_armor"},
-        nautilus_armors   = {"nautilus_armor"},
-        eggs              = {"^egg$", "blue_egg", "brown_egg"},
-        potatoes          = {"potato"},
-        bowl_foods        = {"bowl", "_stew", "_soup"},
-        bottles_drink     = {"potion", "bottle", "dragon_breath"},
-        muttons           = {"mutton"},
-        rabbits           = {"^rabbit$", "cooked_rabbit"},
-        fishes            = {"cod$","cooked_cod", "salmon$", "cooked_salmon", "tropical_fish$"},
-        spider_eyes       = {"spider_eye"},
-        carrots           = {"carrot"},
-        bricks            = {"brick$", "nether_brick", "resin_brick"},
-        ink_sacs          = {"ink_sac"},
-        scutes            = {"_scute"},
-        balls             = {"slime_ball", "clay_ball", "magma_cream"},
-        powders           = {"^redstone$", "gunpowder", "glowstone_dust", "^sugar$"},
-        hanging_plants    = itemLists.hangingPlants,
-        spawn_eggs_adjust = itemLists.spawnEggsAdjust,
-        spawn_eggs        = {"spawn_egg"},
-    }
-}
-local function getTag()
-    for tag, matches in pairs(tags.registry) do
-        for _, item in ipairs(matches) do
-            if itemName:match(item) then
-                return tag
-            end
-        end
-    end
-    for _, tag in ipairs(tags.default) do
-        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
-            return tag
-        end
-    end
-end
-
--- == ITEM TYPE CHECKING ==
-local isException   = matched(itemLists.hangingPlants) or matched(itemLists.except, true) or IsItemCompat
-local is2D          = matched(itemLists.sprites2D, true) or matched("spawn_egg", true)
+-- === ITEM TYPE CHECKING ===
+local isException   = matched(ItemLists.except, true) or ItemCompat or tag == "hanging_plants"
+local is2D          = matched(ItemLists.sprites2D, true) or tag == "spawn_eggs"
 local general2D     = not isException and is2D
 local general3D     = not (isException or is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain", "waxed.*door"}, true)
 
--- == NOT RENDER AS BLOCK ==
+-- === NOT RENDER AS BLOCK ===
 renderBlock(
     false,
     {"weeping_vines", "vine", "ladder", "signs", "tripwire_hook", "string", "bars", "resin_clump", "glass_panes", "sugar_cane"}
 )
 
--- == GENERAL ADJUST ==
+-- === GENERAL ADJUST ===
 if general3D then
     move(0.05, -0.075, -0.1)
     rotate(-4, 18, -1)
@@ -198,11 +124,12 @@ elseif general2D then
     rotate(-6.5, -5.5, -1)
 end
 
-if not AlexModel then
+if skinModel == "Steve" then
     move(0.035, nil, nil)
 end
 
-local poses = {
+-- === INDIVIDUAL ADJUSTS ===
+local positions = {
     -- Building Blocks
     doors                       = { m = {0.01, -0.445, 0.345},    r = {2.5, -113, 3.5}, s = {1.15} },
     bars                        = { m = {nil, nil, -0.01} },
@@ -309,9 +236,9 @@ local poses = {
     carrot_on_a_stick           = { m = {0.02, 0.04, -0.035},     r = {nil, -5.5, nil} },
     warped_fungus_on_a_stick    = { m = {0.02, 0.075, -0.07},     r = {nil, -5.5, nil} },
     pickaxes                    = { m = {0.025, -0.115, -0.04},   r = {nil, -8.5, nil} },
-    axes                        = { m = {0.025, -0.115, -0.04},   r = {nil, -8.5, nil} },
-    hoes                        = { m = {0.025, -0.115, -0.04},   r = {nil, -8.5, nil} },
-    shovels                     = { m = {-0.005, -0.23, 0.01},    r = {-2, 5, -12.5} },
+    axes                        = { m = {0.025, -0.115, -0.06},   r = {nil, -8.5, nil} },
+    hoes                        = { m = {0.025, -0.115, -0.06},   r = {nil, -8.5, nil} },
+    shovels                     = { m = {0, -0.165, 0.01},        r = {-4, 5, -12.5} },
     flint_and_steel             = { m = {-0.105, nil, nil} },
     fire_charge                 = { m = {-0.025, -0.035, 0.03} },
     shears                      = { m = {0.03, -0.075, -0.065},   r = {-55, -4, 50} },
@@ -337,7 +264,6 @@ local poses = {
     nautilus_armors             = { m = {-0.04, -0.075, -0.005} },
     swords                      = { m = {0.025, nil, -0.025},     r = {nil, -5, nil} },
     mace                        = { m = {0.025, -0.06, -0.025},   r = {nil, -5, nil} },
-    trident                     = { m = {-0.03, nil, nil} },
     shield                      = { m = {-0.035, 0.06, 0.005},    r = {-1.5, -22.5, nil}, s = {0.8, 1, 1} },
     head_armor                  = { m = {nil, -0.11, -0.005} },
     foot_armor                  = { m = {nil, -0.11, -0.005} },
@@ -395,16 +321,14 @@ local poses = {
     powders                     = { m = {-0.02, -0.02, 0.015} },
     rabbit_foot                 = { m = {-0.02, -0.02, 0.015} },
     ghast_tear                  = { m = {nil, -0.105, nil} },
-    smithing_template           = { m = {-0.02, nil, 0.02} },
+    smithing_templates          = { m = {-0.02, nil, 0.02} },
     -- Spawn Eggs
     spawn_eggs_adjust           = { m = {-0.005, 0.03, nil} },
     spawn_eggs                  = { m = {-0.01, -0.04, nil} }
 }
-
-if not IsItemCompat then
-    local entry = poses[itemName] or poses[getTag()]
+if not ItemCompat then
+    local entry = positions[itemName] or positions[tag]
     if entry then
-        debugger:out("teste")
         if entry.m then move(entry.m[1], entry.m[2], entry.m[3])   end
         if entry.r then rotate(entry.r[1], entry.r[2], entry.r[3]) end
         if entry.s then scale(entry.s[1], entry.s[2], entry.s[3])  end
@@ -508,8 +432,6 @@ local sck                   = context.mainHand and canKnockbackCounter or canKno
 local sw                    = context.mainHand and mainHandSwitch or offHandSwitch
 local mat                   = context.matrices
 local hic                   = context.mainHand and Easings:easeInOutSine(hitImpactCounter) or hitImpactCounterO
-local ywAngle               = (context.mainHand and yawAngle) or yawAngleO
-local ptAngle               = (context.mainHand and pitchAngle) or pitchAngleO
 local swing                 = M:sin(context.swingProgress * 3.14)
 local swing_hit             = M:sin(M:clamp(context.swingProgress, 0.16561, 0.49422) * 4.78 * 2 + 4.7)
 local swingOverall          = M:sin(context.swingProgress * 3.14)
@@ -619,6 +541,9 @@ yawSpeedO = yawSpeedO + (M:sin(walk) * 3 * walkSmoother + (M:sin(context.offHand
 yawSpeedO = yawSpeedO - GRAVITY * yawAngleO * dt
 yawSpeedO = yawSpeedO * M:pow(DAMPING, dt)
 yawAngleO = yawAngleO + yawSpeedO * dt
+
+local ywAngle   = (context.mainHand and yawAngle) or yawAngleO
+local ptAngle   = (context.mainHand and pitchAngle) or pitchAngleO
 
 -- == RESOURCE PACKS ==
 local rvTorches         = ${rvTorches}
@@ -1133,8 +1058,6 @@ if matched("bucket", true) then
     end
 end
 
-
-
 if itemName == "dragon_head" then
 	M:moveY(mat, 0.25)
     M:rotateZ(mat, 6 * l)
@@ -1150,105 +1073,4 @@ end
 if isShovel then
 	M:moveX(mat, -0.09 * l)
 	M:rotateY(mat, 80 * l)
-end
-
--- === PACK COMPATIBILITY ===
-local function process(ops, dataORx, default_y, default_z)
-    if type(dataORx) ~= "table" then
-        if dataORx   then ops.x(dataORx)    end
-        if default_y then ops.y(default_y)  end
-        if default_z then ops.z(default_z)  end
-        return
-    end
-    local order = dataORx[4] or "xyz"
-    for i = 1, 3 do
-        local axis = order:sub(i, i):lower()
-        local val  = dataORx[i]
-        if val and ops[axis] then ops[axis](val) end
-    end
-end
-
-local function pose(tables, force)
-    for _, t in ipairs(tables) do
-        if (t.condition ~= nil and t.condition[1]) or t.condition == nil then
-            for _, i in ipairs(t[1]) do
-                if matched(i, t.matches) then
-                    if not IsItemCompat or force then
-                        if t.renderAsBlock ~= nil then
-                            renderBlock(t.renderAsBlock, t[1], force)
-                        end
-                        local opsOrder = t.ops or "mrs"
-                        for j = 1, #opsOrder do
-                            local op = opsOrder:sub(j, j):lower()
-                            if op == "m" and t.m then process(moves, t.m) end
-                            if op == "r" and t.r then process(rotates, t.r) end
-                            if op == "s" and t.s then
-                                if t.s[2] == nil and t.s[3] == nil then
-                                    M:scale(context.matrices, t.s[1], t.s[1], t.s[1])
-                                else
-                                    M:scale(context.matrices, t.s[1], t.s[2], t.s[3])
-                                end
-                            end
-                        end
-                        if not t.prox then return end
-                    end
-                end
-            end
-        end
-    end
-end
-
-if IsItemCompat then
-    Positions = Positions or {}
-    if Positions and next(Positions) then pose(Positions, true) end
-
-    ItemsUndoAdjusts = ItemsUndoAdjusts or {}
-    if ItemsUndoAdjusts and next(ItemsUndoAdjusts) then pose(ItemsUndoAdjusts, true) end
-end
-
--- == Packs Corrections ==
-if w3di and a3ds and (itemName:match("_banner_pattern") or itemName == "name_tag") then
-    M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5), 0, -0.13, 0)
-end
-
-if itemName == "shears" and gousPoses then
-    if not context.bl then
-        M:moveZ(mat, 0.1)
-        M:rotateY(mat, 180)
-    end
-    M:rotateZ(mat, 45)
-end
-
-if rvTorches and matched("candle", true) then
-    renderAsBlock:put(I:getName(context.item), false)
-    M:moveX(mat, -0.05 * l)
-    M:rotateX(mat, -8)
-    M:rotateY(mat, -10 * l)
-    M:rotateZ(mat, 6 * l)
-end
-
-if (torchesPack or w3di) and matched("lanterns") then
-    M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, 0, 0.4, 0)
-    M:rotateZ(mat, ywAngle * -1, 0, 0.4, 0)
-end
-
-if glowing3Darmors then
-    if matched("chest_armor") then
-        M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3), 0, 0.1, 0.1)
-        M:rotateZ(mat, ywAngle * 0.5, -0.129, -0.004, 0.495)
-    elseif matched("leg_armor") then
-        M:rotateZ(mat, M:clamp(playerPitch / 2.5, -15, 80) + ptAngle + ywAngle * 0.3, 0, 0.44, 0.55)
-    elseif itemName == "elytra" and not w3di then
-        M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5, 0, -0.13, 0)
-	    M:rotateZ(mat, ywAngle * -0.7, -0.1 * l, 0, 0.1)
-    end
-end
-
-if itemName == "bell" and a3ds then
-    M:moveX(mat, 0.15 * l)
-    M:moveY(mat, -0.05)
-    M:moveZ(mat, -0.1)
-    M:scale(mat, 1.2, 1.2, 1.2)
-    M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
-    M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
 end
