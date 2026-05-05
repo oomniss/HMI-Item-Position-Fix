@@ -1,10 +1,51 @@
 -- by omnis._.
 
+local mat         = context.matrices
 local l           = context.mainHand and 1 or -1
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
-local AlexModel   = ${skinModel}
+local skinModel   = (${skinModel} and "Alex") or "Steve"
 
--- == MATCH ITEM ==
+-- === FUNCTIONS ===
+local function getTag()
+    for _, tag in ipairs(ItemsTag.default) do
+        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
+            return tag
+        end
+    end
+    for tag, entry in pairs(ItemsTag.registry) do
+        for _, i in ipairs(entry) do
+            if itemName:match(i) then
+                return tag
+            end
+        end
+    end
+end
+local tag = getTag()
+
+local itemCompatCache = { [0] = {}, [1] = {} }
+local function getitemCompat()
+    if itemCompatCache[0][itemName] then
+        return false
+    end
+    if itemCompatCache[1][itemName] then
+        return true
+    end
+
+    for _, rp in ipairs(ActivePacks) do
+        if PackCompat[rp] then
+            for _, item in ipairs(PackCompat[rp]) do
+                if item == tag or item == itemName then
+                    itemCompatCache[1][itemName] = rp
+                    return true
+                end
+            end
+        end
+    end
+    itemCompatCache[0][itemName] = true
+    return false
+end
+local itemCompat = getitemCompat()
+
 local function matched(items, matches)
     local list = type(items) == "table" and items or {items}
 
@@ -28,13 +69,8 @@ local function matched(items, matches)
     return false
 end
 
--- == RENDER AS BLOCK ==
-local function renderBlock(render, items, force)
-    if force then
-        renderAsBlock:put(I:getName(context.item), render)
-        return
-    end
-    if IsItemCompat then return end
+local function renderBlock(render, items)
+    if itemCompat then return end
 
     for _, i in ipairs(items) do
         if matched(i) then
@@ -44,152 +80,43 @@ local function renderBlock(render, items, force)
     end
 end
 
--- == POSITION PROCESSING ==
 local function move(x, y, z)
-    M:moveX(context.matrices, (x or 0) * l)
-    M:moveY(context.matrices, y or 0)
-    M:moveZ(context.matrices, z or 0)
+    if not itemCompat then
+        M:moveX(mat, (x or 0) * l)
+        M:moveY(mat, y or 0)
+        M:moveZ(mat, z or 0)
+    end
 end
 local function rotate(x, y, z)
-    M:rotateX(context.matrices, x or 0)
-    M:rotateY(context.matrices, (y or 0) * l)
-    M:rotateZ(context.matrices, (z or 0) * l)
+    if not itemCompat then
+        M:rotateX(mat, x or 0)
+        M:rotateY(mat, (y or 0) * l)
+        M:rotateZ(mat, (z or 0) * l)
+    end
 end
 local function scale(x, y, z)
-    if x ~= nil and y == nil and z == nil then
-        M:scale(context.matrices, x, x, x)
-    else
-        M:scale(context.matrices, x or 0, y or 0, z or 0)
-    end
-end
-
--- == ITEMS LISTS ==
-local itemLists = {
-    hangingPlants = {"spore_blossom", "hanging_roots", "pale_hanging_moss", "weeping_vines"},
-    sprites2D = {
-        -- Colored Blocks
-        "glass_pane",
-        -- Natural Blocks
-        "small_amethyst_bud", "pitcher_pod", "lily_pad", "_seeds", "_bars", "sugar_cane",
-        -- Functional Blocks
-        "armor_stand", "glow_item_frame", "ender_eye", "fire_charge", "name_tag", "lead", "ladder", "sign",
-        -- Redstone Blocks
-        "^redstone$", "string", "tripwire_hook", "minecart",
-        -- Tools
-        "bundle", "compass", "^map$", "wind_charge", "ender_pearl", "_harness",
-        "elytra", "saddle", "goat_horn", "firework_rocket", "brush", "clock", "music_disc",
-        -- Combat
-        "wolf_armor", "totem_of_undying", "arrow", "_helmet", "_chestplate", "leggings", "boots", "horse_armor",
-        "snowball", "^egg$", "brown_egg", "blue_egg", "nautilus_armor",
-        -- Foods
-        "apple", "chorus_fruit", "melon_slice", "carrot", "potato", "^beetroot$",
-        "bread", "cookie", "pumpkin_pie", "beef", "porkchop", "^chicken$", "mutton", "^rabbit$",
-        "^cod$", "^salmon$", "^tropical_fish$", "^pufferfish$", "cooked_chicken",
-        "cooked_rabbit", "cooked_cod", "cooked_salmon", "_stew", "_soup", "rotten_flesh", "^spider_eye$",
-        "^dried_kelp$", "^honeycomb$", "_berries", "bowl", "bottle", "potion",
-        -- Ingredients
-        "coal$", "^emerald$", "^lapis_lazuli$", "^diamond$", "quartz$", "_shard", "netherite_scrap", "flint",
-        "wheat", "feather", "^leather$", "rabbit_hide", "resin_clump", "ink_sac", "_scute", "slime_ball", "clay_ball",
-        "prismarine_crystals", "nautilus_shell", "heart_of_the_sea", "phantom_membrane", "_key", "ghast_tear",
-        "nether_star", "shulker_shell", "popped_chorus_fruit", "disc_fragment_5", "brick$", "^raw_iron$", "^raw_gold$",
-        "^raw_copper$", "paper", "firework_star", "glowstone_dust", "book$", "gunpowder", "fermented_spider_eye",
-        "^sugar$", "glistering_melon_slice", "magma_cream", "_nugget", "_ingot", "^stick$", "bone", "_dye", "blaze_powder",
-        "dragon_breath", "rabbit_foot", "banner_pattern", "pottery_sherd", "smithing_template"
-    },
-    spawnEggsAdjust = {
-        "cow", "camel", "donkey", "horse", "mule", "llama", "panda", "polar_bear", "cod", "dolphin", "squid", "nautilus",
-        "salmon", "tadpole", "tropical_fish", "mooshroom", "sniffer", "iron_golem", "creaking", "guardian", "slime",
-        "warden", "ravager", "ghast", "hoglin", "magma_cube", "strider", "zoglin", "enderman"
-    },
-    except = {
-        "pink_petals", "wildflowers", "leaf_litter", "bucket", "fishing_rod", "shears", "rail", "fence", "wall",
-        "bed_", "_banner$", "candle", "glow_lichen", "sniffer_egg", "sculk_vein", "^torch$", "_torch",
-        "hanging_sign", "golem_statue", "comparator", "conduit", "campfire", "anvil", "brewing_stand",
-        "repeater", "button", "^hopper$", "pickaxe", "axe", "shovel", "hoe", "sword", "_on_a_stick",
-        "boat", "raft", "trident", "mace", "cake", "blaze_rod", "breeze_rod", "heavy_core", "item_frame", "painting",
-        "^lantern$", "soul_lantern", "copper_lantern", "_head", "_skull", "pressure_plate", "trapdoor", "carpet",
-        "bamboo", "^vine$", "frogspawn", "turtle_egg", "dried_ghast", "_spear", "^cauldron$"
-    }
-}
-
--- == TAGS ==
-local tags = {
-    default = {
-        "doors", "bars", "fences", "walls", "fence_gates", "chains", "trapdoors", "glass_panes", "banners",
-        "beds", "candles", "small_flowers", "saplings", "parrot_food", "lightning_rods", "shulker_boxes",
-        "wooden_shelves", "hanging_signs", "signs", "copper_golem_statues", "lanterns", "buttons", "rails",
-        "chiseled_bookshelf", "pickaxes", "axes", "hoes", "shovels", "bundles", "bookshelf_books", "music_discs",
-        "boats", "chest_boats", "swords", "head_armor", "chest_armor", "leg_armor", "foot_armor", "arrows",
-        "ingots", "raw_materials", "nuggets", "smithing_template"
-    },
-    registry = {
-        pressure_plates   = {"_pressure_plate"},
-        carpets           = {"_carpet"},
-        amethyst_cristals = {"amethyst_bud", "amethyst_cluster"},
-        small_plants      = {"_grass", "_roots", "nether_sprouts"},
-        mushrooms         = {"_mushroom", "_fungus$"},
-        corals            = {"_coral$", "_coral_fan"},
-        bushes            = {"bush"},
-        tulips            = {"tulip"},
-        ground_cover      = {"pink_petals", "wildflowers", "leaf_litter"},
-        froglights        = {"froglight"},
-        campfires         = {"campfire"},
-        torches           = {"^torch$", "soul_torch", "copper_torch", "redstone_torch"},
-        furnaces          = {"^furnace$", "blast_furnace", "smoker"},
-        anvils            = {"anvil"},
-        ender_items       = {"ender_eye", "ender_pearl"},
-        minecarts         = {"minecart"},
-        pistons           = {"piston"},
-        ejectors          = {"dropper", "dispenser", "crafter"},
-        horse_armors      = {"horse_armor"},
-        nautilus_armors   = {"nautilus_armor"},
-        eggs              = {"^egg$", "blue_egg", "brown_egg"},
-        potatoes          = {"potato"},
-        bowl_foods        = {"bowl", "_stew", "_soup"},
-        bottles_drink     = {"potion", "bottle", "dragon_breath"},
-        muttons           = {"mutton"},
-        rabbits           = {"^rabbit$", "cooked_rabbit"},
-        fishes            = {"cod$","cooked_cod", "salmon$", "cooked_salmon", "tropical_fish$"},
-        spider_eyes       = {"spider_eye"},
-        carrots           = {"carrot"},
-        bricks            = {"brick$", "nether_brick", "resin_brick"},
-        ink_sacs          = {"ink_sac"},
-        scutes            = {"_scute"},
-        balls             = {"slime_ball", "clay_ball", "magma_cream"},
-        powders           = {"^redstone$", "gunpowder", "glowstone_dust", "^sugar$"},
-        hanging_plants    = itemLists.hangingPlants,
-        spawn_eggs_adjust = itemLists.spawnEggsAdjust,
-        spawn_eggs        = {"spawn_egg"},
-    }
-}
-local function getTag()
-    for tag, matches in pairs(tags.registry) do
-        for _, item in ipairs(matches) do
-            if itemName:match(item) then
-                return tag
-            end
-        end
-    end
-    for _, tag in ipairs(tags.default) do
-        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
-            return tag
+    if not itemCompat then
+        if x ~= nil and y == nil and z == nil then
+            M:scale(mat, x, x, x)
+        else
+            M:scale(mat, x or 0, y or 0, z or 0)
         end
     end
 end
 
--- == ITEM TYPE CHECKING ==
-local isException   = matched(itemLists.hangingPlants) or matched(itemLists.except, true) or IsItemCompat
-local is2D          = matched(itemLists.sprites2D, true) or matched("spawn_egg", true)
-local general2D     = not isException and is2D
-local general3D     = not (isException or is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain", "waxed.*door"}, true)
-
--- == NOT RENDER AS BLOCK ==
+-- === NOT RENDER AS BLOCK ===
 renderBlock(
     false,
     {"weeping_vines", "vine", "ladder", "signs", "tripwire_hook", "string", "bars", "resin_clump", "glass_panes", "sugar_cane"}
 )
 
--- == GENERAL ADJUST ==
+-- === ITEM TYPE CHECKING ===
+local isException   = matched(ItemLists.except, true) or itemCompat or tag == "hanging_plants"
+local is2D          = matched(ItemLists.sprites2D, true) or tag == "spawn_eggs"
+local general2D     = not isException and is2D
+local general3D     = not (isException or is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain", "waxed.*door"}, true)
+
+-- === GENERAL ADJUST ===
 if general3D then
     move(0.05, -0.075, -0.1)
     rotate(-4, 18, -1)
@@ -198,11 +125,12 @@ elseif general2D then
     rotate(-6.5, -5.5, -1)
 end
 
-if not AlexModel then
+if skinModel == "Steve" then
     move(0.035, nil, nil)
 end
 
-local poses = {
+-- === INDIVIDUAL ADJUSTS ===
+local positions = {
     -- Building Blocks
     doors                       = { m = {0.01, -0.445, 0.345},    r = {2.5, -113, 3.5}, s = {1.15} },
     bars                        = { m = {nil, nil, -0.01} },
@@ -309,9 +237,9 @@ local poses = {
     carrot_on_a_stick           = { m = {0.02, 0.04, -0.035},     r = {nil, -5.5, nil} },
     warped_fungus_on_a_stick    = { m = {0.02, 0.075, -0.07},     r = {nil, -5.5, nil} },
     pickaxes                    = { m = {0.025, -0.115, -0.04},   r = {nil, -8.5, nil} },
-    axes                        = { m = {0.025, -0.115, -0.04},   r = {nil, -8.5, nil} },
-    hoes                        = { m = {0.025, -0.115, -0.04},   r = {nil, -8.5, nil} },
-    shovels                     = { m = {-0.005, -0.23, 0.01},    r = {-2, 5, -12.5} },
+    axes                        = { m = {0.025, -0.115, -0.06},   r = {nil, -8.5, nil} },
+    hoes                        = { m = {0.025, -0.115, -0.06},   r = {nil, -8.5, nil} },
+    shovels                     = { m = {0, -0.165, 0.01},        r = {-4, 5, -12.5} },
     flint_and_steel             = { m = {-0.105, nil, nil} },
     fire_charge                 = { m = {-0.025, -0.035, 0.03} },
     shears                      = { m = {0.03, -0.075, -0.065},   r = {-55, -4, 50} },
@@ -337,7 +265,6 @@ local poses = {
     nautilus_armors             = { m = {-0.04, -0.075, -0.005} },
     swords                      = { m = {0.025, nil, -0.025},     r = {nil, -5, nil} },
     mace                        = { m = {0.025, -0.06, -0.025},   r = {nil, -5, nil} },
-    trident                     = { m = {-0.03, nil, nil} },
     shield                      = { m = {-0.035, 0.06, 0.005},    r = {-1.5, -22.5, nil}, s = {0.8, 1, 1} },
     head_armor                  = { m = {nil, -0.11, -0.005} },
     foot_armor                  = { m = {nil, -0.11, -0.005} },
@@ -395,13 +322,13 @@ local poses = {
     powders                     = { m = {-0.02, -0.02, 0.015} },
     rabbit_foot                 = { m = {-0.02, -0.02, 0.015} },
     ghast_tear                  = { m = {nil, -0.105, nil} },
-    smithing_template           = { m = {-0.02, nil, 0.02} },
+    smithing_templates          = { m = {-0.02, nil, 0.02} },
     -- Spawn Eggs
     spawn_eggs_adjust           = { m = {-0.005, 0.03, nil} },
     spawn_eggs                  = { m = {-0.01, -0.04, nil} }
 }
-if not IsItemCompat then
-    local entry = poses[itemName] or poses[getTag()]
+if not itemCompat then
+    local entry = positions[itemName] or positions[tag]
     if entry then
         if entry.m then move(entry.m[1], entry.m[2], entry.m[3])   end
         if entry.r then rotate(entry.r[1], entry.r[2], entry.r[3]) end
@@ -495,7 +422,6 @@ local sc                    = context.mainHand and spearCounterM or spearCounter
 local scd                   = context.mainHand and canDismountCounter or canDismountCounterO
 local sck                   = context.mainHand and canKnockbackCounter or canKnockbackCounterO
 local sw                    = context.mainHand and mainHandSwitch or offHandSwitch
-local mat                   = context.matrices
 local hic                   = context.mainHand and Easings:easeInOutSine(hitImpactCounter) or hitImpactCounterO
 local dt                    = context.deltaTime * 30
 local playerSpeed           = P:getSpeed(context.player)
@@ -542,6 +468,10 @@ local function particle(x, y, z, texture, size, tick)
 		"OPACITY", "TRANSLUCENT_L",
 		1, 255, tick
 	)
+end
+
+local function posInHands(mainHand, offHand)
+    return context.mainHand and mainHand or offHand
 end
 
 -- == CALC ==
@@ -783,36 +713,134 @@ else
 end
 
 -- == EAT AND DRINK ANIMATION ==
-if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and context.mainHand then
-    M:moveX(mat, -0.1 * l * foodCount)
-    M:moveY(mat, 0.1 * l * foodCount)
-    M:moveZ(mat, 0.05 * foodCount)
-    if useAction == "eat" or useAction == "toot_horn" then
-        M:rotateX(mat, -23 * foodCount * foodCount)
-        M:rotateZ(mat, -25 * l * foodCount * foodCount)
-    end
-    M:rotateY(mat, -50 * l * foodCount * foodCount)
+local function applyTransform(op, progress, exp, x, y, z)
+    local t = M:pow(progress, exp)
 
-    if useAction == "drink" then
-        M:rotateX(mat, 15 * foodCount * foodCount)
-	M:moveZ(mat, -0.1 * foodCount)
-	M:moveZ(mat, -0.1 * foodCount)
+    if x then op.x(x * t) end
+    if y then op.y(y * t) end
+    if z then op.z(z * t) end
+end
+
+local moves = {
+    x = function(v) M:moveX(context.matrices, v * l) end,
+    y = function(v) M:moveY(context.matrices, v) end,
+    z = function(v) M:moveZ(context.matrices, v) end
+}
+local rotates = {
+    x = function(v) M:rotateX(context.matrices, v) end,
+    y = function(v) M:rotateY(context.matrices, v * l) end,
+    z = function(v) M:rotateZ(context.matrices, v * l) end
+}
+
+-- Animation
+local function eatDrinkAnimation(use, progress, movePos, rotatePos, scalePos)
+    local function m(default, override)
+        if override ~= nil then return override else return default end
+    end
+
+    local moveVals = {
+        x = movePos and m(nil, movePos[1]) or nil,
+        y = movePos and m(nil, movePos[2]) or nil,
+        z = movePos and m(-0.05, movePos[3]) or -0.05
+    }
+    local rotateVals = {
+        x = rotatePos and m(nil, rotatePos[1]) or nil,
+        y = rotatePos and m(-50, rotatePos[2]) or -50,
+        z = rotatePos and m(nil, rotatePos[3]) or nil
+    }
+
+    applyTransform(moves, progress, 1, 0.02, moveVals.y, moveVals.z)
+    applyTransform(moves, progress, 1, moveVals.x, nil, nil)
+
+    if use == "eat" or use == "toot_horn" then
+        local ex = rotatePos and m(-23, rotatePos[1]) or -23
+        local ez = rotatePos and m(-12, rotatePos[3]) or -12
+        applyTransform(rotates, progress, 2,  ex,  nil,  ez)
+    end
+
+    applyTransform(rotates, progress, 2,  rotateVals.x,  rotateVals.y,  rotateVals.z)
+
+    if use == "drink" then
+        local dx = rotatePos and m(15, rotatePos[1]) or 15
+        applyTransform(rotates, progress, 2,  dx,  nil,  nil)
+    end
+
+    if scalePos then
+        local t = M:pow(progress, 1)
+        local sx = m(1, scalePos[1])
+        local sy = m(1, scalePos[2])
+        local sz = m(1, scalePos[3])
+        M:scale(mat, 1 + (sx - 1) * t, 1 + (sy - 1) * t, 1 + (sz - 1) * t)
+    end
+end
+local progress = context.mainHand and foodCount or foodCountO
+
+local specialCases = {
+    {
+        pack = function() return refinedBuckets and w3di end,
+        items = {"milk_bucket"},
+        move = {0.01, 0.17, -0.1}, scale = {0.8, 0.8, 0.8}
+    },
+    {
+        pack = function() return w3di and not refinedBuckets end,
+        items = {"milk_bucket"},
+        move = {-0.07, 0.05, -0.11}, rotate = {-5, -85, 5}, scale = {0.6, 0.6, 0.6}
+    },
+    {
+        pack = function() return w3Dfoods and not (w3di or freshFoods) end,
+        transforms = {
+            { {"apple", "chorus_fruit", "potato", "beetroot", "bread"}, m = {nil, nil, -0.05}, r = {0, 0, 0}, matches = true },
+            { {"cookie", "melon_slice", "glow_berries", "dried_kelp", "beef", "porkchop", "mutton", "rotten_flesh"}, m = {nil, 0.1, -0.05}, r = {0, 0, 0}, matches = true },
+            { {"soup", "stew"}, m = {nil, 0.12, -0.1}, r = {5, 0, 0}, matches = true },
+            { {"pumpkin_pie"}, m = {nil, 0.1, -0.15}, r = {0, 0, 0} },
+            { {"spider_eye"}, m = {0.05, nil, -0.05}, r = {0, 0, 0} },
+            { {"carrot", "golden_carrot"}, m = {0.05, 0.15, 0}, r = {0, 0, 0} },
+        }
+    },
+    -- Without packs
+    {
+        pack = function() return not (w3di or refinedBuckets) end,
+        items = {"milk_bucket"},
+        move = {0.25, 0.137, -0.3}
+    },
+    {
+        pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
+        move = {-0.04, -0.015, nil}
+    },
+    {
+        pack = function() return not (w3di or freshFoods) end,
+        items = {"sweet_berries"},
+        move = {nil, nil, 0.05}, rotate = {nil, 10, nil}
+    },
+    {
+        pack = function() return not (w3di or freshFoods) and useAction == "eat" end,
+        move = {nil, -0.05, 0.1}
+    }
+}
+
+local caseMatched = false
+for _, case in ipairs(specialCases) do
+    if case.pack() then
+        if case.transforms then
+            for _, transform in ipairs(case.transforms) do
+                for _, item in ipairs(transform[1]) do
+                    if matched(item, transform.matches) then
+                        eatDrinkAnimation(useAction, progress, transform.m, transform.r, transform.s)
+                        caseMatched = true
+                        break
+                    end
+                end
+            end
+        elseif (case.items ~= nil and matched(case.items)) or case.items == nil then
+            eatDrinkAnimation(useAction, progress, case.move, case.rotate, case.scale)
+            caseMatched = true
+            break
+        end
     end
 end
 
-if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and not context.mainHand then
-    M:moveX(mat, 0.02 * l * foodCountO)
-    M:moveZ(mat, -0.05 * foodCountO)
-    if useAction == "eat" or useAction == "toot_horn" then
-        M:rotateX(mat, -23 * foodCountO * foodCountO)
-        M:rotateZ(mat, -12 * l * foodCountO * foodCountO)
-    end
-    M:rotateY(mat, -50 * l * foodCountO * foodCountO)
-
-    if useAction == "drink" then
-        M:rotateX(mat, 15 * foodCountO * foodCountO)
-	M:moveZ(mat, -0.1 * foodCountO)
-    end
+if not caseMatched and (useAction == "eat" or useAction == "drink" or useAction == "toot_horn") then
+    eatDrinkAnimation(useAction, progress)
 end
 
 global.foodCount    = 0.0;
@@ -983,17 +1011,14 @@ if isShovel                                     then itemSwingSpeed:put(I:getNam
 if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getName(context.item), 12) end
 
 -- == TRIDENT AND SPEAR POSE ==
-global.riptideCounter = 0;
-global.riptideCounterO = 0;
-
 if I:getUseAction(context.item) == "trident" then
     M:rotateY(mat, 60 * l)
-    M:moveZ(mat, -0.035)
-    M:moveX(mat, -0.015 * l)
-    M:rotateY(mat, -90 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:rotateX(mat, 180 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:moveZ(mat, -0.08 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:moveX(mat, 0.05 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:moveZ(mat, posInHands(-0.025, -0.22))
+    M:moveX(mat, posInHands(-0.045, 0.04))
+    M:rotateY(mat, -95 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:rotateX(mat, 174 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:moveZ(mat, posInHands(-0.045, -0.22) * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:moveX(mat, posInHands(0.04, 0.245) * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
     M:moveY(mat, 0.15 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
 end
 
@@ -1076,161 +1101,93 @@ if isShovel then
 end
 
 -- === HOLD MY ACTIONS ITEM_ADDON DEPOSITION ===
-if not I:isEmpty(context.item) and not I:isBlock(context.item) and context.mainHand then
-	if not I:isIn(context.item, Tags:getVanillaTag("swords")) and not I:isIn(context.item, Tags:getVanillaTag("shovels")) and not I:isIn(context.item, Tags:getVanillaTag("pickaxes")) and not I:isIn(context.item, Tags:getVanillaTag("axes")) and not I:isIn(context.item, Tags:getVanillaTag("hoes")) and not I:isOf(context.item, Items:get("minecraft:mace")) and not I:isOf(context.item, Items:get("minecraft:trident")) and not I:isOf(context.item, Items:get("minecraft:stick")) and not I:isOf(context.item, Items:get("minecraft:bamboo")) and not I:isOf(context.item, Items:get("minecraft:bone")) then
-        M:moveZ(context.matrices, 0.1)
-        M:moveX(context.matrices, -0.073)
-        M:rotateY(context.matrices, -5)
-        M:rotateZ(context.matrices, 7)
-
-        if getTag() ~= "shovels" then
-            M:moveX(context.matrices, -0.015)
-            M:moveY(context.matrices, 0.005)
-            M:moveZ(context.matrices, 0.115)
-            M:rotateX(context.matrices, 8)
-            M:rotateY(context.matrices, 4.5)
-            M:rotateZ(context.matrices, -2)
-        end
-
-        if itemName == "totem_of_undying" then
-            M:moveY(context.matrices, -0.065)
-        end
-	end
-end
-
-if not I:isEmpty(context.item) and not I:isBlock(context.item) and not context.mainHand then
-	if not I:isIn(context.item, Tags:getVanillaTag("swords")) and not I:isIn(context.item, Tags:getVanillaTag("shovels")) and not I:isIn(context.item, Tags:getVanillaTag("pickaxes")) and not I:isIn(context.item, Tags:getVanillaTag("axes")) and not I:isIn(context.item, Tags:getVanillaTag("hoes")) and not I:isOf(context.item, Items:get("minecraft:mace")) and not I:isOf(context.item, Items:get("minecraft:trident")) and not I:isOf(context.item, Items:get("minecraft:stick")) and not I:isOf(context.item, Items:get("minecraft:bamboo")) and not I:isOf(context.item, Items:get("minecraft:bone")) then
-	M:moveZ(context.matrices, 0.1)
-	M:moveX(context.matrices, 0.073)
-	M:rotateY(context.matrices, 5)
-	M:rotateZ(context.matrices, -7)
+if not I:isEmpty(context.item) and not I:isBlock(context.item) then
+    if not (
+        tag == "swords" or tag == "shovels" or tag == "pickaxes" or tag == "axes" or tag == "hoes" or tag == "buckets" or
+        itemName == "mace" or itemName == "trident" or itemName == "stick" or itemName == "bamboo" or itemName == "bone"
+    ) then
+        M:moveZ(mat, 0.1)
+        M:moveX(mat, -0.073 * l)
+        M:rotateY(mat, -5 * l)
+        M:rotateZ(mat, 7 * l)
 	end
 end
 
 if context.mainHand then
-	if I:isIn(context.item, Tags:getVanillaTag("swords")) or I:isIn(context.item, Tags:getVanillaTag("pickaxes")) or I:isIn(context.item, Tags:getVanillaTag("axes")) or I:isIn(context.item, Tags:getVanillaTag("hoes")) or I:isOf(context.item, Items:get("minecraft:stick")) then
-	M:scale(context.matrices, 1/1.2, 1/1.2, 1/1.2)
-	M:rotateX(context.matrices, 0)
-	M:rotateY(context.matrices, 5.5)
-	M:moveZ(context.matrices, 0.06)
-	M:moveY(context.matrices, 0.035)
-	M:moveX(context.matrices, -0.025)
-	M:rotateZ(context.matrices, 2)
+    if tag == "swords" or tag == "pickaxes" or tag == "axes" or tag == "hoes" or itemName == "stick" then
+        M:scale(mat, 1/1.2, 1/1.2, 1/1.2)
+        M:rotateY(mat, 5.5)
+        M:moveZ(mat, 0.06)
+        M:moveY(mat, 0.035)
+        M:moveX(mat, -0.025)
+        M:rotateZ(mat, 2)
 	end
+    if tag == "shovels" then
+        M:scale(mat, 1/1.2, 1/1.2, 1/1.2)
+        M:rotateZ(mat, 4)
+        M:rotateY(mat, -4)
+        M:rotateX(mat, -10)
+        M:moveY(mat, 0.08)
+        M:moveZ(mat, 0.08)
+        M:moveX(mat, 0.02)
+    end
+    if tag == "spears" then
+        M:rotateZ(mat, -10)
+        M:rotateX(mat, -10)
+        M:moveX(mat, 0.060)
+        M:moveY(mat, 0.080)
+        M:moveZ(mat, -0.060)
+    end
+    if itemName == "bucket" then
+        M:moveX(mat, -0.2)
+        M:moveZ(mat, 0.029)
+        M:moveY(mat, 0.15)
+        M:rotateY(mat, -12)
+        M:rotateZ(mat, -4)
+    end
+else
+    if tag == "swords" or tag == "pickaxes" or tag == "axes" or tag == "hoes" or itemName == "stick" then
+        M:scale(mat, 1/1.1, 1/1.1, 1/1.1)
+        M:rotateX(mat, -5)
+        M:rotateY(mat, -8)
+        M:moveZ(mat, 0.05)
+        M:moveY(mat, 0.028)
+        M:moveX(mat, 0.025)
+    end
+    if tag == "shovels" then
+        M:scale(mat, 1/1.2, 1/1.2, 1/1.2)
+        M:rotateY(mat, 4)
+        M:moveZ(mat, -0.06)
+        M:rotateX(mat, -15)
+        M:moveY(mat, -0.08)
+        M:moveX(mat, -0.02)
+    end
+    if tag == "spears" then
+        M:rotateZ(mat, 10)
+        M:rotateX(mat, -10)
+        M:moveX(mat, -0.1)
+        M:moveY(mat, 0.05)
+        M:moveZ(mat, -0.2)
+    end
+    if itemName == "bucket" then
+        M:moveX(mat, 0.1)
+        M:moveZ(mat, 0.09)
+        M:moveY(mat, 0.17)
+        M:rotateY(mat, 12)
+        M:rotateZ(mat, -4)
+    end
 end
 
-if not context.mainHand then
-	if I:isIn(context.item, Tags:getVanillaTag("swords")) or I:isIn(context.item, Tags:getVanillaTag("pickaxes")) or I:isIn(context.item, Tags:getVanillaTag("axes")) or I:isIn(context.item, Tags:getVanillaTag("hoes")) or I:isOf(context.item, Items:get("minecraft:stick")) then
-	M:scale(context.matrices, 1/1.1, 1/1.1, 1/1.1)
-	M:rotateX(context.matrices, -5)
-	M:rotateY(context.matrices, -8)
-	M:moveZ(context.matrices, 0.05)
-	M:moveY(context.matrices, 0.028)
-	M:moveX(context.matrices, 0.025)
-	M:rotateZ(context.matrices, 0)
-	end
+if itemName == "mace" then
+	M:scale(mat, 1/1.1, 1/1.1, 1/1.1)
+	M:moveZ(mat, 0.05)
+	M:moveY(mat, -0.05)
+	M:rotateX(mat, 5)
+	M:rotateY(mat, 5.5)
+    M:moveX(mat, -0.05 * l)
 end
 
-
--- Fixes
-
-if I:isOf(context.item, Items:get("minecraft:mace")) then
-	M:scale(context.matrices, 1/1.1, 1/1.1, 1/1.1)
-	M:moveZ(context.matrices, 0.05)
-	M:moveY(context.matrices, -0.05)
-	M:moveX(context.matrices, 0)
-	M:rotateX(context.matrices, 5)
-	M:rotateY(context.matrices, 5.5)
-	M:rotateZ(context.matrices, 0)
-end
-
-if context.mainHand and I:isIn(context.item, Tags:getVanillaTag("shovels")) then
-	M:scale(context.matrices, 1/1.2, 1/1.2, 1/1.2)
-	M:rotateZ(context.matrices, 4)
-	M:rotateY(context.matrices, -4)
-	M:rotateX(context.matrices, -10)
-	M:moveY(context.matrices, 0.08)
-	M:moveZ(context.matrices, 0.08)
-	M:moveX(context.matrices, 0.02)
-end
-
-if not context.mainHand and I:isIn(context.item, Tags:getVanillaTag("shovels")) then
-	M:scale(context.matrices, 1/1.2, 1/1.2, 1/1.2)
-	M:rotateY(context.matrices, 4)
-	M:moveZ(context.matrices, -0.06)
-	M:rotateX(context.matrices, -15)
-	M:moveY(context.matrices, -0.08)
-	M:moveX(context.matrices, -0.02)
-end
-
-if I:isOf(context.item, Items:get("minecraft:trident")) and context.mainHand then
-	M:moveX(context.matrices, 0.1)
-	M:moveZ(context.matrices, -0.1)
-	else if I:isOf(context.item, Items:get("minecraft:trident")) then
-	M:moveX(context.matrices, -0.1)
-	M:moveZ(context.matrices, -0.1)
-	end
-end
-
-if I:isOf(context.item, Items:get("minecraft:mace")) and context.mainHand then
-	M:moveX(context.matrices, -0.05)
-	else if I:isOf(context.item, Items:get("minecraft:mace")) then
-	M:moveX(context.matrices, 0.05)
-	end
-end
-
--- Buckets
-if context.mainHand then
-if I:isOf(context.item, Items:get("minecraft:axolotl_bucket")) or I:isOf(context.item, Items:get("minecraft:milk_bucket")) or I:isOf(context.item, Items:get("minecraft:salmon_bucket")) or I:isOf(context.item, Items:get("minecraft:cod_bucket")) or I:isOf(context.item, Items:get("minecraft:tropical_fish_bucket")) or I:isOf(context.item, Items:get("minecraft:tadpole_bucket")) or I:isOf(context.item, Items:get("minecraft:pufferfish_bucket")) or I:isOf(context.item, Items:get("minecraft:water_bucket")) or I:isOf(context.item, Items:get("minecraft:lava_bucket")) then
-		M:rotateZ(context.matrices, 4)
-		M:rotateY(context.matrices, 12)
-		M:moveY(context.matrices, -0.15)
-		M:moveZ(context.matrices, -0.029)
-		M:moveX(context.matrices, 0.2)
-		end
-end
-
-if not context.mainHand then
-if I:isOf(context.item, Items:get("minecraft:axolotl_bucket")) or I:isOf(context.item, Items:get("minecraft:milk_bucket")) or I:isOf(context.item, Items:get("minecraft:salmon_bucket")) or I:isOf(context.item, Items:get("minecraft:cod_bucket")) or I:isOf(context.item, Items:get("minecraft:tropical_fish_bucket")) or I:isOf(context.item, Items:get("minecraft:tadpole_bucket")) or I:isOf(context.item, Items:get("minecraft:pufferfish_bucket")) or I:isOf(context.item, Items:get("minecraft:water_bucket")) or I:isOf(context.item, Items:get("minecraft:lava_bucket")) then
-		M:rotateZ(context.matrices, 4)
-		M:rotateY(context.matrices, -12)
-		M:moveY(context.matrices, -0.17)
-		M:moveZ(context.matrices, -0.09)
-		M:moveX(context.matrices, -0.1)
-	end
-end
-
-if context.mainHand and I:isOf(context.item, Items:get("minecraft:powder_snow_bucket")) then
-		M:rotateX(context.matrices, 4)
-		M:rotateZ(context.matrices, 12)
-		M:moveX(context.matrices, 0.1)
-		M:moveZ(context.matrices, 0.11)
-		M:moveY(context.matrices, -0.23)
-	else if I:isOf(context.item, Items:get("minecraft:powder_snow_bucket")) then
-		M:rotateX(context.matrices, 4)
-		M:rotateZ(context.matrices, -8)
-		M:moveX(context.matrices, -0.06)
-		M:moveZ(context.matrices, 0.06)
-		M:moveY(context.matrices, -0.26)
-	end
-end
-
--- Spears
-
-if I:isIn(context.item, Tags:getVanillaTag("spears")) and context.mainHand then
-	M:rotateZ(context.matrices, -10)
-	M:rotateX(context.matrices, -10)
-	M:rotateY(context.matrices, 0)
-	M:moveX(context.matrices, 0.060)
-	M:moveY(context.matrices, 0.080)
-	M:moveZ(context.matrices, -0.060)
-end
-
-if I:isIn(context.item, Tags:getVanillaTag("spears")) and not context.mainHand then
-	M:rotateZ(context.matrices, 10)
-	M:rotateX(context.matrices, -10)
-	M:rotateY(context.matrices, 0)
-	M:moveX(context.matrices, -0.1)
-	M:moveY(context.matrices, 0.05)
-	M:moveZ(context.matrices, -0.2)
+if itemName == "trident" then
+	M:moveX(mat, 0.1 * l)
+	M:moveZ(mat, -0.1 * l)
 end

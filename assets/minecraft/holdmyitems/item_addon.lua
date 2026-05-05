@@ -7,15 +7,15 @@ local itemName    = I:getName(context.item):gsub("minecraft:", "")
 local isUsingItem = P:isUsingItem(context.player)
 local useAction   = I:getUseAction(context.item)
 
--- === GET TAG ===
+-- === FUNCTIONS ===
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
         if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
             return tag
         end
     end
-    for tag, tagTab in pairs(ItemsTag.registry) do
-        for _, i in ipairs(tagTab) do
+    for tag, entry in pairs(ItemsTag.registry) do
+        for _, i in ipairs(entry) do
             if itemName:match(i) then
                 return tag
             end
@@ -24,7 +24,6 @@ local function getTag()
 end
 local tag = getTag()
 
--- === IS ITEM IN LIST ===
 local function isInList(list)
     for _, i in ipairs(list) do
         if itemName == i or tag == i then
@@ -34,16 +33,14 @@ local function isInList(list)
     return false
 end
 
--- === POSITION IN MAIN HAND AND OFF HAND ===
 local function posInHands(mainHand, offhand)
     return context.mainHand and mainHand or offhand
 end
 
--- === POSITION PROCESSING ===
 local move = {
-    x = function(v) M:moveX(context.matrices, (v or 0) * l) end,
-    y = function(v) M:moveY(context.matrices, v or 0)       end,
-    z = function(v) M:moveZ(context.matrices, v or 0)       end
+    x = function(v) M:moveX(context.matrices, (v or 0) * l)   end,
+    y = function(v) M:moveY(context.matrices, v or 0)         end,
+    z = function(v) M:moveZ(context.matrices, v or 0)         end
 }
 local rotate = {
     x = function(v) M:rotateX(context.matrices, v or 0)       end,
@@ -63,6 +60,7 @@ end
 -- === POSITIONS ===
 local positions   = {}
 local claimed     = { ["adjust"] = {}, ["desadjust"] = {} }
+
 local function positioning(pos)
     if claimed["adjust"][itemName] then return end
     local key = (pos[itemName] and itemName) or (pos[tag] and tag)
@@ -584,7 +582,6 @@ local function processPose(pos)
             end
         end
     end
-    return
 end
 
 local function condition(entry)
@@ -610,7 +607,6 @@ local function depositioning(pos)
             return
         end
     end
-    return
 end
 
 local packsDepositions = {
@@ -740,9 +736,6 @@ local packsDepositions = {
         slime_ball                = { s = {1/1.05}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"}, ops = "smr" },
         clay_ball                 = { m = {-0.055, 0.015, nil}, r = {-3, 0, 6} },
         heart_of_the_sea          = { s = {1/1.35}, m = {0.05, -0.07, nil, "zxy"}, r = {0, 5, nil, "xzy"} }
-    },
-    holdMyActions = {
-
     }
 }
 if w3di then
@@ -768,13 +761,13 @@ if w3di then
 
 elseif a3ds then
     local a3dsConditions = {
-        { glowing3Dtotem,   ItemsUndoAdjusts.a3ds.totem   },
-        { gousPoses,        ItemsUndoAdjusts.a3ds.shears  },
-        { better3Dbooks,    ItemsUndoAdjusts.a3ds.books   },
+        { glowing3Dtotem,   PackCompat.glowing3Dtotem },
+        { gousPoses,        PackCompat.gousPoses },
+        { better3Dbooks,    PackCompat.better3Dbooks },
     }
     for _, entry in ipairs(a3dsConditions) do
         if entry[1] and isInList(entry[2]) then
-            depositioning(entry[2])
+            depositioning(packsDepositions["a3ds"])
         end
     end
 end

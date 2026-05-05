@@ -1,31 +1,29 @@
 -- by omnis._.
 
+local mat         = context.matrices
 local l           = context.mainHand and 1 or -1
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
 local skinModel   = (${skinModel} and "Alex") or "Steve"
 
--- === GET TAG ===
+-- === FUNCTIONS ===
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
         if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
             return tag
         end
     end
-    for _, tagSource in ipairs({ItemsTag.tables, ItemsTag.registry}) do
-        for tag, matches in pairs(tagSource) do
-            for _, item in ipairs(matches) do
-                if itemName:match(item) then
-                    return tag
-                end
+    for tag, entry in pairs(ItemsTag.registry) do
+        for _, i in ipairs(entry) do
+            if itemName:match(i) then
+                return tag
             end
         end
     end
 end
 local tag = getTag()
 
--- === COMPATIBILITY CHECKING ===
 local itemCompatCache = { [0] = {}, [1] = {} }
-local function getItemCompat()
+local function getitemCompat()
     if itemCompatCache[0][itemName] then
         return false
     end
@@ -46,9 +44,8 @@ local function getItemCompat()
     itemCompatCache[0][itemName] = true
     return false
 end
-ItemCompat = getItemCompat()
+local itemCompat = getitemCompat()
 
--- === MATCH ITEM ===
 local function matched(items, matches)
     local list = type(items) == "table" and items or {items}
 
@@ -72,9 +69,8 @@ local function matched(items, matches)
     return false
 end
 
--- === RENDER AS BLOCK ===
 local function renderBlock(render, items)
-    if ItemCompat then return end
+    if itemCompat then return end
 
     for _, i in ipairs(items) do
         if matched(i) then
@@ -84,36 +80,41 @@ local function renderBlock(render, items)
     end
 end
 
--- === POSITION PROCESSING ===
 local function move(x, y, z)
-    M:moveX(context.matrices, (x or 0) * l)
-    M:moveY(context.matrices, y or 0)
-    M:moveZ(context.matrices, z or 0)
-end
-local function rotate(x, y, z)
-    M:rotateX(context.matrices, x or 0)
-    M:rotateY(context.matrices, (y or 0) * l)
-    M:rotateZ(context.matrices, (z or 0) * l)
-end
-local function scale(x, y, z)
-    if x ~= nil and y == nil and z == nil then
-        M:scale(context.matrices, x, x, x)
-    else
-        M:scale(context.matrices, x or 0, y or 0, z or 0)
+    if not itemCompat then
+        M:moveX(mat, (x or 0) * l)
+        M:moveY(mat, y or 0)
+        M:moveZ(mat, z or 0)
     end
 end
-
--- === ITEM TYPE CHECKING ===
-local isException   = matched(ItemLists.except, true) or ItemCompat or tag == "hanging_plants"
-local is2D          = matched(ItemLists.sprites2D, true) or tag == "spawn_eggs"
-local general2D     = not isException and is2D
-local general3D     = not (isException or is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain", "waxed.*door"}, true)
+local function rotate(x, y, z)
+    if not itemCompat then
+        M:rotateX(mat, x or 0)
+        M:rotateY(mat, (y or 0) * l)
+        M:rotateZ(mat, (z or 0) * l)
+    end
+end
+local function scale(x, y, z)
+    if not itemCompat then
+        if x ~= nil and y == nil and z == nil then
+            M:scale(mat, x, x, x)
+        else
+            M:scale(mat, x or 0, y or 0, z or 0)
+        end
+    end
+end
 
 -- === NOT RENDER AS BLOCK ===
 renderBlock(
     false,
     {"weeping_vines", "vine", "ladder", "signs", "tripwire_hook", "string", "bars", "resin_clump", "glass_panes", "sugar_cane"}
 )
+
+-- === ITEM TYPE CHECKING ===
+local isException   = matched(ItemLists.except, true) or itemCompat or tag == "hanging_plants"
+local is2D          = matched(ItemLists.sprites2D, true) or tag == "spawn_eggs"
+local general2D     = not isException and is2D
+local general3D     = not (isException or is2D) or matched({"_bulb", "crafting_table", "waxed.*rod", "waxed.*chest", "waxed.*chain", "waxed.*door"}, true)
 
 -- === GENERAL ADJUST ===
 if general3D then
@@ -326,7 +327,7 @@ local positions = {
     spawn_eggs_adjust           = { m = {-0.005, 0.03, nil} },
     spawn_eggs                  = { m = {-0.01, -0.04, nil} }
 }
-if not ItemCompat then
+if not itemCompat then
     local entry = positions[itemName] or positions[tag]
     if entry then
         if entry.m then move(entry.m[1], entry.m[2], entry.m[3])   end
@@ -797,7 +798,7 @@ local specialCases = {
     {
         pack = function() return not (w3di or refinedBuckets) end,
         items = {"milk_bucket"},
-        move = {-0.03, 0.15, -0.09}, rotate = {5, -40, 10}, scale = {0.55, 0.55, 0.55}
+        move = {0.02, 0, -0.3}
     },
     {
         pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
@@ -996,7 +997,7 @@ if useAction == "trident" then
     M:rotateY(mat, 60 * l)
     M:moveZ(mat, -0.025)
     M:moveX(mat, -0.015 * l)
-    M:rotateY(mat, -90 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:rotateY(mat, -94.5 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
     M:rotateX(mat, 180 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
     M:moveZ(mat, -0.08 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
     M:moveX(mat, 0.05 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
@@ -1056,6 +1057,19 @@ if matched("bucket", true) then
         M:moveY(mat, 0.1 * easedFoodCounter)
         M:moveZ(mat, 0.02 * easedFoodCounter)
     end
+end
+
+if
+    I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_cold"))
+    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_warm"))
+    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_temperate"))
+then
+    M:moveY(mat, 0.025)
+    M:moveX(mat, -0 * l)
+    M:moveZ(mat, -0.1)
+    M:rotateY(mat, 180)
+    M:rotateX(mat, -82.5)
+    M:rotateZ(mat, -20 * l)
 end
 
 if itemName == "dragon_head" then
