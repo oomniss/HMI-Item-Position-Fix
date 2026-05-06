@@ -57,7 +57,7 @@ ItemsTag = {
         "wooden_shelves", "hanging_signs", "signs", "copper_golem_statues", "lanterns", "buttons", "rails",
         "chiseled_bookshelf", "pickaxes", "axes", "hoes", "shovels", "bundles", "bookshelf_books", "music_discs",
         "boats", "chest_boats", "swords", "head_armor", "chest_armor", "leg_armor", "foot_armor", "arrows",
-        "ingots", "raw_materials", "nuggets", "harnesses", "dyes", "loom_patterns", "compasses", "spears"
+        "ingots", "raw_materials", "nuggets", "harnesses", "dyes", "compasses", "spears"
     },
     registry = {
         pressure_plates       = {"_pressure_plate"},
@@ -102,15 +102,13 @@ ItemsTag = {
         apples                = {"apple"},
         coals                 = {"coal$"},
         rods                  = {"fishing_rod", "on_a_stick"},
-        hangingPlants         = {"spore_blossom", "hanging_roots", "pale_hanging_moss", "weeping_vines"},
+        hanging_plants        = {"spore_blossom", "hanging_roots", "pale_hanging_moss", "weeping_vines"},
         berries               = {"berries"},
         beefs                 = {"beef", "porkchop", "rotten_flesh"},
         chickens              = {"^chicken$", "cooked_chicken"},
         keys                  = {"key"},
-        shards                = {"amethyst_shard", "echo_shard"}
-    },
-    tables = {
-        spawn_eggs_adjust     = ItemLists.spawnEggsAdjust,
+        shards                = {"amethyst_shard", "echo_shard"},
+        banner_patterns       = {"banner_pattern"}
     }
 }
 
@@ -163,7 +161,7 @@ PackCompat = {
         "coals", "raw_materials", "emerald", "lapis_lazuli", "diamond", "quartz", "honeycomb", "resin_clump", "rabbit_hide",
         "netherite_scrap", "stick", "flint", "bone", "leather", "nautilus_shell", "heart_of_the_sea", "blaze_rod",  "dyes",
         "ink_sacs", "balls", "prismarine_crystals", "bricks", "paper", "book", "firework_star", "powders", "nether_star",
-        "breeze_rod", "blaze_powder", "sugar", "rabbit_foot", "ghast_tear", "loom_patterns", "smithing_templates", "ingots",
+        "breeze_rod", "blaze_powder", "sugar", "rabbit_foot", "ghast_tear", "banner_patterns", "smithing_templates", "ingots",
         "keys", "enchanted_book", "echo_shard", "amethyst_shard", "nuggets"
     },
     wNature = {

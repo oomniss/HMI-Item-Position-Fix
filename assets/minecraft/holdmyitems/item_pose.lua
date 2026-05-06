@@ -205,7 +205,7 @@ local positions = {
     anvils                      = { m = {-0.11, -0.08, -0.13},    r = {10, 84.5, -16} },
     brewing_stand               = { m = {-0.11, -0.08, -0.13},    r = {10, 84.5, -16} },
     end_crystal                 = { m = {-0.125, -0.065, 0.23},   r = {nil, -29.5, nil} },
-    conduit                     = { m = {0.22, -0.22, -0.1},      r = {-5.5, -6, -1},      s = {1.3} },
+    conduit                     = { m = {0.275, -0.285, -0.125},      r = {-5.5, -6, -1},      s = {1.9} },
     scaffolding                 = { m = {0.13, -0.265, 0.025},    r = {nil, -23, nil} },
     flower_pot                  = { m = {0.19, -0.035, 0.05},     r = {-1.5, -24, nil},    s = {1.4} },
     wooden_shelves              = { m = {-0.315, -0.005, 0.28},   r = {0.5, 157, nil} },
@@ -324,7 +324,6 @@ local positions = {
     ghast_tear                  = { m = {nil, -0.105, nil} },
     smithing_templates          = { m = {-0.02, nil, 0.02} },
     -- Spawn Eggs
-    spawn_eggs_adjust           = { m = {-0.005, 0.03, nil} },
     spawn_eggs                  = { m = {-0.01, -0.04, nil} }
 }
 if not itemCompat then
@@ -608,7 +607,6 @@ if useAction == "spear" then
 end
 
 if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
-
     M:moveZ(mat, -0.05 * swing_rot)
     M:moveY(mat, -0.05 * swing_rot)
     M:rotateX(mat, 10 * swing_rot)
@@ -646,8 +644,8 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
     end
 
     if isShovel then
-        M:moveY(mat, 0.12 * swing_sword_tilt)
-        M:moveZ(mat, -0.05 * swing_sword_tilt)
+        M:moveZ(mat, 0.05 * swing_sword_tilt)
+        M:moveY(mat, 0.2 * swing_sword_tilt)
         M:rotateX(mat, 10 * swing_sword_tilt)
         M:rotateX(mat, -30 * swingOverall)
         M:rotateX(mat, 20 * swing_rot)

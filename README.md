@@ -12,7 +12,7 @@ This pack includes full compatibility support for the most popular 3D resource p
 
 | Compat | Pack                             | Details/Notes                                                                                                         |
 | ------ | -------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| ✅     | **Actually 3D Stuff** (A3DS)     | Incompatible with Fresh Flowers and Plants; Limited compatibility with Gous's Hand Poses                              |
+| ✅     | **Actually 3D Stuff** (A3DS)     | Limited compatibility with Gous's Hand Poses                                                                          |
 | ✅     | **Weskerson's 3D Items** (W3DI)  | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses; Incompatible with W3DFoods |
 | ✅     | **Weskerson's 3D Foods**         | Incompatible with Fresh Foods; Incompatible with W3DI                                                                 |
 | ✅     | **Weskerson's Nature**           | ---                                                                                                                   |
@@ -23,7 +23,7 @@ This pack includes full compatibility support for the most popular 3D resource p
 | ✅     | **Just 3D Armors**               | Incompatible with Glowing 3D Armors                                                                                   |
 | ✅     | **Glowing 3D Armors**            | Incompatible with Just 3D Armors                                                                                      |
 | ✅     | **Glowing 3D Totem**             | ---                                                                                                                   |
-| ✅     | **Fresh Flowers and Plants**     | Incompatible with A3DS                                                                                                |
+| ✅     | **Fresh Flowers and Plants**     | ---                                                                                                                   |
 | ✅     | **Fresh Foods**                  | Incompatible with Weskerson's 3D Foods                                                                                |
 | ✅     | **Fresh Ores And Ingots**        | ---                                                                                                                   |
 | ✅     | **Fresh Seeds**                  | ---                                                                                                                   |
@@ -32,9 +32,9 @@ This pack includes full compatibility support for the most popular 3D resource p
 | ✅     | **Fyoncle's 3D Trims**           | ---                                                                                                                   |
 | ✅     | **Classic Tools Fusion**         | ---                                                                                                                   |
 | ✅     | **Gous's Hand Poses**            | Currently incompatible with W3DI; Limited compatibility with A3DS                                                     |
-| ✅     | **NNE Action Swords**            | Incompatible with Beash's Swing Animations                                                                            |
-| ✅     | **Beash's Swing Animations**     | Incompatible with NNE Action Swords                                                                                   |
-| ✅     | **Hold My Actions**              | Incompatible with NNE Action Swords and Beash's Swing Animations (?)                                                  |
+| ✅     | **NNE Action Swords**            | Incompatible with Beash's Swing Animations and Hold My Actions                                                        |
+| ✅     | **Beash's Swing Animations**     | Incompatible with NNE Action Swords and Hold My Actions                                                               |
+| ✅     | **Hold My Actions**              | Incompatible with NNE Action Swords and Beash's Swing Animations                                                      |
 
 # 📸 Visual Demonstration
 
@@ -62,7 +62,7 @@ To ensure correct positioning, follow this load order:
 4. **Weskerson's 3D Items**
 5. **Weskerson's Nature**
 6. **HMI Item Position Fix**
-7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords)
+7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords) or **Hold My Actions**
 
 > For some reason, `Fyoncle's 3D Trims` must always be placed above `Just 3D Armors`, `R&V Torches`, `Refined Torches`, and `Fresh Foods`. This is necessary to ensure that item positioning and physics do not break. As a precaution, always keep `Fyoncle's 3D Trims` at the very top of your load order.
 

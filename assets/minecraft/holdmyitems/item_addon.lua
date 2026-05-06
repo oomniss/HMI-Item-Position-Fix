@@ -49,7 +49,6 @@ local rotate = {
 }
 local function transform(ops, position)
     local order = position[4] or "xyz"
-
     for i = 1, 3 do
         local axis = order:sub(i, i):lower()
         local val  = position[i]
@@ -57,7 +56,10 @@ local function transform(ops, position)
     end
 end
 
--- === POSITIONS ===
+local function condition(entry)
+    return (entry["condition"] ~= nil and entry["condition"]) or entry["condition"] == nil
+end
+
 local positions   = {}
 local claimed     = { ["adjust"] = {}, ["desadjust"] = {} }
 
@@ -66,37 +68,32 @@ local function positioning(pos)
     local key = (pos[itemName] and itemName) or (pos[tag] and tag)
 
     if pos[key] then
-        if (pos[key]["condition"] ~= nil and pos[key]["condition"]) or pos[key]["condition"] == nil then
+        if condition(pos[key]) then
             positions[itemName] = pos[key]
             claimed["adjust"][itemName] = true
         end
     end
-    return
 end
 
+-- === POSITIONS ===
 if classicToolsFusion then
     positioning({
         wooden_sword    = { m = {nil, -0.035, nil} },
         stone_sword     = { m = {nil, 0.025, nil} },
         copper_sword    = { m = {nil, -0.115, nil} },
         swords          = { m = {nil, -0.05, nil} },
-
         wooden_spear    = { m = {nil, nil, 0.04} },
         stone_spear     = { m = {nil, nil, 0.04} },
-
         wooden_axe      = { m = {nil, 0.055, 0.02} },
         stone_axe       = { m = {nil, 0.055, 0.02} },
         copper_axe      = { m = {nil, 0.04, 0.03} },
         netherite_axe   = { m = {nil, 0.04, 0.03} },
-
         wooden_shovel   = { m = {nil, 0.135, 0.025}, s = {0.9} },
         stone_shovel    = { m = {nil, 0.135, 0.025}, s = {0.9} },
         shovels         = { m = {0.005, 0.06, 0.025} },
-
         wooden_pickaxe  = { m = {nil, 0.045, 0.045} },
         stone_pickaxe   = { m = {nil, 0.025, 0.045} },
         pickaxes        = { m = {nil, nil, 0.03} },
-
         wooden_hoe      = { m = {nil, nil, 0.05} },
         stone_hoe       = { m = {nil, nil, 0.05} },
         copper_hoe      = { m = {nil, nil, 0.045} }
@@ -109,14 +106,16 @@ if rvTorches then
         comparator  = { m = {-0.045, -0.02, -0.035}, r = {-6, -16, 2.5}, renderAsBlock = false },
         torches     = { m = {0.01, -0.075, -0.035}, r = {-5, -5.5, nil} },
         lanterns    = { m = {0.005, -0.545, 0.225}, r = {-25, 21.5, nil} },
-        campfires   = { m = {-0.08, 0.185, 0.255}, r = {8, -9.5, -2.5} }
+        campfires   = { m = {-0.08, 0.185, 0.255}, r = {8, -9.5, -2.5} },
+        candles     = { m = {-0.05, nil, nil}, r = {-8, -10, 6}, renderAsBlock = false }
     })
 end
 
 if refinedTorches then
     positioning({
         torches   = { m = {0.035, -0.05, -0.04}, r = {-5, -4.5, nil} },
-        lanterns  = { m = {-0.04, -0.44, 0.3}, r = {-38, 9, nil} }
+        lanterns  = { m = {-0.04, -0.44, 0.3}, r = {-38, 9, nil} },
+        candles   = { m = {-0.025, 0.01, -0.01}, r = {nil, -9.5, nil}, renderAsBlock = false }
     })
 end
 
@@ -312,20 +311,20 @@ if fyoncle3Dtrims then
 end
 
 if a3ds then
-    local plantsWithBlocks = {
-        "saplings", "small_plants", "fern", "bushes", "small_flowers", "large_fern", "sunflower", "lilac",
-        "rose_bush", "peony", "pitcher_plant"
-    }
-    if isInList(plantsWithBlocks) then
-        renderAsBlock:put(I:getName(context.item), false)
-        transform(move, {nil, -0.04, -0.08})
-    else
+    if not freshFlowers then
+        local plantsWithBlocks = {
+            "saplings", "small_plants", "fern", "bushes", "small_flowers", "large_fern", "sunflower", "lilac",
+            "rose_bush", "peony", "pitcher_plant"
+        }
+        if isInList(plantsWithBlocks) then
+            renderAsBlock:put(I:getName(context.item), false)
+            transform(move, {nil, -0.04, -0.08})
+        end
         positioning({
             -- Natural Blocks
             vine                = { renderAsBlock = false },
             weeping_vines       = { renderAsBlock = false },
             twisting_vines      = { renderAsBlock = false },
-            frogspawn           = { m = {-0.06, 0.04, -0.025}, r = {-4, -5.5, -2}, renderAsBlock = false },
             bamboo              = { m = {0.005, nil, -0.03}, r = {-5.5, -5, -1}, s = {0.8}, renderAsBlock = false },
             mushrooms           = { m = {0.01, -0.03, -0.075}, r = {-5, -4, -1} },
             azalea              = { m = {0.065, -0.095, -0.17}, r = {-6, 29, nil} },
@@ -334,80 +333,84 @@ if a3ds then
             sugar_cane          = { m = {0.015, nil, -0.105}, r = {nil, -5.5, nil}, s = {0.9} },
             glow_lichen         = { m = {nil, -0.21, nil} },
             lily_pad            = { m = {nil, -0.215, 0.02}, r = {-109, nil, nil}, s = {1, 0.4, 1} },
-            ground_cover        = { m = {-0.035, -0.22, -0.085}, r = {-73.5, nil, nil} },
-            -- Functional Blocks
-            bell                = { m = {-0.165, -0.495, 0.17}, r = {-15.5, -4.5, -2.5} },
-            armor_stand         = { m = {nil, 0.03, nil} },
-            item_frame          = { m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
-            painting            = { m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
-            -- Tools & Utilities
-            bundles             = { m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil} },
-            writable_book       = { m = {nil, nil, -0.09} },
-            minecarts           = { m = {nil, 0.045, nil} },
-            ender_eye           = { m = {0.03, -0.01, -0.08}, r = {-4.5, -6, nil} },
-            ender_pearl         = { m = {0.01, -0.005, -0.08}, r = {-4.5, -6, nil} },
-            flint_and_steel     = { m = {0.015, 0.005, -0.095}, r = {10, 2.5, -2.5}, s = {0.9} },
-            bone_meal           = { m = {0.01, 0.07, -0.125}, r = {-5.5, -4, nil} },
-            shears              = { r = {-7, nil, 38.5} },
-            brush               = { m = {0.025, 0.05, -0.035}, r = {-4.5, -5.5, -1} },
-            lead                = { m = {0.125, -0.13, -0.215}, r = {-5.5, -4, -1}, s = {0.9} },
-            compass             = { m = {0.015, 0.06, -0.03}, r = {-6.5, -5, -2} },
-            map                 = { m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
-            paper               = { m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
-            firework_rocket     = { m = {0.035, -0.01, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
-            saddle              = { m = {-0.025, nil, nil} },
-            boats               = { r = {nil, -37.5, nil} },
-            chest_boats         = { r = {nil, -37.5, nil} },
-            goat_horn           = { m = {0.015, 0.09, nil}, r = {nil, -4, -1.5} },
-            -- Combat
-            totem_of_undying    = { m = {0.025, -0.02, -0.055} },
-            eggs                = { m = {0.03, nil, -0.085}, r = {-6, -6, nil}, s = {1.2} },
-            snowball            = { m = {0.015, -0.01, -0.085}, r = {-6, -6, nil} },
-            -- Ingredients
-            resin_clump         = { m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, renderAsBlock = false },
-            coals               = { m = {nil, nil, -0.025}, r = {-8, nil, nil}, s = {0.9} },
-            raw_materials       = { m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil} },
-            nuggets             = { m = {0.02, 0.03, -0.045}, r = {-6, -5, nil} },
-            ingots              = { m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
-            bricks              = { m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
-            string              = { m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
-            smithing_templates  = { m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil} },
-            keys                = { m = {0.015, nil, -0.085}, r = {-6, -5.5, nil} },
-            emerald             = { m = {0.015, -0.035, -0.085}, r = {-6.5, -3.5, nil} },
-            lapis_lazuli        = { m = {nil, -0.06, -0.105}, r = {-6, -5.5, nil },
-            diamond             = { m = {0.015, -0.055, -0.09}, r = {-7.5, -3.5, nil} },
-            quartz              = { m = {0.005, 0.07, -0.035}, r = {-6, -7, nil}, s = {0.7} },
-            shards              = { m = {0.025, -0.01, -0.055}, r = {-4.5, -5.5, nil} },
-            netherite_scrap     = { m = {-0.045, -0.035, -0.13}, r = {-6, -5, -1} },
-            flint               = { m = {0.03, 0.06, -0.08}, r = {14.5, 12.5, -8} },
-            book                = { m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
-            enchanted_book      = { m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
-            stick               = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
-            blaze_rod           = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
-            breeze_rod          = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
-            bone                = { m = {0.025, -0.04, -0.035}, r = {-5, -5.5, nil} },
-            leather             = { m = {-0.01, -0.03, -0.08}, r = {-5.5, -4, -1} },
-            rabbit_hide         = { m = {-0.01, -0.03, -0.08}, r = {-5.5, -4, -1} },
-            honeycomb           = { m = {0.01, 0.04, -0.05}, r = {-5, -5, nil} },
-            ink_sacs            = { m = {0.015, 0.015, -0.085}, r = {-4, -4.5, -1} },
-            clay_ball           = { m = {posInHands(0, 0.06), nil, nil} },
-            fire_charge         = { m = {0.005, 0.04, 0.005}, r = {-6, -5, nil} },
-            heart_of_the_sea    = { m = {0.005, 0.04, 0.005}, r = {-6, -5, nil} },
-            slime_ball          = { m = {0.02, 0.005, -0.09}, r = {-4, -3.5, nil} },
-            prismarine_shard    = { m = {0.02, nil, -0.09}, r = {-6.5, -6, -1.5} },
-            prismarine_crystals = { m = {0.025, 0.01, -0.14}, r = {-7.5, -6.5, nil}, s = {1.15} },
-            nautilus_shell      = { m = {0.025, -0.015, -0.04}, r = {-5.5, -5, nil} },
-            nether_star         = { m = {0.01, -0.135, -0.035}, r = {-6, -5.5, -2} },
-            dyes                = { m = {0.02, nil, -0.105}, r = {-4, -5.5, nil} },
-            firework_star       = { m = {0.03, 0.01, -0.01}, r = {-4.5, -5, -1.5} },
-            magma_cream         = { m = {0.03, 0.01, -0.01}, r = {-4.5, -5, -1.5} },
-            powders             = { m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
-            blaze_powder        = { m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
-            rabbit_foot         = { m = {-0.01, -0.005, -0.08}, r = {-5, -4.5, nil} },
-            ghast_tear          = { m = {0.02, -0.02, -0.05}, r = {-5, -5, -2}, s = {1.3} },
-            loom_patterns       = { m = {nil, nil, -0.175} } }
+            ground_cover        = { m = {-0.035, -0.22, -0.085}, r = {-73.5, nil, nil} }
         })
     end
+    positioning({
+        -- Natural Blocks
+        frogspawn           = { m = {-0.06, 0.04, -0.025}, r = {-4, -5.5, -2}, renderAsBlock = false },
+        -- Functional Blocks
+        bell                = { m = {-0.005, -0.525, 0.145}, r = {-28, nil, nil} },
+        armor_stand         = { m = {nil, 0.03, nil} },
+        item_frame          = { m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
+        painting            = { m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
+        -- Tools & Utilities
+        bundles             = { m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil} },
+        writable_book       = { m = {nil, nil, -0.09} },
+        minecarts           = { m = {nil, 0.045, nil} },
+        ender_eye           = { m = {0.03, -0.01, -0.08}, r = {-4.5, -6, nil} },
+        ender_pearl         = { m = {0.01, -0.005, -0.08}, r = {-4.5, -6, nil} },
+        flint_and_steel     = { m = {0.015, 0.005, -0.095}, r = {10, 2.5, -2.5}, s = {0.9} },
+        bone_meal           = { m = {0.01, 0.07, -0.125}, r = {-5.5, -4, nil} },
+        shears              = { r = {-7, nil, 38.5} },
+        brush               = { m = {0.025, 0.05, -0.035}, r = {-4.5, -5.5, -1} },
+        lead                = { m = {0.125, -0.13, -0.215}, r = {-5.5, -4, -1}, s = {0.9} },
+        compass             = { m = {0.015, 0.06, -0.03}, r = {-6.5, -5, -2} },
+        map                 = { m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
+        paper               = { m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
+        firework_rocket     = { m = {0.035, -0.01, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
+        saddle              = { m = {-0.025, nil, nil} },
+        boats               = { r = {nil, -37.5, nil} },
+        chest_boats         = { r = {nil, -37.5, nil} },
+        goat_horn           = { m = {0.015, 0.09, nil}, r = {nil, -4, -1.5} },
+        -- Combat
+        totem_of_undying    = { m = {0.025, -0.02, -0.055} },
+        eggs                = { m = {0.03, nil, -0.085}, r = {-6, -6, nil}, s = {1.2} },
+        snowball            = { m = {0.015, -0.01, -0.085}, r = {-6, -6, nil} },
+        -- Ingredients
+        resin_clump         = { m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil}, renderAsBlock = false },
+        coals               = { m = {nil, nil, -0.025}, r = {-8, nil, nil}, s = {0.9} },
+        raw_materials       = { m = {-0.005, -0.055, -0.095}, r = {-7, -4.5, nil} },
+        nuggets             = { m = {0.02, 0.03, -0.045}, r = {-6, -5, nil} },
+        ingots              = { m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
+        bricks              = { m = {-0.01, 0.005, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
+        string              = { m = {0.05, -0.005, -0.075}, r = {-4.5, -4.5, nil}, renderAsBlock = false },
+        smithing_templates  = { m = {-0.095, -0.11, -0.14}, r = {-5.5, -5, nil} },
+        keys                = { m = {0.015, nil, -0.085}, r = {-6, -5.5, nil} },
+        emerald             = { m = {0.015, -0.035, -0.085}, r = {-6.5, -3.5, nil} },
+        lapis_lazuli        = { m = {nil, -0.06, -0.105}, r = {-6, -5.5, nil} },
+        diamond             = { m = {0.015, -0.055, -0.09}, r = {-7.5, -3.5, nil} },
+        quartz              = { m = {0.005, 0.07, -0.035}, r = {-6, -7, nil}, s = {0.7} },
+        shards              = { m = {0.025, -0.01, -0.055}, r = {-4.5, -5.5, nil} },
+        netherite_scrap     = { m = {-0.045, -0.035, -0.13}, r = {-6, -5, -1} },
+        flint               = { m = {0.03, 0.06, -0.08}, r = {14.5, 12.5, -8} },
+        book                = { m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
+        enchanted_book      = { m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
+        stick               = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
+        blaze_rod           = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
+        breeze_rod          = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
+        bone                = { m = {0.025, -0.04, -0.035}, r = {-5, -5.5, nil} },
+        leather             = { m = {-0.01, -0.03, -0.08}, r = {-5.5, -4, -1} },
+        rabbit_hide         = { m = {-0.01, -0.03, -0.08}, r = {-5.5, -4, -1} },
+        honeycomb           = { m = {0.01, 0.04, -0.05}, r = {-5, -5, nil} },
+        ink_sacs            = { m = {0.015, 0.015, -0.085}, r = {-4, -4.5, -1} },
+        clay_ball           = { m = {posInHands(0, 0.06), nil, nil} },
+        fire_charge         = { m = {0.005, 0.04, 0.005}, r = {-6, -5, nil} },
+        heart_of_the_sea    = { m = {0.005, 0.04, 0.005}, r = {-6, -5, nil} },
+        slime_ball          = { m = {0.02, 0.005, -0.09}, r = {-4, -3.5, nil} },
+        prismarine_shard    = { m = {0.02, nil, -0.09}, r = {-6.5, -6, -1.5} },
+        prismarine_crystals = { m = {0.025, 0.01, -0.14}, r = {-7.5, -6.5, nil}, s = {1.15} },
+        nautilus_shell      = { m = {0.025, -0.015, -0.04}, r = {-5.5, -5, nil} },
+        nether_star         = { m = {0.01, -0.135, -0.035}, r = {-6, -5.5, -2} },
+        dyes                = { m = {0.02, nil, -0.105}, r = {-4, -5.5, nil} },
+        firework_star       = { m = {0.03, 0.01, -0.01}, r = {-4.5, -5, -1.5} },
+        magma_cream         = { m = {0.03, 0.01, -0.01}, r = {-4.5, -5, -1.5} },
+        powders             = { m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
+        blaze_powder        = { m = {-0.01, -0.02, -0.095}, r = {-8.5, nil, nil} },
+        rabbit_foot         = { m = {-0.01, -0.005, -0.08}, r = {-5, -4.5, nil} },
+        ghast_tear          = { m = {0.02, -0.02, -0.05}, r = {-5, -5, -2}, s = {1.3} },
+        banner_patterns     = { m = {nil, nil, -0.175} }
+    })
 end
 
 if w3di then
@@ -559,7 +562,7 @@ if pose then
 end
 
 -- === DE-POSITIONS ===
-local function processPose(pos)
+local function process(pos)
     if pos["renderAsBlock"] ~= nil then
         renderAsBlock:put(I:getName(context.item), pos["renderAsBlock"])
     end
@@ -584,10 +587,6 @@ local function processPose(pos)
     end
 end
 
-local function condition(entry)
-    return (entry["condition"] ~= nil and entry["condition"]) or entry["condition"] == nil
-end
-
 local function depositioning(pos)
     if claimed["desadjust"][itemName] then return end
     local key = (pos[itemName] and itemName) or (pos[tag] and tag)
@@ -596,13 +595,13 @@ local function depositioning(pos)
         if pos[key].cases then
             for _, case in ipairs(pos[key].cases) do
                 if condition(case) then
-                    processPose(case)
-                    claimed["desadjust"][itemName] = true
-                    return
+                    process(case)
                 end
             end
+            claimed["desadjust"][itemName] = true
+            return
         elseif condition(pos[key]) then
-            processPose(pos[key])
+            process(pos[key])
             claimed["desadjust"][itemName] = true
             return
         end
@@ -615,15 +614,15 @@ local packsDepositions = {
         shears                    = { m = {nil, -0.025, -0.065}, r = {-14.5, 2.5, -35.5} },
         writable_book             = { m = {nil, -0.1, nil}, r = {-25, nil, nil} },
         -- Combat
-        totem_of_undying          = { r = {10, 190, 110, "yzx"} },
+        totem_of_undying          = { r = {10, 190, 110, "yzx"} }
     },
     w3di = {
         -- Functional Blocks
         torches                   = { s = {1/1.35}, r = {0, 5, nil, "zyx"}, m = {-0.07, 0.085, nil}, ops = "srm", condition = itemName ~= "copper_torch" },
         lanterns                  = {
             cases = {
-                [1] = { condition = refinedTorches, m = {0.045, 0.015, -0.07}, r = {6, -13, nil}, s = {0.6} },
-                [2] = { condition = rvTorches, m = {-0.065, 0.08, 0.18}, r = {-11, nil, nil}, s = {0.6} }
+                [1]               = { condition = refinedTorches, m = {0.045, 0.015, -0.07}, r = {6, -13, nil}, s = {0.6} },
+                [2]               = { condition = rvTorches, m = {-0.065, 0.08, 0.18}, r = {-11, nil, nil}, s = {0.6} }
             }
         },
         campfires                 = { s = {1/1.35, 1/1.35, 1/1.5}, r = {-7, -15, 75, "yzx"}, m = {-0.1, -0.15, -0.1, "xzy"}, ops = "srm" },
@@ -635,16 +634,16 @@ local packsDepositions = {
         music_discs               = { s = {1/1.35}, r = {-50, -95, 50, "zyx"}, m = {0.13, 0.205, 0.08, "zyx"}, ops = "srm" },
         milk_bucket               = {
             cases = {
-                [1] = { condition = isUsingItem, m = {-0.1, -0.03, 0, "zxy"}, r = {-35, -10 * d, -10, "zyx"}, s = {1/1.05}, ops = "mrs" },
-                [2] = { s = {1/1.05}, r = {209, -187, -100, "zyx"}, m = {0.01, -0.1, 0.15, "zyx"}, ops = "srm" }
+                [1]               = { condition = isUsingItem, m = {-0.1, -0.03, 0, "zxy"}, r = {-35, -10 * d, -10, "zyx"}, s = {1/1.05}, ops = "mrs" },
+                [2]               = { s = {1/1.05}, r = {209, -187, -100, "zyx"}, m = {0.01, -0.1, 0.15, "zyx"}, ops = "srm" }
             }
         },
         buckets                   = { s = {1/1.05}, r = {-165, -25, -55, "yzx"}, m = {0.12, -0.08, 0.1, "zyx"}, ops = "srm" },
         bundles                   = { s = {1/1.3}, m = {0.05, 0.05, 0.01, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" },
         shears                    = {
             cases = {
-                [1] = { condition = a3ds and not gousPoses, s = {1/1.3, 1/1.4, 1/1.3}, m = {0.1, -0.05, nil, "zxy"}, r = {25, 30, 45, "yxz"}, ops = "smr" },
-                [2] = { condition = a3ds and gousPoses, m = {nil, -0.155, -0.15}, r = {-7, 10, -32.5}, s = {0.9} }
+                [1]               = { condition = a3ds and not gousPoses, s = {1/1.3, 1/1.4, 1/1.3}, m = {0.1, -0.05, nil, "zxy"}, r = {25, 30, 45, "yxz"}, ops = "smr" },
+                [2]               = { condition = a3ds and gousPoses, m = {nil, -0.155, -0.15}, r = {-7, 10, -32.5}, s = {0.9} }
             }
         },
         elytra                    = { m = {0.025, 0.095, 0.16}, r = {58.5, -1.5, -1} },
@@ -662,22 +661,22 @@ local packsDepositions = {
         goat_horn                 = { s = {1/1.3}, m = {0.05, -0.05, nil, "zxy"}, r = {nil, nil, 5}, ops = "smr" },
         firework_rocket           = {
             cases = {
-                [1] = { s = {1/1.2}, m = {0.03, 0, nil, "zxy"}, ops = "smr" },
-                [2] = { s = {1/1.05}, m = {0.05, 0.05, nil, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" }
+                [1]               = { s = {1/1.2}, m = {0.03, 0, nil, "zxy"}, ops = "smr" },
+                [2]               = { s = {1/1.05}, m = {0.05, 0.05, nil, "zxy"}, r = {-95, 0, 5, "yxz"}, ops = "smr" }
             }
         },
         writable_book             = {
             cases = {
-                [1] = { condition = a3ds and not better3Dbooks, s = {1/1.1}, r = {-4, 30, 7, "yxz"}, m = {0.05, -0.05, 0.03, "yzx"}, ops = "srm" },
-                [2] = { condition = a3ds and better3Dbooks, s = {1/1.1}, m = {0.02, -0.055, -0.055}, r = {1.5, nil, 6} },
-                [3] = { condition = not a3ds and better3Dbooks, s = {1/1.1}, r = {-4, 30, 7, "yxz"}, m = {0.05, -0.05, 0.03, "yzx"}, ops = "srm" }
+                [1]               = { condition = a3ds and not better3Dbooks, s = {1/1.1}, r = {-4, 30, 7, "yxz"}, m = {0.05, -0.05, 0.03, "yzx"}, ops = "srm" },
+                [2]               = { condition = a3ds and better3Dbooks, s = {1/1.1}, m = {0.02, -0.055, -0.055}, r = {1.5, nil, 6} },
+                [3]               = { condition = not a3ds and better3Dbooks, s = {1/1.1}, r = {-4, 30, 7, "yxz"}, m = {0.05, -0.05, 0.03, "yzx"}, ops = "srm" }
             }
         },
         -- Combat
         totem_of_undying          = {
             cases = {
-                [1] = { condition = glowing3Dtotem and not a3ds, s = {1/1.2}, m = {0.01, 0.01, 0, "yzx"}, r = {-55, 4, 9, "yxz"}, ops = "smr" },
-                [2] = { condition = glowing3Dtotem and a3ds, s = {1/1.2}, m = {-0.015, -0.005, -0.02}, r = {51, 140, 30.5}, ops = "smr" }
+                [1]               = { condition = not glowing3Dtotem ~= not a3ds, s = {1/1.2}, m = {0.01, 0.01, 0, "yzx"}, r = {-55, 4, 9, "yxz"}, ops = "smr" },
+                [2]               = { condition = glowing3Dtotem and a3ds, s = {1/1.2}, m = {-0.015, -0.005, -0.02}, r = {51, 140, 30.5}, ops = "smr" }
             }
         },
         nautilus_armors           = { s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
@@ -727,7 +726,7 @@ local packsDepositions = {
         nautilus_shell            = { s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
         powders                   = { s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
         blaze_powder              = { s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
-        loom_patterns             = { s = {1/1.4}, r = {180, 130, nil, "zxy"}, m = {-0.1, 0.15, nil, "zyx"}, ops = "srm" },
+        banner_patterns           = { s = {1/1.4}, r = {180, 130, nil, "zxy"}, m = {-0.1, 0.15, nil, "zyx"}, ops = "srm" },
         fire_charge               = { s = {1/1.25}, r = {nil, nil, 5}, ops = "srm" },
         stick                     = { m = {0.05, 0.07, 0.05, "yzx"}, r = {4, nil, -85, "zxy"} },
         bone                      = { m = {0.05, 0.07, 0.05, "yzx"}, r = {4, nil, -85, "zxy"} },
@@ -758,12 +757,15 @@ if w3di then
             depositioning(packsDepositions["w3di"])
         end
     end
+end
 
-elseif a3ds then
+if a3ds then
     local a3dsConditions = {
-        { glowing3Dtotem,   PackCompat.glowing3Dtotem },
-        { gousPoses,        PackCompat.gousPoses },
-        { better3Dbooks,    PackCompat.better3Dbooks },
+        { freshFlowers,                  PackCompat.freshFlowersPlants },
+        -- without W3DI
+        { glowing3Dtotem and not w3di,   PackCompat.glowing3Dtotem },
+        { gousPoses and not w3di,        PackCompat.gousPoses },
+        { better3Dbooks and not w3di,    PackCompat.better3Dbooks },
     }
     for _, entry in ipairs(a3dsConditions) do
         if entry[1] and isInList(entry[2]) then
@@ -780,24 +782,43 @@ local playerPitch   = P:getPitch(context.player)
 local ywAngle       = (context.mainHand and yawAngle) or yawAngleO
 local ptAngle       = (context.mainHand and pitchAngle) or pitchAngleO
 
-if w3di and a3ds and (itemName == "name_tag" or tag == "loom_patterns") then
-    M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5), 0, -0.13, 0)
-end
-
-if itemName == "shears" and gousPoses then
-    if not context.bl then
-        M:moveZ(mat, 0.1)
-        M:rotateY(mat, 180)
+if a3ds then
+    if freshFlowers then
+        if
+            itemName == "pale_hanging_moss"
+            or itemName == "weeping_vines"
+            or itemName == "twisting_vines"
+            or itemName == "vine"
+            or itemName == "hanging_roots"
+        then
+            M:rotateX(mat, -(M:clamp(P:getPitch(context.player) / 1, -45, 90) + ptAngle + ywAngle * 1), 0, -0.05, 0)
+            M:rotateX(mat, 75)
+            M:moveZ(mat, 0.03)
+            M:moveY(mat, 0.2)
+        elseif itemName == "glow_lichen" then
+            M:rotateZ(mat, 30 * l)
+            M:rotateX(mat, -(M:clamp(P:getPitch(context.player) / 1, -45, 90) + ptAngle + ywAngle * 1), 0, -0.05, 0)
+            M:moveZ(mat, 0.03)
+            M:rotateX(mat, 75)
+        end
     end
-    M:rotateZ(mat, 45)
+    if itemName == "bell" then
+        M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
+        M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
+    end
+    if w3di and (itemName == "name_tag" or tag == "banner_patterns") then
+        M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5), 0, -0.13, 0)
+    end
 end
 
-if rvTorches and tag == "candles" then
-    renderAsBlock:put(I:getName(context.item), false)
-    M:moveX(mat, -0.05 * l)
-    M:rotateX(mat, -8)
-    M:rotateY(mat, -10 * l)
-    M:rotateZ(mat, 6 * l)
+if gousPoses then
+    if itemName == "shears" then
+        if not context.bl then
+            M:moveZ(mat, 0.1)
+            M:rotateY(mat, 180)
+        end
+        M:rotateZ(mat, 45)
+    end
 end
 
 if (rvTorches or refinedTorches or w3di) and tag == "lanterns" then
@@ -815,13 +836,4 @@ if glowing3Darmors then
         M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5, 0, -0.13, 0)
 	    M:rotateZ(mat, ywAngle * -0.7, -0.1 * l, 0, 0.1)
     end
-end
-
-if itemName == "bell" and a3ds then
-    M:moveX(mat, 0.15 * l)
-    M:moveY(mat, -0.05)
-    M:moveZ(mat, -0.1)
-    M:scale(mat, 1.2, 1.2, 1.2)
-    M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
-    M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
 end
