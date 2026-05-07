@@ -18,6 +18,6 @@
     just3Darmors:       "HMIItemPositionFix.ResourcePacksCompatibility.Just3DArmors",
     holdMyActions:      "HMIItemPositionFix.ResourcePacksCompatibility.HoldMyActions",
 
-    actionsStuffPoses:  "HMIItemPositionFix.General.ActionStuffToolsPoses"
+    alternative:        "HMIItemPositionFix.General.PoseStyle"
   }
 }

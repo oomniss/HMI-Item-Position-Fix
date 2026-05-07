@@ -5,7 +5,7 @@
   conf: {
     General: {
       SkinModel: false,
-      ActionStuffToolsPoses: false,
+      PoseStyle: false,
       InspectKeybind: {
         type: "integer",
         default: 74

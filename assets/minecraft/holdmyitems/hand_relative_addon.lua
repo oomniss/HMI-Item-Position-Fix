@@ -62,6 +62,7 @@ ItemsTag = {
     registry = {
         pressure_plates       = {"_pressure_plate"},
         carpets               = {"_carpet"},
+        beds                  = {"bed"},
         amethyst_cristals     = {"amethyst_bud", "amethyst_cluster"},
         small_plants          = {"_grass", "crimson_roots", "warped_roots", "nether_sprouts"},
         mushrooms             = {"_mushroom", "_fungus$"},
@@ -91,7 +92,7 @@ ItemsTag = {
         fishes                = {"cod$","cooked_cod", "salmon$", "cooked_salmon", "tropical_fish$"},
         spider_eyes           = {"spider_eye"},
         carrots               = {"carrot"},
-        bricks                = {"brick$", "nether_brick", "resin_brick"},
+        bricks                = {"brick$", "nether_brick", "resin_brick$"},
         ink_sacs              = {"ink_sac"},
         scutes                = {"_scute"},
         balls                 = {"slime_ball", "clay_ball", "magma_cream"},
@@ -128,7 +129,7 @@ PackCompat = {
     fyoncle3Dtrims      = {"smithing_templates"},
     rvChests            = {"chests", "shulker_boxes", "barrel"},
     rvTorches           = {"torches", "lanterns", "repeater", "comparator", "campfires", "candles"},
-    refinedTorches      = {"torches", "lanterns", "campfires", "candles"},
+    refinedTorches      = {"torches", "lanterns", "campfires", "candles", "repeater", "comparator"},
     freshFoods = {
         "apples", "chorus_fruit", "melon_slice", "carrots", "potatoes", "beetroot", "spider_eye", "berries", "bowl_foods", "cake",
         "bread", "cookie", "pumpkin_pie", "beefs", "chickens", "muttons", "rabbits", "pufferfish", "dried_kelp", "fishes", "pressure_plates"

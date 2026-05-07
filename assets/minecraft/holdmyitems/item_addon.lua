@@ -113,9 +113,11 @@ end
 
 if refinedTorches then
     positioning({
-        torches   = { m = {0.035, -0.05, -0.04}, r = {-5, -4.5, nil} },
-        lanterns  = { m = {-0.04, -0.44, 0.3}, r = {-38, 9, nil} },
-        candles   = { m = {-0.025, 0.01, -0.01}, r = {nil, -9.5, nil}, renderAsBlock = false }
+        torches       = { m = {0.035, -0.05, -0.04}, r = {-5, -4.5, nil} },
+        lanterns      = { m = {-0.04, -0.44, 0.3}, r = {-38, 9, nil} },
+        candles       = { m = {-0.025, 0.01, -0.01}, r = {nil, -9.5, nil}, renderAsBlock = false },
+        repeater      = { m = {-0.02, -0.02, -0.06}, r = {-10, -49, -4}, renderAsBlock = false },
+        comparator    = { m = {-0.02, -0.02, -0.06}, r = {-10, -49, -4}, renderAsBlock = false },
     })
 end
 
@@ -628,8 +630,8 @@ local packsDepositions = {
         campfires                 = { s = {1/1.35, 1/1.35, 1/1.5}, r = {-7, -15, 75, "yzx"}, m = {-0.1, -0.15, -0.1, "xzy"}, ops = "srm" },
         armor_stand               = { s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
         -- Redstone Blocks
-        repeater                  = { s = {1/1.35}, r = {-7, -35, 85, "yzx"}, m = {-0.15, -0.15, 0.1, "xzy"}, ops = "srm", condition = rvTorches },
-        comparator                = { s = {1/1.35}, r = {-7, -35, 85, "yzx"}, m = {-0.15, -0.15, 0.1, "xzy"}, ops = "srm", condition = rvTorches },
+        repeater                  = { s = {1/1.35}, r = {-7, -35, 85, "yzx"}, m = {-0.15, -0.15, 0.1, "xzy"}, ops = "srm", condition = rvTorches or refinedTorches },
+        comparator                = { s = {1/1.35}, r = {-7, -35, 85, "yzx"}, m = {-0.15, -0.15, 0.1, "xzy"}, ops = "srm", condition = rvTorches or refinedTorches },
         -- Tools & Utilities
         music_discs               = { s = {1/1.35}, r = {-50, -95, 50, "zyx"}, m = {0.13, 0.205, 0.08, "zyx"}, ops = "srm" },
         milk_bucket               = {

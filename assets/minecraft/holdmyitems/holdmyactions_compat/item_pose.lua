@@ -272,8 +272,8 @@ local positions = {
     wolf_armor                  = { m = {-0.005, -0.285, -0.015} },
     snowball                    = { m = {nil, -0.06, nil} },
     eggs                        = { m = {nil, -0.06, nil} },
-    arrows                      = { m = {nil, nil, 0.02} },
-    bow                         = { m = {-0.03, nil, 0.07},       r = {nil, -25.5, -10.5} },
+    arrows                      = { m = {nil, -0.09, 0.02} },
+    bow                         = { m = {-0.095, nil, 0.07},       r = {nil, -25.5, -10.5} },
     crossbow                    = { m = {-0.12, 0.085, 0.065},    r = {nil, -11, nil} },
     -- Foods & Drinks
     potatoes                    = { m = {nil, -0.04, 0.015} },
@@ -778,7 +778,7 @@ local specialCases = {
     {
         pack = function() return refinedBuckets and w3di end,
         items = {"milk_bucket"},
-        move = {0.01, 0.17, -0.1}, scale = {0.8, 0.8, 0.8}
+        move = {0.15, 0.15, -0.15}, rotate = {nil, nil, -1.5}, scale = {0.8, 0.8, 0.8}
     },
     {
         pack = function() return w3di and not refinedBuckets end,
@@ -1104,7 +1104,7 @@ if not I:isEmpty(context.item) and not I:isBlock(context.item) then
     if not (
         tag == "swords" or tag == "shovels" or tag == "pickaxes" or tag == "axes" or tag == "hoes" or tag == "buckets" or
         itemName == "mace" or itemName == "trident" or itemName == "stick" or itemName == "bamboo" or itemName == "bone"
-    ) then
+    ) or (tag == "buckets" and refinedBuckets) then
         M:moveZ(mat, 0.1)
         M:moveX(mat, -0.073 * l)
         M:rotateY(mat, -5 * l)
@@ -1137,12 +1137,30 @@ if context.mainHand then
         M:moveY(mat, 0.080)
         M:moveZ(mat, -0.060)
     end
-    if itemName == "bucket" then
-        M:moveX(mat, -0.2)
-        M:moveZ(mat, 0.029)
-        M:moveY(mat, 0.15)
-        M:rotateY(mat, -12)
-        M:rotateZ(mat, -4)
+    if refinedBuckets then
+        if itemName == "powder_snow_bucket" then
+            M:rotateX(mat, 4)
+            M:rotateZ(mat, 12)
+            M:moveX(mat, 0.1)
+            M:moveZ(mat, 0.11)
+            M:moveY(mat, -0.23)
+        elseif tag == "buckets" and itemName ~= "bucket" then
+            M:rotateZ(mat, 4)
+            M:rotateY(mat, 12)
+            M:moveY(mat, -0.15)
+            M:moveZ(mat, -0.029)
+            M:moveX(mat, 0.2)
+        end
+        M:moveX(mat, -0.025)
+        M:rotateY(mat, -6)
+    else
+        if itemName == "bucket" then
+            M:moveX(mat, -0.2)
+            M:moveZ(mat, 0.029)
+            M:moveY(mat, 0.15)
+            M:rotateY(mat, -12)
+            M:rotateZ(mat, -4)
+        end
     end
 else
     if tag == "swords" or tag == "pickaxes" or tag == "axes" or tag == "hoes" or itemName == "stick" then
@@ -1168,12 +1186,28 @@ else
         M:moveY(mat, 0.05)
         M:moveZ(mat, -0.2)
     end
-    if itemName == "bucket" then
-        M:moveX(mat, 0.1)
-        M:moveZ(mat, 0.09)
-        M:moveY(mat, 0.17)
-        M:rotateY(mat, 12)
-        M:rotateZ(mat, -4)
+    if refinedBuckets then
+        if itemName == "powder_snow_bucket" then
+            M:rotateX(context.matrices, 4)
+            M:rotateZ(context.matrices, -8)
+            M:moveX(context.matrices, -0.06)
+            M:moveZ(context.matrices, 0.06)
+            M:moveY(context.matrices, -0.26)
+        elseif tag == "buckets" then
+            M:rotateX(context.matrices, 4)
+            M:rotateZ(context.matrices, 12)
+            M:moveX(context.matrices, 0.1)
+            M:moveZ(context.matrices, 0.11)
+            M:moveY(context.matrices, -0.23)
+        end
+    else
+       if itemName == "bucket" then
+            M:moveX(mat, 0.1)
+            M:moveZ(mat, 0.09)
+            M:moveY(mat, 0.17)
+            M:rotateY(mat, 12)
+            M:rotateZ(mat, -4)
+        end
     end
 end
 

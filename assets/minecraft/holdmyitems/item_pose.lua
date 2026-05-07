@@ -272,7 +272,7 @@ local positions = {
     wolf_armor                  = { m = {-0.005, -0.285, -0.015} },
     snowball                    = { m = {nil, -0.06, nil} },
     eggs                        = { m = {nil, -0.06, nil} },
-    arrows                      = { m = {nil, nil, 0.02} },
+    arrows                      = { m = {nil, -0.09, -0.02} },
     bow                         = { m = {-0.03, nil, 0.07},       r = {nil, -25.5, -10.5} },
     crossbow                    = { m = {-0.12, 0.085, 0.065},    r = {nil, -11, nil} },
     -- Foods & Drinks

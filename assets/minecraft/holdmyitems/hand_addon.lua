@@ -123,7 +123,7 @@ end
 local poses = {
     hanging_plants    = { m = {nil, 0.35, -0.05} },
     glow_item_frame   = { m = {0.14, nil, nil}, r = {25, nil, nil} },
-    buckets           = { r = {10, -5, nil, "zyx"}, m = {0.1, nil, nil, "zyx"}, ops = "rms" }
+    buckets           = { r = {10, -5, nil, "zyx"}, m = {0.1, nil, nil, "zyx"}, ops = "rms", condition = not refinedBuckets }
 }
 local pose = poses[itemName] or poses[tag]
 
@@ -132,19 +132,23 @@ if pose and not itemCompat then
 end
 
 -- === POSES CONFIGS ===
-local actionsStuff = ${actionsStuffPoses}
+if ${alternative} then
+    local positionItem = true
 
-if actionsStuff then
     if
-        tag == "shovels" or tag == "pickaxes" or tag == "axes" or tag == "swords" or tag == "hoes" or itemName == "trident"
-        or (itemName == "mace" and not w3di)
+        holdMyActions and (not I:isEmpty(context.item) and not I:isBlock(context.item))
+        or (itemCompat and w3di)
     then
-        transform(move, {-0.1, -0.02, nil})
-        transform(rotate, {-9, 8, nil})
+        positionItem = false
+    end
 
-    elseif tag == "spears" then
+    if tag == "spears" and positionItem then
         transform(move, {0.25, -0.2, -0.02, "zxy"})
         transform(rotate, {5, -5, nil, "zyx"})
+
+    elseif positionItem then
+        transform(move, {-0.1, -0.02, nil})
+        transform(rotate, {-9, nil, 8})
     end
 end
 
@@ -211,7 +215,15 @@ local function depositioning(pos)
     local key = (pos[itemName] and itemName) or (pos[tag] and tag)
 
     if pos[key] then
-        if condition(pos[key]) then
+        if pos[key].cases then
+            for _, case in ipairs(pos[key].cases) do
+                if condition(case) then
+                    process(case)
+                end
+            end
+            claimed["desadjust"][itemName] = true
+            return
+        elseif condition(pos[key]) then
             process(pos[key])
             claimed["desadjust"][itemName] = true
             return
@@ -220,87 +232,99 @@ local function depositioning(pos)
 end
 
 local depositions = {
+    holdMyActions = {
+        buckets = {
+            cases = {
+                [1] = {
+                    condition   = context.mainHand and not (itemName == "bucket" or itemName == "axolotl_bucket" or itemName == "pufferfish_bucket"),
+                    m           = {nil, -0.15, nil} },
+                [2] = {
+                    condition   = not context.mainHand and not (itemName == "bucket" or itemName == "axolotl_bucket" or itemName == "pufferfish_bucket"),
+                    m           = {nil, -0.1, nil} },
+            }
+        }
+    },
     a3ds = {
         -- Natural Blocks
-        vine                      = { m = {0.05, -0.25, nil, "zyx"} },
-        glow_lichen               = { m = {0.05, -0.25, nil, "zyx"} },
-        hanging_plants            = { m = {0.05, -0.25, nil, "zyx"} },
+        vine                    = { m = {0.05, -0.25, nil, "zyx"} },
+        glow_lichen             = { m = {0.05, -0.25, nil, "zyx"} },
+        hanging_plants          = { m = {0.05, -0.25, nil, "zyx"} },
     },
     w3di = {
         -- Functional Blocks
-        torches                   = { m = {-0.05, nil, nil, "zxy"}, r = {-10, nil, nil, "zyx"}, condition = itemName ~= "copper_torch" },
-        lanterns                  = { m = {-0.1, -0.05, nil, "zyx"} },
-        campfires                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        armor_stand               = { m = {0.09, 0.12, 0.05}, r = {nil, nil, -10} },
+        torches                 = { m = {-0.05, nil, nil, "zxy"}, r = {-10, nil, nil, "zyx"}, condition = itemName ~= "copper_torch" },
+        lanterns                = { m = {-0.1, -0.05, nil, "zyx"} },
+        campfires               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        armor_stand             = { m = {0.09, 0.12, 0.05}, r = {nil, nil, -10} },
         -- Redstone Blocks
-        repeater                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        comparator                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        repeater                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        comparator              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         -- Tools & Utilities
-        totem_of_undying          = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        music_discs               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        bundles                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        bookshelf_books           = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        buckets                   = { m = {0, -0.1, nil, "yzx"}, r = {5, -10, nil, "yzx"} },
-        ender_items               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        lead                      = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        map                       = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        firework_rocket           = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        goat_horn                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        name_tag                  = { m = {0.05, -0.3, nil, "zyx"} },
-        rods                      = { m = {-0.2, 0.2, 0.1}, r = {nil, nil, -10} },
-        boats                     = { m = {nil, 0.05, nil} },
-        chest_boats               = { m = {nil, 0.05, nil} },
-        flint_and_steel           = { m = {nil, nil, -0.05}, r = {nil, nil, -10} },
-        shears                    = { m = {nil, 0.1, -0.05}, r = {nil, nil, -10} },
-        compass                   = { m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} },
-        clock                     = { m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} },
+        totem_of_undying        = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        music_discs             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bundles                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bookshelf_books         = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        buckets                 = { m = {0, -0.1, nil, "yzx"}, r = {5, -10, nil, "yzx"} },
+        ender_items             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        lead                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        map                     = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        firework_rocket         = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        goat_horn               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        name_tag                = { m = {0.05, -0.3, nil, "zyx"} },
+        rods                    = { m = {-0.2, 0.2, 0.1}, r = {nil, nil, -10} },
+        boats                   = { m = {nil, 0.05, nil} },
+        chest_boats             = { m = {nil, 0.05, nil} },
+        flint_and_steel         = { m = {nil, nil, -0.05}, r = {nil, nil, -10} },
+        shears                  = { m = {nil, 0.1, -0.05}, r = {nil, nil, -10} },
+        compass                 = { m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} },
+        clock                   = { m = {0.12, 0.12, -0.05}, r = {nil, nil, -10} },
         -- Combat
-        eggs                      = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        snowball                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        eggs                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        snowball                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         -- Foods & Drinks
-        beefs                     = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        muttons                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        chickens                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        rabbits                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        apples                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        melon_slice               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        glistering_melon_slice    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        berries                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        chorus_fruit              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        carrots                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        beetroot                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        potatoes                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        dried_kelp                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        fishes                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        pufferfish                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        bread                     = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        cookie                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        cake                      = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        pumpkin_pie               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        spider_eye                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        bowl_foods                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        beefs                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        muttons                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        chickens                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        rabbits                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        apples                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        melon_slice             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        glistering_melon_slice  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        berries                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        chorus_fruit            = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        carrots                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        beetroot                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        potatoes                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        dried_kelp              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        fishes                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        pufferfish              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bread                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        cookie                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        cake                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        pumpkin_pie             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        spider_eye              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bowl_foods              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         -- Ingredients
-        coals                     = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        raw_materials             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        emerald                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        diamond                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        lapis_lazuli              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        nuggets                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        quartz                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        amethyst_shard            = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        ingots                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        bricks                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        netherite_scrap           = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        flint                     = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        fire_charge               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        stick                     = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        blaze_rod                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        breeze_rod                = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        bone                      = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        honeycomb                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        clay_ball                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        heart_of_the_sea          = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
-        banner_patterns           = { m = {0.05, -0.3, nil, "zyx"} }
+        coals                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        raw_materials           = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        emerald                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        diamond                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        lapis_lazuli            = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        nuggets                 = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        quartz                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        amethyst_shard          = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        ingots                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bricks                  = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        netherite_scrap         = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        flint                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        fire_charge             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        stick                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        blaze_rod               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        breeze_rod              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bone                    = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        honeycomb               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        clay_ball               = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        heart_of_the_sea        = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        banner_patterns         = { m = {0.05, -0.3, nil, "zyx"} }
     }
 }
 if w3di then
@@ -345,6 +369,18 @@ if a3ds then
         end
     end
 end
+
+if holdMyActions then
+    local holdMyActoinsConditions = {
+        { refinedBuckets, PackCompat.refinedBuckets }
+    }
+    for _, entry in ipairs(holdMyActoinsConditions) do
+        if entry[1] and isInList(entry[2]) then
+            depositioning(depositions["holdMyActions"])
+        end
+    end
+end
+
 
 -- === ANIMATIONS ===
 global.mainHandSwitch           = 0.0;
