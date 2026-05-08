@@ -53,7 +53,7 @@ ItemLists = {
 ItemsTag = {
     default = {
         "doors", "bars", "fences", "walls", "fence_gates", "chains", "trapdoors", "glass_panes", "banners",
-        "beds", "candles", "small_flowers", "saplings", "parrot_food", "lightning_rods", "shulker_boxes",
+        "beds", "candles", "small_flowers", "parrot_food", "lightning_rods", "shulker_boxes",
         "wooden_shelves", "hanging_signs", "signs", "copper_golem_statues", "lanterns", "buttons", "rails",
         "chiseled_bookshelf", "pickaxes", "axes", "hoes", "shovels", "bundles", "bookshelf_books", "music_discs",
         "boats", "chest_boats", "swords", "head_armor", "chest_armor", "leg_armor", "foot_armor", "arrows",
@@ -109,7 +109,8 @@ ItemsTag = {
         chickens              = {"^chicken$", "cooked_chicken"},
         keys                  = {"key"},
         shards                = {"amethyst_shard", "echo_shard"},
-        banner_patterns       = {"banner_pattern"}
+        banner_patterns       = {"banner_pattern"},
+        saplings              = {"_sapling", "mangrove_propagule"}
     }
 }
 
@@ -222,5 +223,4 @@ ActivePacks = {}
     gousPoses          = ${gousPoses}           and (table.insert(ActivePacks, "gousPoses") or true)
     classicToolsFusion = ${classicToolsFusion}  and (table.insert(ActivePacks, "classicToolsFusion") or true)
     holdMyActions      = ${holdMyActions}       and (table.insert(ActivePacks, "holdMyActions") or true)
-
--- verificar glistering_melon_slice no w3di, wfoods e fresh foods
+    just3Dstuffs       = ${just3Dstuffs}        and (table.insert(ActivePacks, "just3Dstuffs") or true)

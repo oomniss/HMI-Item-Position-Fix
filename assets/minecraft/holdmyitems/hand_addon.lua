@@ -136,7 +136,7 @@ if ${alternative} then
     local positionItem = true
 
     if
-        holdMyActions and (not I:isEmpty(context.item) and not I:isBlock(context.item))
+        (holdMyActions and (not I:isEmpty(context.item) and not I:isBlock(context.item)))
         or (itemCompat and w3di)
     then
         positionItem = false
@@ -389,7 +389,6 @@ global.offHandSwitch            = 0.0;
 local switch_val                = (context.mainHand and mainHandSwitch) or offHandSwitch
 local switchAnimationVariable   = Easings:easeInBack(M:sin(M:clamp(switch_val, 0.09723, 0.60632) * 3.24 * 1.65 - 0.1))
 
--- Switch Animation Head Armors Glowing3Darmors
 if glowing3Darmors and tag == "head_armor" then
     M:rotateX(mat, 10 * switchAnimationVariable)
     M:rotateZ(mat, 6 * switchAnimationVariable)

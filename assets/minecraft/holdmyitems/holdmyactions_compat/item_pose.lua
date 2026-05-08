@@ -263,7 +263,7 @@ local positions = {
     -- Combat
     horse_armors                = { m = {0.02, -0.04, nil} },
     nautilus_armors             = { m = {-0.04, -0.075, -0.005} },
-    swords                      = { m = {0.025, nil, -0.025},     r = {nil, -5, nil} },
+    swords                      = { m = {0.01, nil, -0.025},     r = {nil, -5, nil} },
     mace                        = { m = {0.025, -0.06, -0.025},   r = {nil, -5, nil} },
     shield                      = { m = {-0.035, 0.06, 0.005},    r = {-1.5, -22.5, nil}, s = {0.8, 1, 1} },
     head_armor                  = { m = {nil, -0.11, -0.005} },
