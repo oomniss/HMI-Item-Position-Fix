@@ -131,27 +131,6 @@ if pose and not itemCompat then
     process(pose)
 end
 
--- === POSES CONFIGS ===
-if ${alternative} then
-    local positionItem = true
-
-    if
-        (holdMyActions and (not I:isEmpty(context.item) and not I:isBlock(context.item)))
-        or (itemCompat and w3di)
-    then
-        positionItem = false
-    end
-
-    if tag == "spears" and positionItem then
-        transform(move, {0.25, -0.2, -0.02, "zxy"})
-        transform(rotate, {5, -5, nil, "zyx"})
-
-    elseif positionItem then
-        transform(move, {-0.1, -0.02, nil})
-        transform(rotate, {-9, nil, 8})
-    end
-end
-
 -- === PACKS POSITIONS ===
 local a3ds              = ${a3ds}
 local w3di              = ${w3di}
@@ -381,6 +360,26 @@ if holdMyActions then
     end
 end
 
+-- === POSES CONFIGS ===
+if ${alternative} then
+    local positionItem = true
+
+    if
+        (holdMyActions and (not I:isEmpty(context.item) and not I:isBlock(context.item)))
+        or (itemCompat and w3di)
+    then
+        positionItem = false
+    end
+
+    if tag == "spears" and positionItem then
+        transform(move, {0.25, -0.2, -0.02, "zxy"})
+        transform(rotate, {5, -5, nil, "zyx"})
+
+    elseif positionItem then
+        transform(move, {-0.1, -0.02, nil})
+        transform(rotate, {-9, nil, 8})
+    end
+end
 
 -- === ANIMATIONS ===
 global.mainHandSwitch           = 0.0;

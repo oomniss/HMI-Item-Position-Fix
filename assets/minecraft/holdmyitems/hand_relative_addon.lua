@@ -53,11 +53,11 @@ ItemLists = {
 ItemsTag = {
     default = {
         "doors", "bars", "fences", "walls", "fence_gates", "chains", "trapdoors", "glass_panes", "banners",
-        "beds", "candles", "small_flowers", "parrot_food", "lightning_rods", "shulker_boxes",
+        "beds", "candles", "small_flowers", "lightning_rods", "shulker_boxes", "compasses", "spears",
         "wooden_shelves", "hanging_signs", "signs", "copper_golem_statues", "lanterns", "buttons", "rails",
         "chiseled_bookshelf", "pickaxes", "axes", "hoes", "shovels", "bundles", "bookshelf_books", "music_discs",
         "boats", "chest_boats", "swords", "head_armor", "chest_armor", "leg_armor", "foot_armor", "arrows",
-        "ingots", "raw_materials", "nuggets", "harnesses", "dyes", "compasses", "spears"
+        "ingots", "raw_materials", "nuggets", "harnesses", "dyes"
     },
     registry = {
         pressure_plates       = {"_pressure_plate"},
@@ -223,4 +223,3 @@ ActivePacks = {}
     gousPoses          = ${gousPoses}           and (table.insert(ActivePacks, "gousPoses") or true)
     classicToolsFusion = ${classicToolsFusion}  and (table.insert(ActivePacks, "classicToolsFusion") or true)
     holdMyActions      = ${holdMyActions}       and (table.insert(ActivePacks, "holdMyActions") or true)
-    just3Dstuffs       = ${just3Dstuffs}        and (table.insert(ActivePacks, "just3Dstuffs") or true)

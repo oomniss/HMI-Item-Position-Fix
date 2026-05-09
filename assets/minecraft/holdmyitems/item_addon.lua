@@ -315,7 +315,7 @@ end
 if a3ds then
     if not freshFlowers then
         local plantsWithBlocks = {
-            "saplings", "small_plants", "fern", "bushes", "small_flowers", "large_fern", "sunflower", "lilac",
+            "saplings", "small_plants", "fern", "bushes", "small_flowers", "sunflower", "lilac",
             "rose_bush", "peony", "pitcher_plant"
         }
         if isInList(plantsWithBlocks) then
