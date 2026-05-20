@@ -6,6 +6,9 @@ local itemName    = I:getName(context.item):gsub("minecraft:", "")
 local skinModel   = (${skinModel} and "Alex") or "Steve"
 
 -- === FUNCTIONS ===
+if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+    return
+end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
         if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
@@ -162,7 +165,7 @@ local positions = {
     peony                       = { m = {0.055, nil, -0.025} },
     pitcher_plant               = { m = {0.055, nil, -0.025} },
     torchflower                 = { m = {0.01, 0.035, 0.07},      r = {nil, -35, nil} },
-    aliumove                    = { m = {0.1, nil, -0.045},       s  = {1.4} },
+    alium                       = { m = {0.1, nil, -0.045},       s  = {1.4} },
     tulips                      = { m = {0.1, nil, -0.045},       s  = {1.4} },
     wither_rose                 = { m = {0.08, nil, -0.065},      s  = {1.4} },
     small_flowers               = { m = {0.09, nil, -0.055},      s  = {1.4} },
@@ -192,6 +195,7 @@ local positions = {
     lily_pad                    = { m = {-0.02, -0.01, -0.11},    r = {90, nil, nil},      s = {1, 1, 0.385} },
     sea_pickle                  = { m = {0.155, nil, 0.05},       r = {nil, -23.5, nil},   s = {1.5} },
     ground_cover                = { m = {nil, -0.19, -0.05},      r = {-72.5, 0.5, -1} },
+    azaleas                     = { m = {0.105, -0.085, -0.065} },
     -- Functional Blocks
     froglights                  = { m = {-0.04, nil, 0.025} },
     shulker_boxes               = { m = {-0.04, nil, 0.025} },
@@ -281,7 +285,7 @@ local positions = {
     bowl_foods                  = { m = {nil, -0.075, -0.015} },
     bottles_drink               = { m = {-0.025, nil, nil} },
     muttons                     = { m = {l == 1 and 0 or -0.07, nil, nil} },
-    sweet_berries               = { m = {0.19, 0.08, nil},        r = {nil, nil, 51} },
+    sweet_berries               = { m = {nil, nil, 0.05} },
     chorus_fruit                = { m = {-0.04, nil, nil} },
     carrots                     = { m = {nil, -0.075, nil} },
     beetroot                    = { m = {nil, -0.105, nil} },
@@ -802,11 +806,6 @@ local specialCases = {
     {
         pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
         move = {-0.04, -0.015, nil}
-    },
-    {
-        pack = function() return not (w3di or freshFoods) end,
-        items = {"sweet_berries"},
-        move = {nil, nil, 0.05}, rotate = {nil, 10, nil}
     },
     {
         pack = function() return not (w3di or freshFoods) and useAction == "eat" end,

@@ -8,6 +8,9 @@ local isUsingItem = P:isUsingItem(context.player)
 local useAction   = I:getUseAction(context.item)
 
 -- === FUNCTIONS ===
+if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+    return
+end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
         if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then

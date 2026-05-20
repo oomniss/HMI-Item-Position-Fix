@@ -110,7 +110,8 @@ ItemsTag = {
         keys                  = {"key"},
         shards                = {"amethyst_shard", "echo_shard"},
         banner_patterns       = {"banner_pattern"},
-        saplings              = {"_sapling", "mangrove_propagule"}
+        saplings              = {"_sapling", "mangrove_propagule"},
+        azaleas               = {"^azalea$", "^flowering_azalea$"},
     }
 }
 

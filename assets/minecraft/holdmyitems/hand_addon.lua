@@ -5,6 +5,9 @@ local mat         = context.matrices
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
 
 -- === FUNCTIONS ===
+if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+    return
+end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
         if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
@@ -31,7 +34,7 @@ local function isInList(list)
 end
 
 local itemCompatCache = { [0] = {}, [1] = {} }
-local function getitemCompat()
+local function getItemCompat()
     if itemCompatCache[0][itemName] then
         return false
     end
@@ -52,7 +55,7 @@ local function getitemCompat()
     itemCompatCache[0][itemName] = true
     return false
 end
-local itemCompat = getitemCompat()
+local itemCompat = getItemCompat()
 
 local move = {
     x = function(v) M:moveX(context.matrices, (v or 0) * l)   end,
@@ -132,22 +135,6 @@ if pose and not itemCompat then
 end
 
 -- === PACKS POSITIONS ===
-local a3ds              = ${a3ds}
-local w3di              = ${w3di}
-local w3Dfoods          = ${w3Dfoods}
-local just3Darmors      = ${just3Darmors}
-local glowing3Darmors   = ${glowing3Darmors}
-local glowing3Dtotem    = ${glowing3Dtotem}
-local rvTorches         = ${rvTorches}
-local refinedTorches    = ${refinedTorches}
-local refinedBuckets    = ${refinedBuckets}
-local freshFoods        = ${freshFoods}
-local freshOres         = ${freshOresIngots}
-local freshDiscs        = ${freshDiscs}
-local better3Dbooks     = ${better3Dbooks}
-local bensBundle        = ${bensBundle}
-local holdMyActions     = ${holdMyActions}
-
 if holdMyActions then
     positioning({
         bucket = { m = {nil, 0.15, nil}, condition = not refinedBuckets }
@@ -371,13 +358,15 @@ if ${alternative} then
         positionItem = false
     end
 
-    if tag == "spears" and positionItem then
-        transform(move, {0.25, -0.2, -0.02, "zxy"})
-        transform(rotate, {5, -5, nil, "zyx"})
+    if positionItem then
+        if tag == "spears" then
+            transform(move, {0.25, -0.2, -0.02, "zxy"})
+            transform(rotate, {5, -5, nil, "zyx"})
 
-    elseif positionItem then
-        transform(move, {-0.1, -0.02, nil})
-        transform(rotate, {-9, nil, 8})
+        else
+            transform(move, {-0.1, -0.02, nil})
+            transform(rotate, {-9, nil, 8})
+        end
     end
 end
 

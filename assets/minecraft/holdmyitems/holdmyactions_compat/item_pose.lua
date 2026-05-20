@@ -6,6 +6,9 @@ local itemName    = I:getName(context.item):gsub("minecraft:", "")
 local skinModel   = (${skinModel} and "Alex") or "Steve"
 
 -- === FUNCTIONS ===
+if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+    return
+end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
         if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
@@ -281,7 +284,7 @@ local positions = {
     bowl_foods                  = { m = {nil, -0.075, -0.015} },
     bottles_drink               = { m = {-0.025, nil, nil} },
     muttons                     = { m = {l == 1 and 0 or -0.07, nil, nil} },
-    sweet_berries               = { m = {0.19, 0.08, nil},        r = {nil, nil, 51} },
+    sweet_berries               = { m = {nil, nil, 0.05} },
     chorus_fruit                = { m = {-0.04, nil, nil} },
     carrots                     = { m = {nil, -0.075, nil} },
     beetroot                    = { m = {nil, -0.105, nil} },
@@ -806,11 +809,6 @@ local specialCases = {
     {
         pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
         move = {-0.04, -0.015, nil}
-    },
-    {
-        pack = function() return not (w3di or freshFoods) end,
-        items = {"sweet_berries"},
-        move = {nil, nil, 0.05}, rotate = {nil, 10, nil}
     },
     {
         pack = function() return not (w3di or freshFoods) and useAction == "eat" end,
