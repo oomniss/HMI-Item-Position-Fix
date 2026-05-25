@@ -15,6 +15,7 @@
     freshSeeds:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshSeeds",
     refinedBuckets:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedBuckets",
     refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",
+    refinedTotem:       "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTotem",
     freshDiscs:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshMusicDiscs",
     wNature:            "HMIItemPositionFix.ResourcePacksCompatibility.WeskersonNature",
     better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",

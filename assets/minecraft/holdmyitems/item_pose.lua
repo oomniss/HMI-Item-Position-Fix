@@ -700,6 +700,10 @@ if matched({"bell", "end_crystal", "pink_petals", "leaf_litter", "wildflowers", 
 	end
 elseif itemName == "painting" or itemName == "item_frame" or (itemName == "glow_item_frame" and not a3ds) then
 	context.swingProgress = 0
+    if a3ds then
+        M:rotateX(mat, -25)
+        M:moveY(mat, -0.65)
+    end
 	M:rotateX(mat, M:clamp(playerPitch / 2.5, -25, 90) + ptAngle, 0, 0.45, 0)
 	M:rotateZ(mat, ywAngle * -1, 0, 0.55, 0)
 else

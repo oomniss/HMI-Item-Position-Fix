@@ -10,31 +10,32 @@ The **Hold My Items** mod brings visible first-person hands and stunning animati
 
 This pack includes full compatibility support for the most popular 3D resource packs. When multiple packs are active at the same time, their item positioning adjustments can stack and conflict with each other — by manually enabling the corresponding toggles in the settings, this pack applies the correct corrections for every combination, so everything stays perfectly aligned no matter what you're running.
 
-| Compat | Pack                             | Details/Notes                                                                                                         |
-| ------ | -------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| ✅     | **Actually 3D Stuff** (A3DS)     | Limited compatibility with Gous's Hand Poses                                                                          |
-| ✅     | **Weskerson's 3D Items** (W3DI)  | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses; Incompatible with W3DFoods |
-| ✅     | **Weskerson's 3D Foods**         | Incompatible with Fresh Foods; Incompatible with W3DI                                                                 |
-| ✅     | **Weskerson's Nature**           | ---                                                                                                                   |
-| ✅     | **R&V Chests & Boxes**           | ---                                                                                                                   |
-| ✅     | **R&V Torches**                  | Incompatible with Pato's Refined Torches                                                                              |
-| ✅     | **Pato's Refined Torches**       | Incompatible with R&V Torches; Limited compatibility with W3DI                                                        |
-| ✅     | **Pato's Refined Buckets**       | ---                                                                                                                   |
-| ✅     | **Just 3D Armors**               | Incompatible with Glowing 3D Armors                                                                                   |
-| ✅     | **Glowing 3D Armors**            | Incompatible with Just 3D Armors                                                                                      |
-| ✅     | **Glowing 3D Totem**             | ---                                                                                                                   |
-| ✅     | **Fresh Flowers and Plants**     | ---                                                                                                                   |
-| ✅     | **Fresh Foods**                  | Incompatible with Weskerson's 3D Foods                                                                                |
-| ✅     | **Fresh Ores And Ingots**        | ---                                                                                                                   |
-| ✅     | **Fresh Seeds**                  | ---                                                                                                                   |
-| ✅     | **Fresh Music Discs**            | ---                                                                                                                   |
-| ✅     | **Ben's Bundle**                 | ---                                                                                                                   |
-| ✅     | **Fyoncle's 3D Trims**           | ---                                                                                                                   |
-| ✅     | **Classic Tools Fusion**         | ---                                                                                                                   |
-| ✅     | **Gous's Hand Poses**            | Currently incompatible with W3DI; Limited compatibility with A3DS                                                     |
-| ✅     | **NNE Action Swords**            | Incompatible with Beash's Swing Animations and Hold My Actions                                                        |
-| ✅     | **Beash's Swing Animations**     | Incompatible with NNE Action Swords and Hold My Actions                                                               |
-| ✅     | **Hold My Actions**              | Incompatible with NNE Action Swords and Beash's Swing Animations                                                      |
+| Compat | Pack | Details/Notes |
+|--------|------|---------------|
+| ✅ | **Actually 3D Stuff** (A3DS) | Limited compatibility with Gous's Hand Poses |
+| ✅ | **Weskerson's 3D Items** (W3DI) | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses; Incompatible with W3DFoods |
+| ✅ | **Weskerson's 3D Foods** | Incompatible with Fresh Foods; Incompatible with W3DI |
+| ✅ | **Weskerson's Nature** | --- |
+| ✅ | **R&V Chests & Boxes** | --- |
+| ✅ | **R&V Torches** | Incompatible with Pato's Refined Torches |
+| ✅ | **Pato's Refined Torches** | Incompatible with R&V Torches; Limited compatibility with W3DI |
+| ✅ | **Pato's Refined Buckets** | --- |
+| ✅ | **Pato's Refined Totem** | Incompatible with Glowing 3D Totem |
+| ✅ | **Just 3D Armors** | Incompatible with Glowing 3D Armors |
+| ✅ | **Glowing 3D Armors** | Incompatible with Just 3D Armors |
+| ✅ | **Glowing 3D Totem** | Incompatible with Pato's Refined Totem |
+| ✅ | **Fresh Flowers and Plants** | --- |
+| ✅ | **Fresh Foods** | Incompatible with Weskerson's 3D Foods |
+| ✅ | **Fresh Ores And Ingots** | --- |
+| ✅ | **Fresh Seeds** | --- |
+| ✅ | **Fresh Music Discs** | --- |
+| ✅ | **Ben's Bundle** | --- |
+| ✅ | **Fyoncle's 3D Trims** | --- |
+| ✅ | **Classic Tools Fusion** | --- |
+| ✅ | **Gous's Hand Poses** | Currently incompatible with W3DI; Limited compatibility with A3DS |
+| ✅ | **NNE Action Swords** | Incompatible with Beash's Swing Animations and Hold My Actions |
+| ✅ | **Beash's Swing Animations** | Incompatible with NNE Action Swords and Hold My Actions |
+| ✅ | **Hold My Actions** | Incompatible with NNE Action Swords and Beash's Swing Animations |
 
 # 📸 Visual Demonstration
 

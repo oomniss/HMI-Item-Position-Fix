@@ -119,7 +119,6 @@ ItemsTag = {
 
 -- == Compatible Resource Packs ==
 PackCompat = {
-    refinedBuckets      = {"buckets"},
     freshDiscs          = {"music_discs", "disc_fragment_5"},
     glowing3Dtotem      = {"totem_of_undying"},
     glowing3Darmors     = {"head_armor", "chest_armor", "leg_armor", "foot_armor", "horse_armors", "elytra"},
@@ -132,6 +131,8 @@ PackCompat = {
     rvChests            = {"chests", "shulker_boxes", "barrel"},
     rvTorches           = {"torches", "lanterns", "repeater", "comparator", "campfires", "candles"},
     refinedTorches      = {"torches", "lanterns", "campfires", "candles", "repeater", "comparator"},
+    refinedBuckets      = {"buckets"},
+    refinedTotem        = {"totem_of_undying"},
     freshFoods = {
         "apples", "chorus_fruit", "melon_slice", "carrots", "potatoes", "beetroot", "spider_eye", "berries", "bowl_foods", "cake",
         "bread", "cookie", "pumpkin_pie", "beefs", "chickens", "muttons", "rabbits", "pufferfish", "dried_kelp", "fishes", "pressure_plates"
@@ -210,6 +211,7 @@ ActivePacks = {}
     rvTorches          = ${rvTorches}           and (table.insert(ActivePacks, "rvTorches") or true)
     refinedTorches     = ${refinedTorches}      and (table.insert(ActivePacks, "refinedTorches") or true)
     refinedBuckets     = ${refinedBuckets}      and (table.insert(ActivePacks, "refinedBuckets") or true)
+    refinedTotem       = ${refinedTotem}        and (table.insert(ActivePacks, "refinedTotem") or true)
     glowing3Dtotem     = ${glowing3Dtotem}      and (table.insert(ActivePacks, "glowing3Dtotem") or true)
     glowing3Darmors    = ${glowing3Darmors}     and (table.insert(ActivePacks, "glowing3Darmors") or true)
     just3Darmors       = ${just3Darmors}        and (table.insert(ActivePacks, "just3Darmors") or true)

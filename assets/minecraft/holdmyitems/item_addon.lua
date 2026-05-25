@@ -4,7 +4,7 @@ local mat         = context.matrices
 local l           = context.mainHand and 1 or -1
 local d           = (context.bl and 1) or -0.43
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
-local isUsingItem = P:isUsingItem(context.player)
+local isUsingItem = P:isUsingItem(player)
 local useAction   = I:getUseAction(context.item)
 
 -- === FUNCTIONS ===
@@ -121,6 +121,12 @@ if refinedTorches then
         candles       = { m = {-0.025, 0.01, -0.01}, r = {nil, -9.5, nil}, renderAsBlock = false },
         repeater      = { m = {-0.02, -0.02, -0.06}, r = {-10, -49, -4}, renderAsBlock = false },
         comparator    = { m = {-0.02, -0.02, -0.06}, r = {-10, -49, -4}, renderAsBlock = false },
+    })
+end
+
+if refinedTotem then
+    positioning({
+        totem_of_undying = { m = {l == 1 and 0.11 or 0.135, -0.005,  l == 1 and -0.06 or -0.075}, r = {3, nil, -8.5} }
     })
 end
 
@@ -347,8 +353,8 @@ if a3ds then
         -- Functional Blocks
         bell                = { m = {-0.005, -0.525, 0.145}, r = {-28, nil, nil} },
         armor_stand         = { m = {nil, 0.03, nil} },
-        item_frame          = { m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
-        painting            = { m = {-0.03, -0.62, 0.2}, r = {-39, -6, nil} },
+        item_frame          = { m = {-0.125, 0.055, -0.1}, r = {nil, -3.5, -2} },
+        painting            = { m = {-0.125, 0.055, -0.1}, r = {nil, -3.5, -2} },
         -- Tools & Utilities
         bundles             = { m = {0.015, 0.03, -0.055}, r = {-4, -5.5, nil} },
         writable_book       = { m = {nil, nil, -0.09} },
@@ -388,7 +394,7 @@ if a3ds then
         quartz              = { m = {0.005, 0.07, -0.035}, r = {-6, -7, nil}, s = {0.7} },
         shards              = { m = {0.025, -0.01, -0.055}, r = {-4.5, -5.5, nil} },
         netherite_scrap     = { m = {-0.045, -0.035, -0.13}, r = {-6, -5, -1} },
-        flint               = { m = {0.03, 0.06, -0.08}, r = {14.5, 12.5, -8} },
+        flint               = { m = {0.02, -0.065, -0.11}, r = {-6, -5.5, -1.5} },
         book                = { m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
         enchanted_book      = { m = {-0.135, nil, 0.085}, r = {-5, -6, -2} },
         stick               = { m = {0.02, -0.19, -0.015}, r = {-4.5, -7, -0.5} },
@@ -613,6 +619,14 @@ local function depositioning(pos)
     end
 end
 
+local function xor(...)
+    local result = false
+    for _, v in ipairs({...}) do
+        result = result ~= v
+    end
+    return result
+end
+
 local packsDepositions = {
     a3ds = {
         -- Tools & Utilities
@@ -680,8 +694,9 @@ local packsDepositions = {
         -- Combat
         totem_of_undying          = {
             cases = {
-                [1]               = { condition = not glowing3Dtotem ~= not a3ds, s = {1/1.2}, m = {0.01, 0.01, 0, "yzx"}, r = {-55, 4, 9, "yxz"}, ops = "smr" },
-                [2]               = { condition = glowing3Dtotem and a3ds, s = {1/1.2}, m = {-0.015, -0.005, -0.02}, r = {51, 140, 30.5}, ops = "smr" }
+                [1]               = { condition = xor(glowing3Dtotem, a3ds, refinedTotem), s = {1/1.2}, m = {0.01, 0.01, 0, "yzx"}, r = {-55, 4, 9, "yxz"}, ops = "smr" },
+                [2]               = { condition = glowing3Dtotem and a3ds, s = {1/1.2}, m = {-0.015, -0.005, -0.02}, r = {51, 140, 30.5}, ops = "smr" },
+                [3]               = { condition = refinedTotem and a3ds, s = {1/1.2}, m = {0.015, 0.015, -0.02}, r = {65, 140, 15}, ops = "smr" },
             }
         },
         nautilus_armors           = { s = {1/1.1}, r = {-4, 0.3, 7, "yxz"}, m = {0, 0.05, -0.07, "yzx"}, ops = "srm" },
@@ -750,6 +765,7 @@ if w3di then
         { rvTorches,         PackCompat.rvTorches },
         { refinedTorches,    PackCompat.refinedTorches },
         { refinedBuckets,    PackCompat.refinedBuckets },
+        { refinedTotem,      PackCompat.refinedTotem },
         { freshFoods,        PackCompat.freshFoods },
         { freshOres,         PackCompat.freshOresIngots },
         { freshDiscs,        PackCompat.freshDiscs },
@@ -767,6 +783,7 @@ end
 if a3ds then
     local a3dsConditions = {
         { freshFlowers,                  PackCompat.freshFlowersPlants },
+        { refinedTotem,                  PackCompat.refinedTotem },
         -- without W3DI
         { glowing3Dtotem and not w3di,   PackCompat.glowing3Dtotem },
         { gousPoses and not w3di,        PackCompat.gousPoses },
@@ -783,7 +800,8 @@ end
 global.yawAngleO    = 0.0;
 global.pitchAngleO  = 0.0;
 
-local playerPitch   = P:getPitch(context.player)
+local player        = context.player
+local playerPitch   = P:getPitch(player)
 local ywAngle       = (context.mainHand and yawAngle) or yawAngleO
 local ptAngle       = (context.mainHand and pitchAngle) or pitchAngleO
 
@@ -796,13 +814,13 @@ if a3ds then
             or itemName == "vine"
             or itemName == "hanging_roots"
         then
-            M:rotateX(mat, -(M:clamp(P:getPitch(context.player) / 1, -45, 90) + ptAngle + ywAngle * 1), 0, -0.05, 0)
+            M:rotateX(mat, -(M:clamp(P:getPitch(player) / 1, -45, 90) + ptAngle + ywAngle * 1), 0, -0.05, 0)
             M:rotateX(mat, 75)
             M:moveZ(mat, 0.03)
             M:moveY(mat, 0.2)
         elseif itemName == "glow_lichen" then
             M:rotateZ(mat, 30 * l)
-            M:rotateX(mat, -(M:clamp(P:getPitch(context.player) / 1, -45, 90) + ptAngle + ywAngle * 1), 0, -0.05, 0)
+            M:rotateX(mat, -(M:clamp(P:getPitch(player) / 1, -45, 90) + ptAngle + ywAngle * 1), 0, -0.05, 0)
             M:moveZ(mat, 0.03)
             M:rotateX(mat, 75)
         end
@@ -810,6 +828,9 @@ if a3ds then
     if itemName == "bell" then
         M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
         M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
+    elseif itemName == "item_frame" or itemName == "painting" then
+        M:rotateX(mat, M:clamp(P:getPitch(player) / 2, 0, 45) + ptAngle, 1, 0.4, -0.1, 0)
+        M:rotateZ(mat, M:clamp(P:getPitch(player) / 2, 0, 0) - ywAngle, 0, 0.4, -0.1, 0)
     end
     if w3di and (itemName == "name_tag" or tag == "banner_patterns") then
         M:rotateX(mat, -(M:clamp(playerPitch / 2.5, -20, 90) + ptAngle + ywAngle * 0.5), 0, -0.13, 0)

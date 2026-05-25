@@ -24,6 +24,7 @@
       RVTorches: false,
       PatoRefinedTorches: false,
       PatoRefinedBuckets: false,
+      PatoRefinedTotem: false,
       Just3DArmors: false,
       Glowing3DArmors: false,
       Glowing3DTotem: false,
