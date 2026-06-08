@@ -5,7 +5,7 @@ local mat         = context.matrices
 local itemName    = I:getName(context.item):gsub("minecraft:", "")
 
 -- === FUNCTIONS ===
-if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+if not ItemsTag or not ItemLists or not PackCompat then
     return
 end
 local function getTag()
@@ -125,22 +125,18 @@ end
 -- === INDIVIDUAL ADJUSTS ===
 local poses = {
     hanging_plants    = { m = {nil, 0.35, -0.05} },
-    glow_item_frame   = { m = {0.14, nil, nil}, r = {25, nil, nil} },
-    buckets           = { r = {10, -5, nil, "zyx"}, m = {0.1, nil, nil, "zyx"}, ops = "rms", condition = not refinedBuckets }
+    glow_item_frame   = { m = {0, -0.1, 0.05}, r = {25, nil, nil} },
+    buckets           = { r = {-9, nil, 8}, m = {-0.02, -0.1, 0.15, "yxy"}, ops = "rms", condition = not (refinedBuckets or w3di) }
 }
 local pose = poses[itemName] or poses[tag]
 
 if pose and not itemCompat then
-    process(pose)
+    if condition(pose) then
+        process(pose)
+    end
 end
 
 -- === PACKS POSITIONS ===
-if holdMyActions then
-    positioning({
-        bucket = { m = {nil, 0.15, nil}, condition = not refinedBuckets }
-    })
-end
-
 if w3Dfoods then
     if isInList(PackCompat.w3Dfoods) then
         transform(rotate, {nil, nil, 10})
@@ -172,7 +168,9 @@ end
 local posePack = positions[itemName] or positions[tag]
 
 if posePack and itemCompat then
-    process(posePack)
+    if condition(posePack) then
+        process(posePack)
+    end
 end
 
 -- === PACKS DEPOSITIONS ===
@@ -198,18 +196,6 @@ local function depositioning(pos)
 end
 
 local depositions = {
-    holdMyActions = {
-        buckets = {
-            cases = {
-                [1] = {
-                    condition   = context.mainHand and not (itemName == "bucket" or itemName == "axolotl_bucket" or itemName == "pufferfish_bucket"),
-                    m           = {nil, -0.15, nil} },
-                [2] = {
-                    condition   = not context.mainHand and not (itemName == "bucket" or itemName == "axolotl_bucket" or itemName == "pufferfish_bucket"),
-                    m           = {nil, -0.1, nil} },
-            }
-        }
-    },
     a3ds = {
         -- Natural Blocks
         vine                    = { m = {0.05, -0.25, nil, "zyx"} },
@@ -269,6 +255,7 @@ local depositions = {
         pumpkin_pie             = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         spider_eye              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         bowl_foods              = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
+        bottles_drink           = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         -- Ingredients
         coals                   = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
         raw_materials           = { m = {0.09, 0.09, -0.05}, r = {nil, nil, -10} },
@@ -294,18 +281,6 @@ local depositions = {
     }
 }
 if w3di then
-    if holdMyActions then
-        local depose = {
-            "nautilus_armors", "mace"
-        }
-        for _, i in ipairs(depose) do
-            if itemName == i or tag == i then
-                transform(move, {0.09, 0.09, -0.05})
-                transform(rotate, {nil, nil, -10})
-            end
-        end
-    end
-
     local w3diConditions = {
         { a3ds,             PackCompat.a3ds },
         { freshOres,        PackCompat.freshOresIngots },
@@ -316,7 +291,7 @@ if w3di then
         { better3Dbooks,    PackCompat.better3Dbooks },
         { refinedBuckets,   PackCompat.refinedBuckets },
         { refinedTorches,   PackCompat.refinedTorches },
-        { rvTorches,        PackCompat.rvTorches },
+        { rvTorches,        PackCompat.rvTorches }
     }
     for _, entry in ipairs(w3diConditions) do
         if entry[1] and isInList(entry[2]) then
@@ -332,40 +307,6 @@ if a3ds then
     for _, entry in ipairs(a3dsConditions) do
         if entry[1] and isInList(entry[2]) then
             depositioning(depositions["a3ds"])
-        end
-    end
-end
-
-if holdMyActions then
-    local holdMyActoinsConditions = {
-        { refinedBuckets, PackCompat.refinedBuckets }
-    }
-    for _, entry in ipairs(holdMyActoinsConditions) do
-        if entry[1] and isInList(entry[2]) then
-            depositioning(depositions["holdMyActions"])
-        end
-    end
-end
-
--- === POSES CONFIGS ===
-if ${alternative} then
-    local positionItem = true
-
-    if
-        (holdMyActions and (not I:isEmpty(context.item) and not I:isBlock(context.item)))
-        or (itemCompat and w3di)
-    then
-        positionItem = false
-    end
-
-    if positionItem then
-        if tag == "spears" then
-            transform(move, {0.25, -0.2, -0.02, "zxy"})
-            transform(rotate, {5, -5, nil, "zyx"})
-
-        else
-            transform(move, {-0.1, -0.02, nil})
-            transform(rotate, {-9, nil, 8})
         end
     end
 end

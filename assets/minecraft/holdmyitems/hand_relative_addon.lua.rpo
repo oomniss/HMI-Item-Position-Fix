@@ -22,6 +22,7 @@
     fyoncle3Dtrims:     "HMIItemPositionFix.ResourcePacksCompatibility.Fyoncle3DTrims",
     gousPoses:          "HMIItemPositionFix.ResourcePacksCompatibility.GoussHandPoses",
     classicToolsFusion: "HMIItemPositionFix.ResourcePacksCompatibility.ClassicToolsFusion",
-    holdMyActions:      "HMIItemPositionFix.ResourcePacksCompatibility.HoldMyActions"
+    beashAnimations:    "HMIItemPositionFix.ResourcePacksCompatibility.BeashSwingAnimations",
+    nneSwords:          "HMIItemPositionFix.ResourcePacksCompatibility.NNEActionSwords"
   }
 }

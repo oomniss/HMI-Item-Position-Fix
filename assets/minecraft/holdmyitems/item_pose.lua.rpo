@@ -1,6 +1,4 @@
 {
-  condition: "!ResourcePacksCompatibility.HoldMyActions",
-  fallback: "assets/minecraft/holdmyitems/holdmyactions_compat/item_pose.lua",
   expansions: {
     rvTorches:          "HMIItemPositionFix.ResourcePacksCompatibility.RVTorches",
     refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",

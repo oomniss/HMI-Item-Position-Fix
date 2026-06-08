@@ -225,4 +225,5 @@ ActivePacks = {}
     fyoncle3Dtrims     = ${fyoncle3Dtrims}      and (table.insert(ActivePacks, "fyoncle3Dtrims") or true)
     gousPoses          = ${gousPoses}           and (table.insert(ActivePacks, "gousPoses") or true)
     classicToolsFusion = ${classicToolsFusion}  and (table.insert(ActivePacks, "classicToolsFusion") or true)
-    holdMyActions      = ${holdMyActions}       and (table.insert(ActivePacks, "holdMyActions") or true)
+    beashAnimations    = ${beashAnimations}     and (table.insert(ActivePacks, "beashAnimations") or true)
+    nneSwords          = ${nneSwords}           and (table.insert(ActivePacks, "nneSwords") or true)

@@ -6,7 +6,7 @@ local itemName    = I:getName(context.item):gsub("minecraft:", "")
 local skinModel   = (${skinModel} and "Alex") or "Steve"
 
 -- === FUNCTIONS ===
-if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+if not ItemsTag or not ItemLists or not PackCompat then
     return
 end
 local function getTag()
@@ -53,17 +53,12 @@ local function matched(items, matches)
     local list = type(items) == "table" and items or {items}
 
     local function check(i)
-        if itemName == i then
+        if itemName == i or tag == i then
             return true
         end
         if matches and itemName:match(i) then
             return true
         end
-        if i:find("[%^%$%(%)%%%.%[%]%*%+%-%?]") then
-            return false
-        end
-        return I:isIn(context.item, Tags:getFabricTag(i))
-            or I:isIn(context.item, Tags:getVanillaTag(i))
     end
 
     for _, i in ipairs(list) do
@@ -102,7 +97,7 @@ local function scale(x, y, z)
         if x ~= nil and y == nil and z == nil then
             M:scale(mat, x, x, x)
         else
-            M:scale(mat, x or 0, y or 0, z or 0)
+            M:scale(mat, x or 1, y or 1, z or 1)
         end
     end
 end
@@ -435,7 +430,6 @@ local sc                    = context.mainHand and spearCounterM or spearCounter
 local scd                   = context.mainHand and canDismountCounter or canDismountCounterO
 local sck                   = context.mainHand and canKnockbackCounter or canKnockbackCounterO
 local sw                    = context.mainHand and mainHandSwitch or offHandSwitch
-local mat                   = context.matrices
 local hic                   = context.mainHand and Easings:easeInOutSine(hitImpactCounter) or hitImpactCounterO
 local swing                 = M:sin(context.swingProgress * 3.14)
 local swing_hit             = M:sin(M:clamp(context.swingProgress, 0.16561, 0.49422) * 4.78 * 2 + 4.7)
@@ -482,16 +476,9 @@ local function particle(x, y, z, texture, size, tick)
 	)
 end
 
-local moves = {
-    x = function(v) M:moveX(context.matrices, v * l) end,
-    y = function(v) M:moveY(context.matrices, v) end,
-    z = function(v) M:moveZ(context.matrices, v) end
-}
-local rotates = {
-    x = function(v) M:rotateX(context.matrices, v) end,
-    y = function(v) M:rotateY(context.matrices, v * l) end,
-    z = function(v) M:rotateZ(context.matrices, v * l) end
-}
+local function posInHands(hand, offhand)
+    return l == 1 and hand or offhand
+end
 
 -- == CALC ==
 local isSword        = matched({"swords"})
@@ -501,7 +488,7 @@ local isHangingSign  = matched({"hanging_signs"})
 local isPickaxe      = matched({"pickaxes"})
 local isNugget       = matched({"nuggets"})
 local isMusicDisc    = matched({"music_discs"})
-local isSpearTag     = matched({"spears"})
+local isSpear        = matched({"spears"})
 local isSkull        = matched({"skulls"})
 
 -- Brush
@@ -549,22 +536,6 @@ yawAngleO = yawAngleO + yawSpeedO * dt
 
 local ywAngle   = (context.mainHand and yawAngle) or yawAngleO
 local ptAngle   = (context.mainHand and pitchAngle) or pitchAngleO
-
--- == RESOURCE PACKS ==
-local rvTorches         = ${rvTorches}
-local refinedTorches    = ${refinedTorches}
-local glowing3Darmors   = ${glowing3Darmors}
-local a3ds              = ${a3ds}
-local w3di              = ${w3di}
-local w3Dfoods          = ${w3Dfoods}
-local refinedBuckets    = ${refinedBuckets}
-local freshFoods        = ${freshFoods}
-local freshPlants       = ${freshPlants}
-local gousPoses         = ${gousPoses}
-local nneSwords         = ${nneSwords}
-local beashAnimations   = ${beashAnimations}
-local torchesPack       = rvTorches or refinedTorches
-local foodPack          = freshFoods or w3di or w3Dfoods
 
 -- == SWING ANIMATIONS ==
 if isPickaxe then
@@ -689,7 +660,7 @@ if matched({"bell", "end_crystal", "pink_petals", "leaf_litter", "wildflowers", 
 			M:scale(mat, 1.2, 1.2, 1.2)
 			M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, -0.1 * l, 0.4, 0.1)
 			M:rotateZ(mat, ywAngle * -1, -0.1 * l, 0.4, 0.1)
-        elseif not (torchesPack or w3di) then
+        elseif not (refinedTorches or rvTorches or w3di) then
 			M:rotateX(mat, M:clamp(playerPitch / 2.5, -20, 90) + ptAngle, 0, 0.4, 0)
 			M:rotateZ(mat, ywAngle * -1, 0, 0.4, 0)
 		end
@@ -728,122 +699,148 @@ else
 end
 
 -- == EAT & DRINK ANIMATION ==
-local function applyTransform(op, progress, exp, x, y, z)
-    local t = M:pow(progress, exp)
+global.progress = 0.0;
+progress = context.mainHand and foodCount or foodCountO
 
-    if x then op.x(x * t) end
-    if y then op.y(y * t) end
-    if z then op.z(z * t) end
-end
+local foodDefault   = w3di or w3Dfoods or freshFoods
+local drinkDefault  = (w3di and itemName ~= "milk_bucket") or refinedBuckets
+local square        = progress * progress
 
--- Animation
-local function eatDrinkAnimation(use, progress, movePos, rotatePos, scalePos)
-    local function m(default, override)
-        if override ~= nil then return override else return default end
+local function eatDrinkDefault()
+    if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and context.mainHand then
+        M:moveX(mat, 0.02 * l * foodCount)
+        M:moveZ(mat, -0.05 * foodCount)
+        if useAction == "eat" or useAction == "toot_horn" then
+            M:rotateX(mat, -23 * foodCount * foodCount)
+            M:rotateZ(mat, -12 * l * foodCount * foodCount)
+        end
+        M:rotateY(mat, -50 * l * foodCount * foodCount)
+
+        if useAction == "drink" then
+            M:rotateX(mat, 15 * foodCount * foodCount)
+        end
     end
 
-    local moveVals = {
-        x = movePos and m(nil, movePos[1]) or nil,
-        y = movePos and m(nil, movePos[2]) or nil,
-        z = movePos and m(-0.05, movePos[3]) or -0.05
-    }
-    local rotateVals = {
-        x = rotatePos and m(nil, rotatePos[1]) or nil,
-        y = rotatePos and m(-50, rotatePos[2]) or -50,
-        z = rotatePos and m(nil, rotatePos[3]) or nil
-    }
+    if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and not context.mainHand then
+        M:moveX(mat, 0.02 * l * foodCountO)
+        M:moveZ(mat, -0.05 * foodCountO)
+        if useAction == "eat" or useAction == "toot_horn" then
+            M:rotateX(mat, -23 * foodCountO * foodCountO)
+            M:rotateZ(mat, -12 * l * foodCountO * foodCountO)
+        end
+        M:rotateY(mat, -50 * l * foodCountO * foodCountO)
 
-    applyTransform(moves, progress, 1, 0.02, moveVals.y, moveVals.z)
-    applyTransform(moves, progress, 1, moveVals.x, nil, nil)
-
-    if use == "eat" or use == "toot_horn" then
-        local ex = rotatePos and m(-23, rotatePos[1]) or -23
-        local ez = rotatePos and m(-12, rotatePos[3]) or -12
-        applyTransform(rotates, progress, 2,  ex,  nil,  ez)
-    end
-
-    applyTransform(rotates, progress, 2,  rotateVals.x,  rotateVals.y,  rotateVals.z)
-
-    if use == "drink" then
-        local dx = rotatePos and m(15, rotatePos[1]) or 15
-        applyTransform(rotates, progress, 2,  dx,  nil,  nil)
-    end
-
-    if scalePos then
-        local t = M:pow(progress, 1)
-        local sx = m(1, scalePos[1])
-        local sy = m(1, scalePos[2])
-        local sz = m(1, scalePos[3])
-        M:scale(mat, 1 + (sx - 1) * t, 1 + (sy - 1) * t, 1 + (sz - 1) * t)
-    end
-end
-local progress = context.mainHand and foodCount or foodCountO
-
-local specialCases = {
-    {
-        pack = function() return refinedBuckets and w3di end,
-        items = {"milk_bucket"},
-        move = {0.01, 0.17, -0.1}, scale = {0.8, 0.8, 0.8}
-    },
-    {
-        pack = function() return w3di and not refinedBuckets end,
-        items = {"milk_bucket"},
-        move = {-0.07, 0.05, -0.11}, rotate = {-5, -85, 5}, scale = {0.6, 0.6, 0.6}
-    },
-    {
-        pack = function() return w3Dfoods and not (w3di or freshFoods) end,
-        transforms = {
-            { {"apple", "chorus_fruit", "potato", "beetroot", "bread"}, m = {nil, nil, -0.05}, r = {0, 0, 0}, matches = true },
-            { {"cookie", "melon_slice", "glow_berries", "dried_kelp", "beef", "porkchop", "mutton", "rotten_flesh"}, m = {nil, 0.1, -0.05}, r = {0, 0, 0}, matches = true },
-            { {"soup", "stew"}, m = {nil, 0.12, -0.1}, r = {5, 0, 0}, matches = true },
-            { {"pumpkin_pie"}, m = {nil, 0.1, -0.15}, r = {0, 0, 0} },
-            { {"spider_eye"}, m = {0.05, nil, -0.05}, r = {0, 0, 0} },
-            { {"carrot", "golden_carrot"}, m = {0.05, 0.15, 0}, r = {0, 0, 0} },
-        }
-    },
-    -- Without packs
-    {
-        pack = function() return not (w3di or refinedBuckets) end,
-        items = {"milk_bucket"},
-        move = {0.02, 0, -0.3}
-    },
-    {
-        pack = function() return not (w3di or refinedBuckets) and useAction == "drink" end,
-        move = {-0.04, -0.015, nil}
-    },
-    {
-        pack = function() return not (w3di or freshFoods) and useAction == "eat" end,
-        move = {nil, -0.05, 0.1}
-    }
-}
-
-local caseMatched = false
-for _, case in ipairs(specialCases) do
-    if case.pack() then
-        if case.transforms then
-            for _, transform in ipairs(case.transforms) do
-                for _, item in ipairs(transform[1]) do
-                    if matched(item, transform.matches) then
-                        eatDrinkAnimation(useAction, progress, transform.m, transform.r, transform.s)
-                        caseMatched = true
-                        break
-                    end
-                end
-            end
-        elseif (case.items ~= nil and matched(case.items)) or case.items == nil then
-            eatDrinkAnimation(useAction, progress, case.move, case.rotate, case.scale)
-            caseMatched = true
-            break
+        if useAction == "drink" then
+            M:rotateX(mat, 15 * foodCountO * foodCountO)
         end
     end
 end
 
-if not caseMatched and (useAction == "eat" or useAction == "drink" or useAction == "toot_horn") then
-    eatDrinkAnimation(useAction, progress)
+local function drink()
+    M:rotateY(mat, posInHands(-45, -50) * l * square)
+    if itemName == "milk_bucket" then
+        M:moveZ(mat, -0.25 * progress)
+        M:moveX(mat, -0.02 * l * progress)
+        M:moveY(mat, 0.13 * progress)
+        M:scale(mat, 0.8, 0.8, 0.8)
+    else
+        M:moveZ(mat, 0.05 * progress)
+        M:moveX(mat, 0.03 * l * progress)
+    end
+    M:rotateX(mat, posInHands(10, 18) * square)
 end
 
-global.foodCount    = 0.0;
-global.foodCountO   = 0.0;
+local function eat()
+    M:moveY(mat, -0.05 * progress)
+    M:moveZ(mat, 0.05 * progress)
+    M:rotateY(mat, posInHands(-45, -60) * l * square)
+    M:rotateX(mat, -25 * square)
+end
+
+local function eatDrinkAnimation(items, moveValues, rotateValues, scaleValues)
+    local list = type(items) == "table" and items or {items}
+
+    local function applyIndividualTransform()
+        if moveValues then
+            M:moveX(mat, (moveValues[1] or 0) * progress * l)
+            M:moveY(mat, (moveValues[2] or 0) * progress)
+            M:moveZ(mat, (moveValues[3] or 0) * progress)
+        end
+        if rotateValues then
+            M:rotateX(mat, (rotateValues[1] or 0) * square)
+            M:rotateY(mat, (rotateValues[2] or 0) * square * l)
+            M:rotateZ(mat, (rotateValues[3] or 0) * square * l)
+        end
+        if scaleValues then
+            if scaleValues[1] ~= nil and scaleValues[2] == nil and scaleValues[3] == nil then
+                M:scale(mat, scaleValues[1], scaleValues[1], scaleValues[1])
+            else
+                M:scale(mat, scaleValues[1] or 1, scaleValues[2] or 1, scaleValues[3] or 1)
+            end
+        end
+    end
+    local function applyTransform()
+        if drinkDefault or foodDefault then
+            eatDrinkDefault()
+        end
+
+        if useAction == "drink" then
+            if not drinkDefault then drink() end
+            applyIndividualTransform()
+        elseif useAction == "eat" then
+            if not foodDefault then eat() end
+            applyIndividualTransform()
+        end
+    end
+    if isUsingItem and (useAction == "eat" or useAction == "drink") then
+        if items == "general" then
+            applyTransform()
+        else
+            for _, i in ipairs(list) do
+                if i == itemName or i == tag then
+                    applyTransform()
+                end
+            end
+        end
+    end
+end
+
+local individualAnimationAdjusts = {
+    -- packs
+    {
+        w3di and not refinedBuckets,
+        items = {"milk_bucket"}, moveValues = {posInHands(-0.2, -0.1), 0, posInHands(0.3, 0.35)}, rotateValues = {posInHands(0, -10), 20, 0}, scaleValues = {0.85}
+    },
+    {
+        w3di and refinedBuckets,
+        items = {"milk_bucket"}, moveValues = {-0.05, 0.22, -0.15}, rotateValues = {5, 0, 0}, scaleValues = {0.7}
+    },
+    -- without packs
+    {
+        not (refinedBuckets or w3di),
+        items = {"milk_bucket"}, moveValues = {posInHands(0.08, 0.02), 0, -0.05}, rotateValues = {0, posInHands(-10, -5), 0}
+    }
+}
+
+local animated = false
+for _, adj in ipairs(individualAnimationAdjusts) do
+    if adj[1] then
+        for _, i in ipairs(adj.items) do
+            if i == itemName or i == tag then
+                eatDrinkAnimation(adj.items, adj.moveValues, adj.rotateValues, adj.scaleValues)
+                animated = true
+                break
+            end
+        end
+    end
+    if animated then break end
+end
+if not animated then
+    eatDrinkAnimation("general")
+end
+
+global.foodCount = 0.0;
+global.foodCountO = 0.0;
 
 local easedFoodCounter = Easings:easeInQuart(context.mainHand and foodCount or foodCountO)
 
@@ -940,27 +937,25 @@ if itemName == "filled_map" then
 end
 
 -- == GLOW AND PARTICLES ==
-if not (refinedBuckets or torchesPack or w3di) then
-
-    if itemName == "torch" 		            then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")       end
-    if itemName == "copper_torch" 	        then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")       end
-    if itemName == "soul_torch" 			then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")         end
-    if itemName == "redstone_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")          end
-    if itemName == "lantern" 				then glow(0.45 * l, 0.15, 0.5, "textures/particle/orange_glow.png")     end
-    if itemName == "soul_lantern" 			then glow(0.45 * l, 0.15, 0.5, "textures/particle/blue_glow.png")       end
-    if itemName:match("copper_lantern") 	then glow(0.45 * l, 0.15, 0.5, "textures/particle/copper_glow.png")     end
-    if itemName == "lava_bucket" 			then glow(-0.05 * l, 0, 0, "textures/particle/orange_glow.png")         end
-
-elseif w3di and not (torchesPack or refinedBuckets) then
-
-    if itemName == "torch" 		            then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")       end
-    if itemName == "copper_torch" 	        then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")       end
-    if itemName == "soul_torch" 			then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")         end
-    if itemName == "redstone_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")          end
-	if itemName == "lantern" 			    then glow(0.05 * l, -0.2, -0.2, "textures/particle/orange_glow.png")    end
-	if itemName == "soul_lantern" 		    then glow(0.05 * l, -0.2, -0.2, "textures/particle/b_glow.png")         end
-	if itemName:match("copper_lantern")     then glow(0.05 * l, -0.2, -0.2, "textures/particle/copper_glow.png")    end
-
+if not (refinedBuckets or rvTorches or refinedTorches ) then
+    if not w3di then
+        if itemName == "torch" 		            then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")       end
+        if itemName == "copper_torch" 	        then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")       end
+        if itemName == "soul_torch" 			then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")         end
+        if itemName == "redstone_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")          end
+        if itemName == "lantern" 				then glow(0.45 * l, 0.15, 0.5, "textures/particle/orange_glow.png")     end
+        if itemName == "soul_lantern" 			then glow(0.45 * l, 0.15, 0.5, "textures/particle/blue_glow.png")       end
+        if itemName:match("copper_lantern") 	then glow(0.45 * l, 0.15, 0.5, "textures/particle/copper_glow.png")     end
+        if itemName == "lava_bucket" 			then glow(-0.05 * l, 0, 0, "textures/particle/orange_glow.png")         end
+    else
+        if itemName == "torch" 		            then glow(0.5 * l, 0.6, 0.5, "textures/particle/orange_glow.png")       end
+        if itemName == "copper_torch" 	        then glow(0.5 * l, 0.6, 0.5, "textures/particle/copper_glow.png")       end
+        if itemName == "soul_torch" 			then glow(0.5 * l, 0.6, 0.5, "textures/particle/blue_glow.png")         end
+        if itemName == "redstone_torch" 		then glow(0.5 * l, 0.6, 0.5, "textures/particle/red_glow.png")          end
+        if itemName == "lantern" 			    then glow(0.05 * l, -0.2, -0.2, "textures/particle/orange_glow.png")    end
+        if itemName == "soul_lantern" 		    then glow(0.05 * l, -0.2, -0.2, "textures/particle/b_glow.png")         end
+        if itemName:match("copper_lantern")     then glow(0.05 * l, -0.2, -0.2, "textures/particle/copper_glow.png")    end
+    end
 end
 
 if swingCountPrev ~= P:getSwingCount(context.player) and context.mainHand and itemName == "bell" then
@@ -990,11 +985,11 @@ end
 if context.mainHand then swingMHandPrev = context.swingMHand else swingOHandPrev = context.swingOHand end
 
 -- == SWING SPEED ==
-if isSpearTag                                   then itemSwingSpeed:put(I:getName(context.item), 15) end
+if isSpear                                      then itemSwingSpeed:put(I:getName(context.item), 15) end
 if isShovel                                     then itemSwingSpeed:put(I:getName(context.item), 14) end
 if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getName(context.item), 12) end
 
--- == TRIDENT AND SPEAR POSE ==
+-- == TRIDENT AND SPEAR ==
 if useAction == "trident" then
     M:rotateY(mat, 60 * l)
     M:moveZ(mat, -0.025)
@@ -1034,17 +1029,11 @@ end
 prevAge = P:getAge(context.player)
 
 -- == SOME POSITIONS ==
-if
-    matched("bucket", true)
-    or (isUsingItem and useAction == "eat" and foodPack)
-then
+if tag == "buckets" then
     M:moveX(mat, -0.05 * l)
     M:rotateX(mat, -8)
     M:rotateY(mat, -10 * l)
     M:rotateZ(mat, 6 * l)
-end
-
-if matched("bucket", true) then
     M:moveY(mat, 0.025)
     M:moveX(mat, -0 * l)
     M:moveZ(mat, -0.1)
@@ -1058,6 +1047,11 @@ if matched("bucket", true) then
         M:moveX(mat, 0 * l * easedFoodCounter)
         M:moveY(mat, 0.1 * easedFoodCounter)
         M:moveZ(mat, 0.02 * easedFoodCounter)
+    end
+    if not (w3di or refinedBuckets) then
+        move(0.015, 0.085, -0.065)
+        rotate(nil, -6.5, nil)
+        scale(1.1)
     end
 end
 

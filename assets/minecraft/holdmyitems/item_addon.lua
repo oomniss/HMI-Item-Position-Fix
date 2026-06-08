@@ -1,5 +1,6 @@
 -- by omnis._.
 
+local player      = context.player
 local mat         = context.matrices
 local l           = context.mainHand and 1 or -1
 local d           = (context.bl and 1) or -0.43
@@ -8,7 +9,7 @@ local isUsingItem = P:isUsingItem(player)
 local useAction   = I:getUseAction(context.item)
 
 -- === FUNCTIONS ===
-if not ItemsTag or not ItemsTag.default or not ItemsTag.registry or not Tags then
+if not ItemsTag or not ItemLists or not PackCompat then
     return
 end
 local function getTag()
@@ -444,7 +445,7 @@ if w3di then
         chest_boats               = { r = {3.5, -8, -4.5} },
         -- Tools & Utilities
         elytra                    = { m = {nil, -0.32, nil}, r = {-131.5, nil, nil}, condition = not just3Darmors },
-        buckets                   = { m = {0.005, 0.15, -0.04}, r = {86, -151.5, -4}, s = {1.1}, condition = not refinedBuckets },
+        buckets                   = { m = {-0.065, 0.165, -0.04}, r = {89.5, -156.5, nil}, condition = not refinedBuckets },
         bundles                   = { m = {-0.05, -0.015, -0.015}, r = {-6, -11, 2.5}, s = {0.9} },
         music_discs               = { m = {-0.05, nil, -0.06}, r = {-5.5, -10.5, 2.5} },
         disc_fragment_5           = { m = {-0.065, -0.045, -0.005}, r = {-5.5, -9.5, 5.5} },
@@ -466,6 +467,32 @@ if w3di then
         eggs                      = { m = {0.01, -0.015, -0.05}, r = {-6, -5.5, 3} },
         snowball                  = { m = {0.01, -0.015, -0.05}, r = {-6, -5.5, 3} },
         totem_of_undying          = { m = {-0.06, nil, -0.045}, r = {-7.5, nil, nil} },
+        -- Foods & Drinks
+        apples                    = { m = {-0.05, -0.01, -0.035}, r = {-5.5, -5.5, 3} },
+        chorus_fruit              = { m = {-0.05, -0.01, -0.035}, r = {-5.5, -5.5, 3} },
+        melon_slice               = { m = {-0.045, -0.03, -0.105}, r = {-5, -6, nil} },
+        beefs                     = { m = {-0.05, -0.005, -0.025}, r = {-5, -6, 3.5} },
+        potatoes                  = { m = {-0.05, -0.005, -0.035}, r = {-6, -5.5, 3.5} },
+        bread                     = { m = {-0.05, -0.005, -0.035}, r = {-6, -5.5, 3.5} },
+        bowl_foods                = { m = {0.01, -0.015, -0.105}, r = {-7, -6.5, -1} },
+        bottles_drink             = { m = {-0.055, nil, -0.035}, r = {-4.5, -7, 4} },
+        carrots                   = { m = {-0.045, -0.085, -0.08}, r = {-9.5, -9.5, 6} },
+        spider_eye                = { m = {-0.07, -0.14, -0.115}, r = {-6, -6.5, 3} },
+        sweet_berries             = { m = {0.025, 0.085, -0.12}, r = {-5.5, -4.5, 7.5} },
+        glow_berries              = { m = {-0.06, -0.01, -0.07} },
+        dried_kelp                = { m = {-0.095, 0.02, -0.005}, r = {nil, -4, nil} },
+        beetroot                  = { m = {-0.045, -0.01, -0.08}, r = {-5.5, -10, 6.5} },
+        chickens                  = { m = {-0.06, -0.005, -0.025}, r = {-5.5, -5.5, 3.5} },
+        rabbits                   = { m = {-0.055, 0.01, 0.065}, r = {-5.5, -5.5, 4.5} },
+        cod                       = { m = {-0.115, -0.005, -0.065}, r = {-5, -7, 5} },
+        cooked_cod                = { m = {-0.115, -0.005, -0.065}, r = {-5, -7, 5} },
+        salmon                    = { m = {-0.09, -0.005, -0.085}, r = {-5, -7, 5} },
+        cooked_salmon             = { m = {-0.09, -0.005, -0.085}, r = {-5, -7, 5} },
+        tropical_fish             = { m = {-0.065, -0.005, -0.075}, r = {-3, -5, 4} },
+        pufferfish                = { m = {-0.075, nil, nil}, r = {-4.5, -5.5, 2.5} },
+        cookie                    = { m = {-0.06, -0.005, -0.02}, r = {-5, -5.5, 3.5} },
+        cake                      = { m = {-0.03, 0.125, -0.085}, r = {3.5, -22.5, 3}, s = {0.9} },
+        pumpkin_pie               = { m = {-0.125, nil, 0.01}, r = {-7, -6, 3} },
         -- Ingredients
         coals                     = { m = {-0.045, nil, nil}, r = {-4.5, -11, 4} },
         raw_materials             = { m = {-0.045, nil, -0.035}, r = {-6, -6.5, 4.5} },
@@ -502,38 +529,7 @@ if w3di then
         glistering_melon_slice    = { m = {-0.045, -0.03, -0.105}, r = {-5, -6, nil} },
         -- Spawn Eggs
         spawn_eggs                = { m = {-0.02, -0.015, -0.03}, r = {-6.5, -10.5, 3} }
-
     })
-    if not (isUsingItem and useAction == "eat") then
-        positioning({
-            -- Foods & Drinks
-            apples          = { m = {-0.05, -0.01, -0.035}, r = {-5.5, -5.5, 3} },
-            chorus_fruit    = { m = {-0.05, -0.01, -0.035}, r = {-5.5, -5.5, 3} },
-            melon_slice     = { m = {-0.045, -0.03, -0.105}, r = {-5, -6, nil} },
-            beefs           = { m = {-0.05, -0.005, -0.025}, r = {-5, -6, 3.5} },
-            potatoes        = { m = {-0.05, -0.005, -0.035}, r = {-6, -5.5, 3.5} },
-            bread           = { m = {-0.05, -0.005, -0.035}, r = {-6, -5.5, 3.5} },
-            bowl_foods      = { m = {0.01, -0.015, -0.105}, r = {-7, -6.5, -1} },
-            bottles_drink   = { m = {-0.055, nil, -0.035}, r = {-4.5, -7, 4} },
-            carrots         = { m = {-0.045, -0.085, -0.08}, r = {-9.5, -9.5, 6} },
-            spider_eye      = { m = {-0.07, -0.14, -0.115}, r = {-6, -6.5, 3} },
-            sweet_berries   = { m = {0.025, 0.085, -0.12}, r = {-5.5, -4.5, 7.5} },
-            glow_berries    = { m = {-0.06, -0.01, -0.07} },
-            dried_kelp      = { m = {-0.095, 0.02, -0.005}, r = {nil, -4, nil} },
-            beetroot        = { m = {-0.045, -0.01, -0.08}, r = {-5.5, -10, 6.5} },
-            chickens        = { m = {-0.06, -0.005, -0.025}, r = {-5.5, -5.5, 3.5} },
-            rabbits         = { m = {-0.055, 0.01, 0.065}, r = {-5.5, -5.5, 4.5} },
-            cod             = { m = {-0.115, -0.005, -0.065}, r = {-5, -7, 5} },
-            cooked_cod      = { m = {-0.115, -0.005, -0.065}, r = {-5, -7, 5} },
-            salmon          = { m = {-0.09, -0.005, -0.085}, r = {-5, -7, 5} },
-            cooked_salmon   = { m = {-0.09, -0.005, -0.085}, r = {-5, -7, 5} },
-            tropical_fish   = { m = {-0.065, -0.005, -0.075}, r = {-3, -5, 4} },
-            pufferfish      = { m = {-0.075, nil, nil}, r = {-4.5, -5.5, 2.5} },
-            cookie          = { m = {-0.06, -0.005, -0.02}, r = {-5, -5.5, 3.5} },
-            cake            = { m = {-0.03, 0.125, -0.085}, r = {3.5, -22.5, 3}, s = {0.9} },
-            pumpkin_pie     = { m = {-0.125, nil, 0.01}, r = {-7, -6, 3} }
-        })
-    end
 end
 
 if wNature then
@@ -800,7 +796,6 @@ end
 global.yawAngleO    = 0.0;
 global.pitchAngleO  = 0.0;
 
-local player        = context.player
 local playerPitch   = P:getPitch(player)
 local ywAngle       = (context.mainHand and yawAngle) or yawAngleO
 local ptAngle       = (context.mainHand and pitchAngle) or pitchAngleO
