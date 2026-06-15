@@ -704,6 +704,7 @@ progress = context.mainHand and foodCount or foodCountO
 
 local foodDefault   = w3di or w3Dfoods or freshFoods
 local drinkDefault  = (w3di and itemName ~= "milk_bucket") or refinedBuckets
+local tootHorn      = useAction == "toot_horn"
 local square        = progress * progress
 
 local function eatDrinkDefault()
@@ -780,7 +781,7 @@ local function eatDrinkAnimation(items, moveValues, rotateValues, scaleValues)
         end
     end
     local function applyTransform()
-        if drinkDefault or foodDefault then
+        if drinkDefault or foodDefault or tootHorn then
             eatDrinkDefault()
         end
 
@@ -790,9 +791,11 @@ local function eatDrinkAnimation(items, moveValues, rotateValues, scaleValues)
         elseif useAction == "eat" then
             if not foodDefault then eat() end
             applyIndividualTransform()
+        elseif useAction == "toot_horn" then
+            applyIndividualTransform()
         end
     end
-    if isUsingItem and (useAction == "eat" or useAction == "drink") then
+    if isUsingItem and (useAction == "eat" or useAction == "drink" or useAction == "toot_horn") then
         if items == "general" then
             applyTransform()
         else
@@ -819,6 +822,10 @@ local individualAnimationAdjusts = {
     {
         not (refinedBuckets or w3di),
         items = {"milk_bucket"}, moveValues = {posInHands(0.08, 0.02), 0, -0.05}, rotateValues = {0, posInHands(-10, -5), 0}
+    },
+    {
+        not (w3di or a3ds),
+        items = {"goat_horn"}, moveValues = {0.14, nil, nil}
     }
 }
 
