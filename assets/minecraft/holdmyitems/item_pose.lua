@@ -991,14 +991,12 @@ if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getNam
 
 -- == TRIDENT AND SPEAR ==
 if useAction == "trident" then
-    M:rotateY(mat, 60 * l)
-    M:moveZ(mat, -0.025)
-    M:moveX(mat, -0.015 * l)
-    M:rotateY(mat, -94.5 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:rotateX(mat, 180 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:moveZ(mat, -0.08 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:moveX(mat, 0.05 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
-    M:moveY(mat, 0.15 * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:moveX(mat, 0.1 * Easings:easeOutBack(M:clamp(tridentM * 1.5, 0, 1)))
+    M:moveX(mat, -0.03 * l)
+    M:rotateZ(mat, 170 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:rotateY(mat, 40 * l)
+    M:rotateX(mat, -90 * Easings:easeOutBack(M:sin(context.mainHand and riptideCounter or riptideCounterO * 3.14)))
+    M:rotateZ(mat, -45 * l * Easings:easeOutBack(M:sin(context.mainHand and riptideCounter or riptideCounterO * 3.14)))
 end
 
 if useAction == "spear" then
