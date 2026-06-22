@@ -1,12 +1,10 @@
 -- by omnis._.
-
-local player      = context.player
-local mat         = context.matrices
-local l           = context.mainHand and 1 or -1
-local d           = (context.bl and 1) or -0.43
-local itemName    = I:getName(context.item):gsub("minecraft:", "")
-local isUsingItem = P:isUsingItem(player)
-local useAction   = I:getUseAction(context.item)
+local mat           = matrices
+local l             = (mainHand and 1) or -0.43
+local d             = (mainHand and 1) or -0.43
+local itemName      = I:getName(item):gsub("minecraft:", "")
+local isUsingItem   = P:isUsingItem(player)
+local useAction     = I:getUseAction(item)
 
 -- === FUNCTIONS ===
 if not ItemsTag or not ItemLists or not PackCompat then
@@ -14,7 +12,7 @@ if not ItemsTag or not ItemLists or not PackCompat then
 end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
-        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
+        if I:isIn(item, Tags:getVanillaTag(tag)) or I:isIn(item, Tags:getFabricTag(tag)) then
             return tag
         end
     end
@@ -37,19 +35,19 @@ local function isInList(list)
     return false
 end
 
-local function posInHands(mainHand, offhand)
-    return context.mainHand and mainHand or offhand
+local function posInHands(main, off)
+    return l == 1 and main or off
 end
 
 local move = {
-    x = function(v) M:moveX(context.matrices, (v or 0) * l)   end,
-    y = function(v) M:moveY(context.matrices, v or 0)         end,
-    z = function(v) M:moveZ(context.matrices, v or 0)         end
+    x = function(v) M:moveX(mat, (v or 0) * l)   end,
+    y = function(v) M:moveY(mat, v or 0)         end,
+    z = function(v) M:moveZ(mat, v or 0)         end
 }
 local rotate = {
-    x = function(v) M:rotateX(context.matrices, v or 0)       end,
-    y = function(v) M:rotateY(context.matrices, (v or 0) * l) end,
-    z = function(v) M:rotateZ(context.matrices, (v or 0) * l) end
+    x = function(v) M:rotateX(mat, v or 0)       end,
+    y = function(v) M:rotateY(mat, (v or 0) * l) end,
+    z = function(v) M:rotateZ(mat, (v or 0) * l) end
 }
 local function transform(ops, position)
     local order = position[4] or "xyz"
@@ -329,7 +327,7 @@ if a3ds then
             "rose_bush", "peony", "pitcher_plant"
         }
         if isInList(plantsWithBlocks) then
-            renderAsBlock:put(I:getName(context.item), false)
+            renderAsBlock:put(I:getName(item), false)
             transform(move, {nil, -0.04, -0.08})
         end
         positioning({
@@ -555,7 +553,7 @@ local pose = positions[itemName]
 
 if pose then
     if pose["renderAsBlock"] ~= nil then
-        renderAsBlock:put(I:getName(context.item), pose["renderAsBlock"])
+        renderAsBlock:put(I:getName(item), pose["renderAsBlock"])
     end
     if pose.m then transform(move, pose.m) end
     if pose.r then transform(rotate, pose.r) end
@@ -571,7 +569,7 @@ end
 -- === DE-POSITIONS ===
 local function process(pos)
     if pos["renderAsBlock"] ~= nil then
-        renderAsBlock:put(I:getName(context.item), pos["renderAsBlock"])
+        renderAsBlock:put(I:getName(item), pos["renderAsBlock"])
     end
 
     local ops = pos["ops"] or "mrs"
@@ -797,8 +795,8 @@ global.yawAngleO    = 0.0;
 global.pitchAngleO  = 0.0;
 
 local playerPitch   = P:getPitch(player)
-local ywAngle       = (context.mainHand and yawAngle) or yawAngleO
-local ptAngle       = (context.mainHand and pitchAngle) or pitchAngleO
+local ywAngle       = (mainHand and yawAngle) or yawAngleO
+local ptAngle       = (mainHand and pitchAngle) or pitchAngleO
 
 if a3ds then
     if freshFlowers then
@@ -834,7 +832,7 @@ end
 
 if gousPoses then
     if itemName == "shears" then
-        if not context.bl then
+        if not bl then
             M:moveZ(mat, 0.1)
             M:rotateY(mat, 180)
         end

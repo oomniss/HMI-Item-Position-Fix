@@ -1,14 +1,20 @@
-![title](https://cdn.modrinth.com/data/cached_images/bcd833f6980ddde5b04a7904df2d47e7b42989ce.png)
+<div align="center">
+  <a href="https://modrinth.com/mod/respackopts">
+    <img src="https://cdn.modrinth.com/data/cached_images/8f7139e48730e4ba6e94d9c16115951d0b71cd14.png" width="154" alt="Respackopts">
+  </a>
+</div>
 
-The **Hold My Items** mod brings visible first-person hands and stunning animations to the game, but it shifts the position of items in the player's hand, causing most of them to appear misaligned. This pack fixes that — every single item is carefully repositioned to sit exactly where it should.
+---
 
-> This resource pack requires the Respackopts mod to function correctly.
+![title](https://cdn.modrinth.com/data/cached_images/a89cee4dacc467730b06eb8e826af6f857eabd01.png)
 
-[![Respackopts](https://img.shields.io/badge/Get-Respackopts-blue?style=for-the-badge&logo=modrinth)](https://modrinth.com/mod/respackopts)
+The **Hold My Items** mod brings visible first-person hands and stunning animations to the game, but it shifts item positioning in the player's hand, causing most items to appear misaligned. This pack fixes exactly that — every single item has been carefully repositioned to sit right where it should.
 
-# 🛠️ Compatibility & Sinergy
+# 🛠️ Compatibility
 
-This pack includes full compatibility support for the most popular 3D resource packs. When multiple packs are active at the same time, their item positioning adjustments can stack and conflict with each other — by manually enabling the corresponding toggles in the settings, this pack applies the correct corrections for every combination, so everything stays perfectly aligned no matter what you're running.
+This pack is compatible with both **HMI 5.0** and **HMI 5.1**. That said, not every supported resource pack has been calibrated for HMI 5.0 — if you're on an older version, some compatibility entries may not behave as expected.
+
+When running multiple 3D resource packs at the same time, their positioning adjustments can stack and conflict with each other. By enabling the corresponding toggles in the settings menu, this pack applies the right corrections for every combination — so everything stays perfectly aligned no matter what you're running.
 
 | Compat | Pack | Details/Notes |
 |--------|------|---------------|
@@ -35,7 +41,6 @@ This pack includes full compatibility support for the most popular 3D resource p
 | ✅ | **Gous's Hand Poses** | Currently incompatible with W3DI; Limited compatibility with A3DS |
 | ✅ | **NNE Action Swords** | Incompatible with Beash's Swing Animations and Hold My Actions |
 | ✅ | **Beash's Swing Animations** | Incompatible with NNE Action Swords and Hold My Actions |
-| ✅ | **Hold My Actions** | Incompatible with NNE Action Swords and Beash's Swing Animations |
 
 # 📸 Visual Demonstration
 
@@ -44,7 +49,7 @@ See the difference the **HMI Item Position Fix** makes when using popular 3D res
 | Resource Pack                | Without HMI Item Position Fix | With HMI Item Position Fix |
 | ---------------------------- | ----------------------------- | -------------------------- |
 | Glowing 3D Totem             | ![totem](https://cdn.modrinth.com/data/cached_images/465806011025dfe4a841b40a9ac2e9dcc7b98875.png)                              | ![totem_hmi](https://cdn.modrinth.com/data/cached_images/bbf4f047d472949ade662376c1e8a59e54f6157d.png)                       |
-| Glowing 3D Armors             | ![armor](https://cdn.modrinth.com/data/cached_images/5e197f3fcf1e0a10a0af0fa94ebdbc4014584346.png)                              | !![armor_hmi](https://cdn.modrinth.com/data/cached_images/f63a03ca40d82e386495c271586b1a376de1ba32.png)                       |
+| Glowing 3D Armors             | ![armor](https://cdn.modrinth.com/data/cached_images/5e197f3fcf1e0a10a0af0fa94ebdbc4014584346.png)                              | ![armor_hmi](https://cdn.modrinth.com/data/cached_images/f63a03ca40d82e386495c271586b1a376de1ba32.png)                       |
 | Fresh Foods                  | ![foods](https://cdn.modrinth.com/data/cached_images/b4f89f85ab6cc30ab9651672afb4ec52436ebfa6.png)                           | ![foods_hmi](https://cdn.modrinth.com/data/cached_images/767a772129c9cd743b8dde866dd240dfcf72c6f0.png)                        |
 | Fresh Seeds                  | ![seeds](https://cdn.modrinth.com/data/cached_images/2f9579c802f3e8a7bd47e0cc2612e529254a3ef2.png)                           | ![seeds_hmi](https://cdn.modrinth.com/data/cached_images/767397528d840f3a68ad629d6b8576877c300c27.png)                        |
 | Fresh Ores and Ingots        | ![ores](https://cdn.modrinth.com/data/cached_images/01bc7cbee12dcda82a2c6459a3341befa5fa43f7.png)                           | ![ores_hmi](https://cdn.modrinth.com/data/cached_images/91d30fec20c28c28d29d0b2f4c6804b04f30f6d5.png)                        |
@@ -65,33 +70,33 @@ To ensure correct positioning, follow this load order:
 6. **HMI Item Position Fix**
 7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords) or **Hold My Actions**
 
-> For some reason, `Fyoncle's 3D Trims` must always be placed above `Just 3D Armors`, `R&V Torches`, `Refined Torches`, and `Fresh Foods`. This is necessary to ensure that item positioning and physics do not break. As a precaution, always keep `Fyoncle's 3D Trims` at the very top of your load order.
+> `Fyoncle's 3D Trims` must always sit above `Just 3D Armors`, `R&V Torches`, `Refined Torches`, and `Fresh Foods` in your load order. For reasons we haven't been able to pin down, placing it lower breaks item positioning and physics for those packs. As a precaution, keep it at the very top.
 
-> For `NNE Action Swords` to work properly, its author requires you to replace the HMI `Example Pack` with their `[HMI] REANIMATED` version, which disables sword battle animations. Make sure to keep `[HMI] REANIMATED` below `HMI Item Position Fix` in the load order.
+> For `NNE Action Swords` to work properly, its author requires you to replace the HMI `Example Pack` with their `[HMI] REANIMATED` version, which disables sword battle animations. Keep `[HMI] REANIMATED` below `HMI Item Position Fix` in the load order.
 
 ![load order](https://cdn.modrinth.com/data/cached_images/1fd662e6a78098d52392897b1324f05216d42924.png)
 
-# ⚠️ Know Problems
+# ⚠️ Known Problems
 
 ## Lanterns
 
-Lanterns are handled by many resource packs and are particularly prone to conflicts. The known issues are:
+Lanterns are handled by many resource packs simultaneously, which makes them especially prone to conflicts. The known issues are:
 
 - Glow particles misaligned when using `W3DI + Refined Torches`
 - Broken physics and positioning when using `W3DI + R&V Torches`
 
-If you are using `W3DI` together with `R&V Torches`, make sure to enable the "Resource Pack Lanterns" option and disable both "Fresh Animations Player Enabled" and "Not Enough Animations Enabled". If you are not using `W3DI`, keep "Resource Pack Lanterns" disabled. This should resolve the conflicts between `R&V Torches` and `W3DI`.
+If you're running `W3DI` together with `R&V Torches`, enable the "Resource Pack Lanterns" option and disable both "Fresh Animations Player Enabled" and "Not Enough Animations Enabled". If you're not using `W3DI`, keep "Resource Pack Lanterns" disabled. This should resolve most of the conflicts between `R&V Torches` and `W3DI`.
 
-As for the glow particle misalignment when using `W3DI` together with `Refined Torches`, there is no fix. This is not something that can be corrected through `HMI Item Position Fix`, as there is no way to remove or reposition the glow particles applied by `Refined Torches`. If you still choose to use `Refined Torches` alongside `W3DI`, make sure both "Fa Player" and "Not Enough Animations" options are disabled, to avoid breaking lantern positioning entirely.
+The glow particle misalignment when combining `W3DI` with `Refined Torches` has no fix — it isn't something `HMI Item Position Fix` can correct, since there's no way to remove or reposition the particles applied by `Refined Torches`. If you still choose to use both together, make sure "Fa Player" and "Not Enough Animations" are disabled to avoid breaking lantern positioning on top of it.
 
 ## The Clock
 
-For some reason, the clock model breaks when using `A3DS` together with `W3DI`. This is likewise not something that can be corrected through `HMI Item Position Fix`.
+For some reason, the clock model breaks when using `A3DS` together with `W3DI`. This one is also out of reach for `HMI Item Position Fix`.
 
 ## The EMF Problem
 
-HMI may cause visual glitches when used together with the Entity Model Features (EMF) mod. To fix this, install Mod Menu, open the Mods menu, and locate EMF. In its options, navigate to the Models section and, under Player Settings, turn on "Prevent first person player animations".
+HMI may cause visual glitches when used alongside the Entity Model Features (EMF) mod. To fix this, open Mod Menu, find EMF in the list, and under the Models section navigate to Player Settings — then turn on "Prevent first person player animations".
 
-If you are using EMF version 3.0.12 or higher, you may encounter item misalignment. This is due to an incompatibility between HMI and EMF. To fix this, simply downgrade your EMF version to 3.0.11.
+If you're on EMF version 3.0.12 or higher, you may also notice item misalignment. This comes from an incompatibility between HMI and newer EMF versions. The simplest fix is to downgrade to EMF 3.0.11.
 
 > Found a bug or have a suggestion? Join our [Discord](https://discord.gg/teDctNyajx)!

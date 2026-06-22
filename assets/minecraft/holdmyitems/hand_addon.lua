@@ -1,8 +1,7 @@
 -- by omnis._.
-
-local l           = context.mainHand and 1 or -1
-local mat         = context.matrices
-local itemName    = I:getName(context.item):gsub("minecraft:", "")
+local mat         = matrices
+local l           = mainHand and 1 or -1
+local itemName    = I:getName(item):gsub("minecraft:", "")
 
 -- === FUNCTIONS ===
 if not ItemsTag or not ItemLists or not PackCompat then
@@ -10,7 +9,7 @@ if not ItemsTag or not ItemLists or not PackCompat then
 end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
-        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
+        if I:isIn(item, Tags:getVanillaTag(tag)) or I:isIn(item, Tags:getFabricTag(tag)) then
             return tag
         end
     end
@@ -44,8 +43,8 @@ local function getItemCompat()
 
     for _, rp in ipairs(ActivePacks) do
         if PackCompat[rp] then
-            for _, item in ipairs(PackCompat[rp]) do
-                if item == tag or item == itemName then
+            for _, i in ipairs(PackCompat[rp]) do
+                if i == tag or i == itemName then
                     itemCompatCache[1][itemName] = rp
                     return true
                 end
@@ -58,14 +57,14 @@ end
 local itemCompat = getItemCompat()
 
 local move = {
-    x = function(v) M:moveX(context.matrices, (v or 0) * l)   end,
-    y = function(v) M:moveY(context.matrices, v or 0)         end,
-    z = function(v) M:moveZ(context.matrices, v or 0)         end
+    x = function(v) M:moveX(mat, (v or 0) * l)   end,
+    y = function(v) M:moveY(mat, v or 0)         end,
+    z = function(v) M:moveZ(mat, v or 0)         end
 }
 local rotate = {
-    x = function(v) M:rotateX(context.matrices, v or 0)       end,
-    y = function(v) M:rotateY(context.matrices, (v or 0) * l) end,
-    z = function(v) M:rotateZ(context.matrices, (v or 0) * l) end
+    x = function(v) M:rotateX(mat, v or 0)       end,
+    y = function(v) M:rotateY(mat, (v or 0) * l) end,
+    z = function(v) M:rotateZ(mat, (v or 0) * l) end
 }
 
 local function transform(ops, position)
@@ -80,7 +79,7 @@ end
 
 local function process(pos)
     if pos["renderAsBlock"] ~= nil then
-        renderAsBlock:put(I:getName(context.item), pos["renderAsBlock"])
+        renderAsBlock:put(I:getName(item), pos["renderAsBlock"])
     end
 
     local ops = pos["ops"] or "mrs"
@@ -315,7 +314,7 @@ end
 global.mainHandSwitch           = 0.0;
 global.offHandSwitch            = 0.0;
 
-local switch_val                = (context.mainHand and mainHandSwitch) or offHandSwitch
+local switch_val                = (mainHand and mainHandSwitch) or offHandSwitch
 local switchAnimationVariable   = Easings:easeInBack(M:sin(M:clamp(switch_val, 0.09723, 0.60632) * 3.24 * 1.65 - 0.1))
 
 if glowing3Darmors and tag == "head_armor" then

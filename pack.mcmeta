@@ -1,9 +1,9 @@
 {
   "pack": {
-    "pack_format": 46,
-    "description": "by omnis",
-    "supported_formats": [46, 75],
-    "min_format": 46,
-    "max_format": 75
+    "pack_format": 63,
+    "supported_formats": { "min_inclusive": 63, "max_inclusive": 64 },
+    "min_format": 63,
+    "max_format": 75,
+    "description": "by omnis"
   }
 }

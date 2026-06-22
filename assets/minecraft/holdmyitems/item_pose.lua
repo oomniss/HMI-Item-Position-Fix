@@ -1,8 +1,26 @@
 -- by omnis._.
+local HMIversion = context == nil and "5.0" or "5.1+"
 
-local mat         = context.matrices
-local l           = context.mainHand and 1 or -1
-local itemName    = I:getName(context.item):gsub("minecraft:", "")
+if HMIversion == "5.1+" then
+    item                  = context.item
+    matrices              = context.matrices
+    player                = context.player
+    mainHand              = context.mainHand
+    deltaTime             = context.deltaTime
+    swingProgress         = context.swingProgress
+    mainHandSwingProgress = context.mainHandSwingProgress
+    offHandSwingProgress  = context.offHandSwingProgress
+    swingMHand            = context.swingMHand
+    swingOHand            = context.swingOHand
+    equipProgress         = context.equipProgress
+    particles             = context.particles
+    hand                  = context.hand
+    bl                    = context.bl
+end
+
+local mat         = matrices
+local l           = mainHand and 1 or -1
+local itemName    = I:getName(item):gsub("minecraft:", "")
 local skinModel   = (${skinModel} and "Alex") or "Steve"
 
 -- === FUNCTIONS ===
@@ -11,7 +29,7 @@ if not ItemsTag or not ItemLists or not PackCompat then
 end
 local function getTag()
     for _, tag in ipairs(ItemsTag.default) do
-        if I:isIn(context.item, Tags:getVanillaTag(tag)) or I:isIn(context.item, Tags:getFabricTag(tag)) then
+        if I:isIn(item, Tags:getVanillaTag(tag)) or I:isIn(item, Tags:getFabricTag(tag)) then
             return tag
         end
     end
@@ -36,8 +54,8 @@ local function getitemCompat()
 
     for _, rp in ipairs(ActivePacks) do
         if PackCompat[rp] then
-            for _, item in ipairs(PackCompat[rp]) do
-                if item == tag or item == itemName then
+            for _, i in ipairs(PackCompat[rp]) do
+                if i == tag or i == itemName then
                     itemCompatCache[1][itemName] = rp
                     return true
                 end
@@ -72,7 +90,7 @@ local function renderBlock(render, items)
 
     for _, i in ipairs(items) do
         if matched(i) then
-            renderAsBlock:put(I:getName(context.item), render)
+            renderAsBlock:put(I:getName(item), render)
             return
         end
     end
@@ -419,23 +437,27 @@ local swing_hit_second
 local GRAVITY               = 0.04
 local DAMPING               = 0.85
 local INTENSITY             = 0.15
-local dt                    = context.deltaTime * 30
-local playerSpeed           = P:getSpeed(context.player)
-local playerPitch           = P:getPitch(context.player)
-local playerYaw             = P:getYaw(context.player)
-local playerAge             = P:getAge(context.player)
-local sp                    = I:getUseAction(P:getMainItem(context.player)) == "spear" and 1 or 0
-local spo                   = I:getUseAction(P:getOffhandItem(context.player)) == "spear" and 1 or 0
-local sc                    = context.mainHand and spearCounterM or spearCounterO
-local scd                   = context.mainHand and canDismountCounter or canDismountCounterO
-local sck                   = context.mainHand and canKnockbackCounter or canKnockbackCounterO
-local sw                    = context.mainHand and mainHandSwitch or offHandSwitch
-local hic                   = context.mainHand and Easings:easeInOutSine(hitImpactCounter) or hitImpactCounterO
-local swing                 = M:sin(context.swingProgress * 3.14)
-local swing_hit             = M:sin(M:clamp(context.swingProgress, 0.16561, 0.49422) * 4.78 * 2 + 4.7)
-local swingOverall          = M:sin(context.swingProgress * 3.14)
-local useAction             = I:getUseAction(context.item)
-local isUsingItem           = P:isUsingItem(context.player)
+local dt                    = deltaTime * 30
+local playerSpeed           = P:getSpeed(player)
+local playerPitch           = P:getPitch(player)
+local playerYaw             = P:getYaw(player)
+local playerAge             = P:getAge(player)
+local sp                    = I:getUseAction(P:getMainItem(player)) == "spear" and 1 or 0
+local spo                   = I:getUseAction(P:getOffhandItem(player)) == "spear" and 1 or 0
+local sc                    = mainHand and spearCounterM or spearCounterO
+local scd                   = mainHand and canDismountCounter or canDismountCounterO
+local sck                   = mainHand and canKnockbackCounter or canKnockbackCounterO
+local sw                    = mainHand and mainHandSwitch or offHandSwitch
+local hic                   = mainHand and Easings:easeInOutSine(hitImpactCounter) or hitImpactCounterO
+local swing                 = M:sin(swingProgress * 3.14)
+local swing_hit             = M:sin(M:clamp(swingProgress, 0.16561, 0.49422) * 4.78 * 2 + 4.7)
+local swingOverall          = M:sin(swingProgress * 3.14)
+local useAction             = I:getUseAction(item)
+local isUsingItem           = P:isUsingItem(player)
+
+if useAction == "spear" and itemName == "trident" then
+    useAction = "trident"
+end
 
 -- == FUNCTIONS ==
 function easeCustom(t)
@@ -452,12 +474,12 @@ end
 
 local function glow(x, y, z, texture)
 	particleManager:addParticle(
-		context.particles,
+		particles,
 		false,
 		x, y, z,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 1.3,
 		Texture:of("minecraft", texture),
-		"ITEM", context.hand,
+		"ITEM", hand,
 		"SPAWN", "ADDITIVE",
 		0, 200 + (20 * M:sin(playerAge * 0.2))
 	)
@@ -465,19 +487,19 @@ end
 
 local function particle(x, y, z, texture, size, tick)
 	particleManager:addParticle(
-		context.particles, true,
+		particles, true,
 		x, y, z,
 		(math.random() * 0.12 - 0.06) * l, math.random() * 0.12,
 		0, 0, 0, 0, 0, 0, 0, size or 0.4,
 		Texture:of("minecraft", texture),
-		"SCREEN", context.hand,
+		"SCREEN", hand,
 		"OPACITY", "TRANSLUCENT_L",
 		1, 255, tick
 	)
 end
 
-local function posInHands(hand, offhand)
-    return l == 1 and hand or offhand
+local function posInHands(main, off)
+    return l == 1 and main or off
 end
 
 -- == CALC ==
@@ -503,8 +525,8 @@ brushSpeedO = brushSpeedO * M:pow(DAMPING, dt)
 brushAngleO = brushAngleO + brushSpeedO * dt
 
 -- Pitch
-pitchSpeed = pitchSpeed + ((playerSpeed * 22 * walkSmoother * -1) - (M:sin(context.mainHandSwingProgress * 3.14)) * 8 + fall * 3 + M:sin(sneak * 3.14) * 0.3 + (playerPitch - prevPitch)) * INTENSITY * dt
-if useAction == "block" and context.mainHand and not isSword then
+pitchSpeed = pitchSpeed + ((playerSpeed * 22 * walkSmoother * -1) - (M:sin(mainHandSwingProgress * 3.14)) * 8 + fall * 3 + M:sin(sneak * 3.14) * 0.3 + (playerPitch - prevPitch)) * INTENSITY * dt
+if useAction == "block" and mainHand and not isSword then
     pitchSpeed = pitchSpeed + 10 * M:sin(shieldDisable * 3.14) * INTENSITY * dt
     pitchSpeed = pitchSpeed + 12 * M:sin(shieldM      * 3.14) * INTENSITY * dt
 end
@@ -513,8 +535,8 @@ pitchSpeed = pitchSpeed - GRAVITY * pitchAngle * dt
 pitchSpeed = pitchSpeed * M:pow(DAMPING, dt)
 pitchAngle = pitchAngle + pitchSpeed * dt
 
-pitchSpeedO = pitchSpeedO + ((playerSpeed * 22 * walkSmoother * -1) - (M:sin(context.offHandSwingProgress * 3.14)) * 8 + fall * 3 + M:sin(sneak * 3.14) * 0.3 + (playerPitch - prevPitch)) * INTENSITY * dt
-if useAction == "block" and not context.mainHand and not isSword then
+pitchSpeedO = pitchSpeedO + ((playerSpeed * 22 * walkSmoother * -1) - (M:sin(offHandSwingProgress * 3.14)) * 8 + fall * 3 + M:sin(sneak * 3.14) * 0.3 + (playerPitch - prevPitch)) * INTENSITY * dt
+if useAction == "block" and not mainHand and not isSword then
     pitchSpeedO = pitchSpeedO + 10 * M:sin(shieldDisable * 3.14) * INTENSITY * dt
     pitchSpeedO = pitchSpeedO + 12 * M:sin(shieldO      * 3.14) * INTENSITY * dt
 end
@@ -524,44 +546,44 @@ pitchSpeedO = pitchSpeedO * M:pow(DAMPING, dt)
 pitchAngleO = pitchAngleO + pitchSpeedO * dt
 
 -- Yaw
-yawSpeed = yawSpeed + (M:sin(walk) * 3 * walkSmoother+ (M:sin(context.mainHandSwingProgress * 3.14)) * 8+ M:sin(swimCounter * swimSmoother) * 3+ M:sin(mainHandSwitch * 6.28) * 3+ playerYaw - prevYaw) * INTENSITY * dt
+yawSpeed = yawSpeed + (M:sin(walk) * 3 * walkSmoother+ (M:sin(mainHandSwingProgress * 3.14)) * 8+ M:sin(swimCounter * swimSmoother) * 3+ M:sin(mainHandSwitch * 6.28) * 3+ playerYaw - prevYaw) * INTENSITY * dt
 yawSpeed = yawSpeed - GRAVITY * yawAngle * dt
 yawSpeed = yawSpeed * M:pow(DAMPING, dt)
 yawAngle = yawAngle + yawSpeed * dt
 
-yawSpeedO = yawSpeedO + (M:sin(walk) * 3 * walkSmoother + (M:sin(context.offHandSwingProgress * 3.14)) * 8 + M:sin(swimCounter * swimSmoother) * 3 + M:sin(offHandSwitch * 6.28) * 3 + playerYaw - prevYaw) * INTENSITY * dt
+yawSpeedO = yawSpeedO + (M:sin(walk) * 3 * walkSmoother + (M:sin(offHandSwingProgress * 3.14)) * 8 + M:sin(swimCounter * swimSmoother) * 3 + M:sin(offHandSwitch * 6.28) * 3 + playerYaw - prevYaw) * INTENSITY * dt
 yawSpeedO = yawSpeedO - GRAVITY * yawAngleO * dt
 yawSpeedO = yawSpeedO * M:pow(DAMPING, dt)
 yawAngleO = yawAngleO + yawSpeedO * dt
 
-local ywAngle   = (context.mainHand and yawAngle) or yawAngleO
-local ptAngle   = (context.mainHand and pitchAngle) or pitchAngleO
+local ywAngle   = (mainHand and yawAngle) or yawAngleO
+local ptAngle   = (mainHand and pitchAngle) or pitchAngleO
 
 -- == SWING ANIMATIONS ==
 if isPickaxe then
-    context.swingProgress = easeCustom(context.swingProgress)
+    swingProgress = easeCustom(swingProgress)
 else
-    context.swingProgress = easeCustomSec(context.swingProgress)
+    swingProgress = easeCustomSec(swingProgress)
 end
 
-if context.swingProgress < 0.70016 then
-    swing_rot = M:sin(M:clamp(context.swingProgress, 0, 0.308) * 5.1)
+if swingProgress < 0.70016 then
+    swing_rot = M:sin(M:clamp(swingProgress, 0, 0.308) * 5.1)
 else
-    swing_rot = M:sin(M:clamp(context.swingProgress, 0.70016, 1) * 5.1 - 2)
+    swing_rot = M:sin(M:clamp(swingProgress, 0.70016, 1) * 5.1 - 2)
 end
 
-if context.swingProgress < 0.65245 then
-    swing_sword_tilt = M:sin(M:clamp(context.swingProgress, 0, 0.16675) * 3.14 * 3)
+if swingProgress < 0.65245 then
+    swing_sword_tilt = M:sin(M:clamp(swingProgress, 0, 0.16675) * 3.14 * 3)
 else
-    swing_sword_tilt = M:sin(M:clamp(context.swingProgress, 0.65245, 1) * 4.4 - 1.3)
+    swing_sword_tilt = M:sin(M:clamp(swingProgress, 0.65245, 1) * 4.4 - 1.3)
 end
 
 swing_rot = swing_rot * swing_rot * swing_rot
 
-if context.swingProgress < 0.65594 then
-    swing_hit_second = M:sin(M:clamp(context.swingProgress, 0.16561, 0.32991) * 4.78 * 2 + 4.7)
+if swingProgress < 0.65594 then
+    swing_hit_second = M:sin(M:clamp(swingProgress, 0.16561, 0.32991) * 4.78 * 2 + 4.7)
 else
-    swing_hit_second = M:sin(M:clamp(context.swingProgress, 0.65594, 0.82025) * 4.78 * 2 - 4.7)
+    swing_hit_second = M:sin(M:clamp(swingProgress, 0.65594, 0.82025) * 4.78 * 2 - 4.7)
 end
 
 if useAction == "spear" then
@@ -590,7 +612,7 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
     M:rotateX(mat, -10 * swing_hit)
 
     if not isSword then
-        if useAction == "trident" or useAction == "spear" then
+        if itemName == "trident" or useAction == "spear" then
             M:moveZ(mat, -0.1 * swing_rot)
             M:moveY(mat, -0.05 * swing_rot)
 
@@ -602,7 +624,7 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
             M:rotateX(mat, -10 * swing_rot)
             M:rotateX(mat, -15 * swing_hit)
 
-            if useAction == "trident" then
+            if itemName == "trident" then
                 M:rotateX(mat, -45 * swingOverall)
             else
                 M:rotateX(mat, -45 * swing_sword_tilt)
@@ -628,8 +650,8 @@ if (useAction ~= "block" and useAction ~= "crossbow") or isSword then
         M:rotateX(mat, 10 * swing_hit_second)
     end
 
-    if isSword and not (beashAnimations or nneSwords or context.interact) then
-        M:sin(context.swingProgress * 3.14)
+    if isSword and not (beashAnimations or nneSwords) then
+        M:sin(swingProgress * 3.14)
         M:moveY(mat, -0.1 * Easings:easeInOutBack(swing))
         M:rotateX(mat, -60 * Easings:easeInOutBack(swing))
     end
@@ -670,7 +692,7 @@ if matched({"bell", "end_crystal", "pink_petals", "leaf_litter", "wildflowers", 
 		M:rotateZ(mat, ywAngle * -1, 0, 0.55, 0)
 	end
 elseif itemName == "painting" or itemName == "item_frame" or (itemName == "glow_item_frame" and not a3ds) then
-	context.swingProgress = 0
+	swingProgress = 0
     if a3ds then
         M:rotateX(mat, -25)
         M:moveY(mat, -0.65)
@@ -679,16 +701,16 @@ elseif itemName == "painting" or itemName == "item_frame" or (itemName == "glow_
 	M:rotateZ(mat, ywAngle * -1, 0, 0.55, 0)
 else
 	if
-		not I:isBlock(context.item)
-		and not I:isEmpty(context.item)
+		not I:isBlock(item)
+		and not I:isEmpty(item)
 		and useAction == "none"
 		and useAction ~= "crossbow"
 	then
 		if isAxe or itemName == "mace" then
 			local ptAngleMultiplier = (itemName == "mace" and 0.2) or 0.15
-			M:rotateX(mat, -20 * M:sin(context.equipProgress * context.equipProgress * context.equipProgress) + (ptAngle * ptAngleMultiplier), 0.3 * l, -0.3, 0)
+			M:rotateX(mat, -20 * M:sin(equipProgress * equipProgress * equipProgress) + (ptAngle * ptAngleMultiplier), 0.3 * l, -0.3, 0)
 		else
-			M:rotateX(mat, -20 * M:sin(context.equipProgress * context.equipProgress * context.equipProgress) + (ptAngle * 0.05), 0.3 * l, -0.4, 0)
+			M:rotateX(mat, -20 * M:sin(equipProgress * equipProgress * equipProgress) + (ptAngle * 0.05), 0.3 * l, -0.4, 0)
 		end
 	end
 	if (isAxe or itemName == "mace") and useAction ~= "crossbow" then
@@ -700,7 +722,7 @@ end
 
 -- == EAT & DRINK ANIMATION ==
 global.progress = 0.0;
-progress = context.mainHand and foodCount or foodCountO
+progress = mainHand and foodCount or foodCountO
 
 local foodDefault   = w3di or w3Dfoods or freshFoods
 local drinkDefault  = (w3di and itemName ~= "milk_bucket") or refinedBuckets
@@ -708,7 +730,7 @@ local tootHorn      = useAction == "toot_horn"
 local square        = progress * progress
 
 local function eatDrinkDefault()
-    if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and context.mainHand then
+    if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and mainHand then
         M:moveX(mat, 0.02 * l * foodCount)
         M:moveZ(mat, -0.05 * foodCount)
         if useAction == "eat" or useAction == "toot_horn" then
@@ -722,7 +744,7 @@ local function eatDrinkDefault()
         end
     end
 
-    if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and not context.mainHand then
+    if (useAction == "drink" or useAction == "eat" or useAction == "toot_horn") and not mainHand then
         M:moveX(mat, 0.02 * l * foodCountO)
         M:moveZ(mat, -0.05 * foodCountO)
         if useAction == "eat" or useAction == "toot_horn" then
@@ -849,11 +871,11 @@ end
 global.foodCount = 0.0;
 global.foodCountO = 0.0;
 
-local easedFoodCounter = Easings:easeInQuart(context.mainHand and foodCount or foodCountO)
+local easedFoodCounter = Easings:easeInQuart(mainHand and foodCount or foodCountO)
 
 -- == BRUSH ANIMATION ==
 if useAction == "brush" then
-	if context.mainHand then
+	if mainHand then
 		M:moveZ(mat, -0.03 	* Easings:easeInOutBack(brushCounter))
 		M:rotateX(mat, -30 	* Easings:easeInOutBack(brushCounter))
 		M:rotateZ(mat, 15 	* l * M:sin((foodCountSec - 0.5) * 4.14) * Easings:easeInOutBack(brushCounter))
@@ -881,24 +903,24 @@ if itemName == "slime_ball" or itemName == "slime_block" or itemName == "honey_b
     end
 end
 
-prevPitch   = P:getPitch(context.player)
-prevYaw     = P:getYaw(context.player)
+prevPitch   = P:getPitch(player)
+prevYaw     = P:getYaw(player)
 
 if itemName == "magma_cream" then
     M:scale(mat, 1 - (fall / 5), 1 + (fall / 5), 1)
 end
 
 -- == SWITCH ANIMATION ==
-local activeSwitch              = context.mainHand and mainHandSwitch or offHandSwitch
-local switchEvent               = context.mainHand and mainHandSwitchEvent or offHandSwitchEvent
+local activeSwitch              = mainHand and mainHandSwitch or offHandSwitch
+local switchEvent               = mainHand and mainHandSwitchEvent or offHandSwitchEvent
 local switchAnimationVariable   = Easings:easeInBack(M:sin(M:clamp(activeSwitch, 0.09723, 0.60632) * 5.346 - 0.1))
 
 if
 	(
 		matched({"bundles", "skulls", "music_discs", "nuggets", "ender_pearl", "ender_eye"})
         or (glowing3Darmors and matched({"head_armor"}))
-		or I:isThrowable(context.item)
-	) and useAction ~= "trident"
+		or I:isThrowable(item)
+	) and itemName ~= "trident"
 then
     M:rotateX(mat, -10 * switchAnimationVariable)
     M:moveY(mat,  0.62 * switchAnimationVariable)
@@ -909,7 +931,7 @@ then
     if isNugget then
         if switchEvent then S:playSound("entity.experience_orb.pickup", 0.3) end
         M:moveY(mat, -0.07)
-        M:rotateX(mat, 360 * Easings:easeInOutBack((context.mainHand and M:clamp(mainHandSwitch * 1.65, 0, 1)) or M:clamp(offHandSwitch * 1.65, 0, 1)), 0, 0.1, 0)
+        M:rotateX(mat, 360 * Easings:easeInOutBack((mainHand and M:clamp(mainHandSwitch * 1.65, 0, 1)) or M:clamp(offHandSwitch * 1.65, 0, 1)), 0, 0.1, 0)
     elseif isMusicDisc then
         if switchEvent then S:playSound("entity.context.player.attack.weak", 0.3) end
         M:rotateZ(mat, 360 * eased, -0.1 * l, 0.25, 0)
@@ -921,7 +943,7 @@ then
     end
 end
 
-if (context.mainHand and mainHandSwitchEvent) or offHandSwitchEvent then
+if (mainHand and mainHandSwitchEvent) or offHandSwitchEvent then
     S:playSound("context.item.armor.equip_leather", 0.2)
 end
 
@@ -965,10 +987,10 @@ if not (refinedBuckets or rvTorches or refinedTorches ) then
     end
 end
 
-if swingCountPrev ~= P:getSwingCount(context.player) and context.mainHand and itemName == "bell" then
+if swingCountPrev ~= P:getSwingCount(player) and mainHand and itemName == "bell" then
 	S:playSound("block.bell.use", 0.3)
 end
-swingCountPrev = P:getSwingCount(context.player)
+swingCountPrev = P:getSwingCount(player)
 
 if itemName == "pink_petals" or itemName == "wildflowers" or itemName == "leaf_litter" then
 	local particle_ticker = function(p)
@@ -977,7 +999,7 @@ if itemName == "pink_petals" or itemName == "wildflowers" or itemName == "leaf_l
 	local flower = ""
 	if itemName == "wildflowers" then flower = "wild_flowers" else flower = itemName end
 
-	if swingMHandPrev ~= context.swingMHand and context.mainHand then
+	if swingMHandPrev ~= swingMHand and mainHand then
 		S:playSound("block.leaf_litter.place", 0.7)
         particle(0.75 * l, -0.2,  -0.9, "textures/particle/firefly.png", 0.4, particle_ticker)
         particle(0.75 * l, -0.2,  -0.9, "textures/particle/firefly.png", 0.4, particle_ticker)
@@ -989,21 +1011,23 @@ if itemName == "pink_petals" or itemName == "wildflowers" or itemName == "leaf_l
         particle(0.65 * l, -0.25, -0.9, "textures/particle/" .. flower .. "_4.png", 0.2, particle_ticker)
     end
 end
-if context.mainHand then swingMHandPrev = context.swingMHand else swingOHandPrev = context.swingOHand end
+if mainHand then swingMHandPrev = swingMHand else swingOHandPrev = swingOHand end
 
 -- == SWING SPEED ==
-if isSpear                                      then itemSwingSpeed:put(I:getName(context.item), 15) end
-if isShovel                                     then itemSwingSpeed:put(I:getName(context.item), 14) end
-if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getName(context.item), 12) end
+if HMIversion == "5.1+" then
+    if isSpear                                      then itemSwingSpeed:put(I:getName(item), 15) end
+    if isShovel                                     then itemSwingSpeed:put(I:getName(item), 14) end
+    if itemName == "trident" or itemName == "mace"  then itemSwingSpeed:put(I:getName(item), 12) end
+end
 
 -- == TRIDENT AND SPEAR ==
-if useAction == "trident" then
+if useAction == "trident" and HMIversion == "5.1+" then
     M:moveX(mat, 0.1 * Easings:easeOutBack(M:clamp(tridentM * 1.5, 0, 1)))
     M:moveX(mat, -0.03 * l)
-    M:rotateZ(mat, 170 * l * Easings:easeOutBack(M:clamp(context.mainHand and tridentM or tridentMO * 1.5, 0, 1)))
+    M:rotateZ(mat, 170 * l * Easings:easeOutBack(M:clamp(mainHand and tridentM or tridentMO * 1.5, 0, 1)))
     M:rotateY(mat, 40 * l)
-    M:rotateX(mat, -90 * Easings:easeOutBack(M:sin(context.mainHand and riptideCounter or riptideCounterO * 3.14)))
-    M:rotateZ(mat, -45 * l * Easings:easeOutBack(M:sin(context.mainHand and riptideCounter or riptideCounterO * 3.14)))
+    M:rotateX(mat, -90 * Easings:easeOutBack(M:sin(mainHand and riptideCounter or riptideCounterO * 3.14)))
+    M:rotateZ(mat, -45 * l * Easings:easeOutBack(M:sin(mainHand and riptideCounter or riptideCounterO * 3.14)))
 end
 
 if useAction == "spear" then
@@ -1014,10 +1038,12 @@ end
 -- == BOW STATE ==
 local easedBowSec  = Easings:easeOutBack(bowCountSec)
 local easedBowSecO = Easings:easeOutBack(bowCountSecO)
-local bc           = context.mainHand and easedBowSec or easedBowSecO
+local bc           = mainHand and easedBowSec or easedBowSecO
 
-usingItem:put("minecraft:bow",    bc >= 0.1)
-useDuration:put("minecraft:bow",  Easings:cubicEase(bc) * 20)
+if HMIversion == "5.1+" then
+    usingItem:put("minecraft:bow",    bc >= 0.1)
+    useDuration:put("minecraft:bow",  Easings:cubicEase(bc) * 20) 
+end
 
 -- == INSPECT ANIMATION ==
 if KeyBindManager:isKeyPressed(${inspectKeybind} ~= 0 and ${inspectKeybind} or 67) then
@@ -1027,11 +1053,11 @@ else
 end
 inspectionSpin = M:clamp(inspectionSpin, 0, 1)
 
-if isSword or isPickaxe or isAxe or useAction == "trident" and context.mainHand then
+if isSword or isPickaxe or isAxe or useAction == "trident" and mainHand then
     M:moveX(mat, -0.2 * l * inspectionCounter)
     M:rotateX(mat, -360 * Easings:easeInOutBack(inspectionSpin), 0, 0, 0.15)
 end
-prevAge = P:getAge(context.player)
+prevAge = P:getAge(player)
 
 -- == SOME POSITIONS ==
 if tag == "buckets" then
@@ -1061,9 +1087,9 @@ if tag == "buckets" then
 end
 
 if
-    I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_cold"))
-    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_warm"))
-    or I:isOf(context.item, Items:get("bucket_of_frog:frog_bucket_temperate"))
+    I:isOf(item, Items:get("bucket_of_frog:frog_bucket_cold"))
+    or I:isOf(item, Items:get("bucket_of_frog:frog_bucket_warm"))
+    or I:isOf(item, Items:get("bucket_of_frog:frog_bucket_temperate"))
 then
     M:moveY(mat, 0.025)
     M:moveX(mat, -0 * l)
