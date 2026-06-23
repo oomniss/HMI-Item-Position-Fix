@@ -1,4 +1,23 @@
 -- by omnis._.
+local HMIversion = context == nil and "5.0" or "5.1+"
+
+if HMIversion == "5.1+" then
+    item                  = context.item
+    matrices              = context.matrices
+    player                = context.player
+    mainHand              = context.mainHand
+    deltaTime             = context.deltaTime
+    swingProgress         = context.swingProgress
+    mainHandSwingProgress = context.mainHandSwingProgress
+    offHandSwingProgress  = context.offHandSwingProgress
+    swingMHand            = context.swingMHand
+    swingOHand            = context.swingOHand
+    equipProgress         = context.equipProgress
+    particles             = context.particles
+    hand                  = context.hand
+    bl                    = context.bl
+end
+
 local mat           = matrices
 local l             = (mainHand and 1) or -0.43
 local d             = (mainHand and 1) or -0.43

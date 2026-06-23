@@ -1,4 +1,23 @@
 -- by omnis._.
+local HMIversion = context == nil and "5.0" or "5.1+"
+
+if HMIversion == "5.1+" then
+    item                  = context.item
+    matrices              = context.matrices
+    player                = context.player
+    mainHand              = context.mainHand
+    deltaTime             = context.deltaTime
+    swingProgress         = context.swingProgress
+    mainHandSwingProgress = context.mainHandSwingProgress
+    offHandSwingProgress  = context.offHandSwingProgress
+    swingMHand            = context.swingMHand
+    swingOHand            = context.swingOHand
+    equipProgress         = context.equipProgress
+    particles             = context.particles
+    hand                  = context.hand
+    bl                    = context.bl
+end
+
 local mat         = matrices
 local l           = mainHand and 1 or -1
 local itemName    = I:getName(item):gsub("minecraft:", "")
@@ -306,6 +325,23 @@ if a3ds then
     for _, entry in ipairs(a3dsConditions) do
         if entry[1] and isInList(entry[2]) then
             depositioning(depositions["a3ds"])
+        end
+    end
+end
+
+-- === POSES CONFIGS ===
+if ${alternative} then
+    local positionItem = true
+    if isInList(PackCompat.w3di) and w3di then positionItem = false end
+
+    if positionItem then
+        if tag == "spears" then
+            transform(move, {0.25, -0.2, -0.02, "zxy"})
+            transform(rotate, {5, -5, nil, "zyx"})
+
+        else
+            transform(move, {-0.1, -0.02, nil})
+            transform(rotate, {-9, nil, 8})
         end
     end
 end
