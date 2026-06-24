@@ -133,6 +133,7 @@ PackCompat = {
     refinedTorches      = {"torches", "lanterns", "campfires", "candles", "repeater", "comparator"},
     refinedBuckets      = {"buckets"},
     refinedTotem        = {"totem_of_undying"},
+    visualEffects       = {"torch"},
     freshFoods = {
         "apples", "chorus_fruit", "melon_slice", "carrots", "potatoes", "beetroot", "spider_eye", "berries", "bowl_foods", "cake",
         "bread", "cookie", "pumpkin_pie", "beefs", "chickens", "muttons", "rabbits", "pufferfish", "dried_kelp", "fishes", "pressure_plates"
@@ -227,3 +228,4 @@ ActivePacks = {}
     classicToolsFusion = ${classicToolsFusion}  and (table.insert(ActivePacks, "classicToolsFusion") or true)
     beashAnimations    = ${beashAnimations}     and (table.insert(ActivePacks, "beashAnimations") or true)
     nneSwords          = ${nneSwords}           and (table.insert(ActivePacks, "nneSwords") or true)
+    vfx                = ${vfx}                 and (table.insert(ActivePacks, "visualEffects") or true)

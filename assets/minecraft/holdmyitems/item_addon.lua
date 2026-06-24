@@ -571,6 +571,12 @@ if wNature then
     })
 end
 
+if vfx then
+    positioning({
+        torch = { m = {0.085, -0.245, -0.12}, r = {-3.5, -6.5, -1}, s = {1.25} }
+    })
+end
+
 local pose = positions[itemName]
 
 if pose then
@@ -644,6 +650,9 @@ local function xor(...)
 end
 
 local packsDepositions = {
+    vfx = {
+        torch = { s = {0.95}, m = {-0.035, -0.05, nil, "zyx"} }
+    },
     a3ds = {
         -- Tools & Utilities
         shears                    = { m = {nil, -0.025, -0.065}, r = {-14.5, 2.5, -35.5} },
@@ -808,6 +817,17 @@ if a3ds then
     for _, entry in ipairs(a3dsConditions) do
         if entry[1] and isInList(entry[2]) then
             depositioning(packsDepositions["a3ds"])
+        end
+    end
+end
+
+if vfx then
+    local vfxConditions = {
+        { refinedTorches or rvTorches or w3di, PackCompat.visualEffects },
+    }
+    for _, entry in ipairs(vfxConditions) do
+        if entry[1] and isInList(entry[2]) then
+            depositioning(packsDepositions["vfx"])
         end
     end
 end

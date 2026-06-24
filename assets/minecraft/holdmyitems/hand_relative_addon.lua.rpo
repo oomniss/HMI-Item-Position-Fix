@@ -23,6 +23,7 @@
     gousPoses:          "HMIItemPositionFix.ResourcePacksCompatibility.GoussHandPoses",
     classicToolsFusion: "HMIItemPositionFix.ResourcePacksCompatibility.ClassicToolsFusion",
     beashAnimations:    "HMIItemPositionFix.ResourcePacksCompatibility.BeashSwingAnimations",
-    nneSwords:          "HMIItemPositionFix.ResourcePacksCompatibility.NNEActionSwords"
+    nneSwords:          "HMIItemPositionFix.ResourcePacksCompatibility.NNEActionSwords",
+    vfx:                "HMIItemPositionFix.ResourcePacksCompatibility.VisualEffects"
   }
 }

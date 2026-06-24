@@ -23,27 +23,28 @@ When running multiple 3D resource packs at the same time, their positioning adju
 | **Actually 3D Stuff** (A3DS) | 1.3.6 | Limited compatibility with Gous's Hand Poses |
 | **Weskerson's 3D Items** (W3DI) | 2.4.3 | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses; Incompatible with W3DFoods |
 | **Weskerson's 3D Foods** | 1.0 | Incompatible with Fresh Foods; Incompatible with W3DI |
-| **Weskerson's Nature** | 1.02 | --- |
-| **R&V Chests & Boxes** | --- | --- |
-| **R&V Torches** | --- | Incompatible with Pato's Refined Torches |
+| **Weskerson's Nature** | 1.02 | - |
+| **R&V Chests & Boxes** | - | - |
+| **R&V Torches** | - | Incompatible with Pato's Refined Torches |
 | **Pato's Refined Torches** | 2.1 | Incompatible with R&V Torches; Limited compatibility with W3DI |
-| **Pato's Refined Buckets** | 2.4.1 | --- |
+| **Pato's Refined Buckets** | 2.4.1 | - |
 | **Pato's Refined Totem** | 1.0 | Incompatible with Glowing 3D Totem |
 | **Just 3D Armors** | 1.4 | Incompatible with Glowing 3D Armors |
 | **Glowing 3D Armors** | 1.1.4 | Incompatible with Just 3D Armors |
 | **Glowing 3D Totem** | 1.3 | Incompatible with Pato's Refined Totem |
-| **Fresh Flowers and Plants** | 1.4.8 | --- |
+| **Fresh Flowers and Plants** | 1.4.8 | - |
 | **Fresh Foods** | 1.3.3 | Incompatible with Weskerson's 3D Foods |
-| **Fresh Ores And Ingots** | 1.2.5 | --- |
-| **Fresh Seeds** | 1.3 | --- |
-| **Fresh Music Discs** | 1.3.1 | --- |
-| **Ben's Bundle** | 1.4 | --- |
-| **Fyoncle's 3D Trims** | 5.0 | --- |
-| **Classic Tools Fusion** | --- | --- |
-| **Bray & Cyber's Better, Fresher 3D Books** | 1.5.1 | --- |
+| **Fresh Ores And Ingots** | 1.2.5 | - |
+| **Fresh Seeds** | 1.3 | - |
+| **Fresh Music Discs** | 1.3.1 | - |
+| **Ben's Bundle** | 1.4 | - |
+| **Fyoncle's 3D Trims** | 5.0 | - |
+| **Classic Tools Fusion** | - | - |
+| **Bray & Cyber's Better, Fresher 3D Books** | 1.5.1 | - |
 | **Gous's Hand Poses** | 1.2.0 | Currently incompatible with W3DI; Limited compatibility with A3DS |
-| **NNE Action Swords** | --- | Incompatible with Beash's Swing Animations and Hold My Actions |
+| **NNE Action Swords** | - | Incompatible with Beash's Swing Animations and Hold My Actions |
 | **Beash's Swing Animations** | 1.5 | Incompatible with NNE Action Swords and Hold My Actions |
+| **Visual Effects+** | 1.1.5 | - |
 
 # 📸 Visual Demonstration
 

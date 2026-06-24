@@ -35,7 +35,8 @@
       ClassicToolsFusion: false,
       GoussHandPoses: false,
       NNEActionSwords: false,
-      BeashSwingAnimations: false
+      BeashSwingAnimations: false,
+      VisualEffects: false
     }
   }
 }
