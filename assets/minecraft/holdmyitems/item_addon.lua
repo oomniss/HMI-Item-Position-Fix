@@ -335,7 +335,7 @@ end
 
 if fyoncle3Dtrims then
     positioning({
-        smithing_templates = { m = {0.025, 0.095, -0.04}, r = {32.5, 77, -36.5} }
+        smithing_templates = { m = {-0.025, -0.055, -0.04}, r = {5.5, -1.5, -3.5}, s = {0.9} }
     })
 end
 
@@ -550,21 +550,24 @@ if w3di then
 end
 
 if wNature then
+    if itemName:match("tulip") then
+        transform(move, {-0.01, -0.015, 0.02})
+        M:scale(mat, 0.8, 0.8, 0.8)
+    end
     positioning({
-        mushrooms           = { m = {0.245, -0.11, -0.135}, r = {-4, -5, nil}, s = {1.45} },
-        tulips              = { m = {0.15, -0.065, -0.08} },
-        oak_sapling         = { m = {0.115, -0.075, -0.08}, r = {-3.5, nil, nil} },
-        flowering_azalea    = { m = {0.165, -0.075, -0.075}, r = {-5, -3.5, nil} },
+        mushrooms           = { m = {0.245, -0.11, -0.135}, r = {-6, -5, -1.5}, s = {1.45} },
+        oak_sapling         = { m = {0.1, nil, -0.04} },
+        azaleas             = { m = {0.165, -0.075, -0.075}, r = {-5, -3.5, nil} },
         dead_bush           = { m = {0.22, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
         fern                = { m = {0.21, -0.09, -0.11}, r = {-4, -6, nil}, s = {1.35} },
-        dandelion           = { m = {0.16, -0.06, -0.11} },
-        poppy               = { m = {0.06, nil, nil} },
+        dandelion           = { m = {0.16, -0.065, -0.11} },
+        poppy               = { m = {0.115, -0.06, -0.04} },
         blue_orchid         = { m = {0.135, -0.06, -0.095} },
         allium              = { m = {-0.075, -0.055, -0.095}, r = {nil, 75.5, nil}, s = {0.9} },
         azure_bluet         = { m = {0.095, -0.06, -0.135}, r = {nil, 35.5, nil} },
-        oxeye_daisy         = { m = {0.205, -0.075, -0.07}, r = {nil, -20.5, nil}, s = {1.25} },
+        oxeye_daisy         = { m = {0.235, -0.09, -0.095}, r = {nil, -20.5, nil}, s = {1.25} },
         cornflower          = { m = {0.21, -0.055, -0.125}, s = {1.25} },
-        lily_of_the_valley  = { m = {0.07, -0.09, -0.115}, r = {nil, 20, nil} }
+        lily_of_the_valley  = { m = {0.085, -0.08, -0.17}, r = {nil, 20, nil}, s = {1.3} }
     })
 end
 

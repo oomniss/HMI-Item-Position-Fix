@@ -333,6 +333,7 @@ end
 if ${alternative} then
     local positionItem = true
     if isInList(PackCompat.w3di) and w3di then positionItem = false end
+    if isInList(PackCompat.w3Dfoods) and w3Dfoods then positionItem = false end
 
     if positionItem then
         if tag == "spears" then

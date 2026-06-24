@@ -10,37 +10,40 @@
 
 The **Hold My Items** mod brings visible first-person hands and stunning animations to the game, but it shifts item positioning in the player's hand, causing most items to appear misaligned. This pack fixes exactly that — every single item has been carefully repositioned to sit right where it should.
 
+> All [gallery](https://modrinth.com/resourcepack/hmi-item-position-fix/gallery) pics were made using [Visual Effects+](https://modrinth.com/resourcepack/visual-effects-plus) by _dosya_ and [Sunbathing Godrays](https://modrinth.com/resourcepack/sunbathing-godrays) by _MehVahdJukaar_
+
 # 🛠️ Compatibility
 
 This pack is compatible with both **HMI 5.0** and **HMI 5.1**. That said, not every supported resource pack has been calibrated for HMI 5.0 — if you're on an older version, some compatibility entries may not behave as expected.
 
 When running multiple 3D resource packs at the same time, their positioning adjustments can stack and conflict with each other. By enabling the corresponding toggles in the settings menu, this pack applies the right corrections for every combination — so everything stays perfectly aligned no matter what you're running.
 
-| Compat | Pack | Details/Notes |
-|--------|------|---------------|
-| ✅ | **Actually 3D Stuff** (A3DS) | Limited compatibility with Gous's Hand Poses |
-| ✅ | **Weskerson's 3D Items** (W3DI) | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses; Incompatible with W3DFoods |
-| ✅ | **Weskerson's 3D Foods** | Incompatible with Fresh Foods; Incompatible with W3DI |
-| ✅ | **Weskerson's Nature** | --- |
-| ✅ | **R&V Chests & Boxes** | --- |
-| ✅ | **R&V Torches** | Incompatible with Pato's Refined Torches |
-| ✅ | **Pato's Refined Torches** | Incompatible with R&V Torches; Limited compatibility with W3DI |
-| ✅ | **Pato's Refined Buckets** | --- |
-| ✅ | **Pato's Refined Totem** | Incompatible with Glowing 3D Totem |
-| ✅ | **Just 3D Armors** | Incompatible with Glowing 3D Armors |
-| ✅ | **Glowing 3D Armors** | Incompatible with Just 3D Armors |
-| ✅ | **Glowing 3D Totem** | Incompatible with Pato's Refined Totem |
-| ✅ | **Fresh Flowers and Plants** | --- |
-| ✅ | **Fresh Foods** | Incompatible with Weskerson's 3D Foods |
-| ✅ | **Fresh Ores And Ingots** | --- |
-| ✅ | **Fresh Seeds** | --- |
-| ✅ | **Fresh Music Discs** | --- |
-| ✅ | **Ben's Bundle** | --- |
-| ✅ | **Fyoncle's 3D Trims** | --- |
-| ✅ | **Classic Tools Fusion** | --- |
-| ✅ | **Gous's Hand Poses** | Currently incompatible with W3DI; Limited compatibility with A3DS |
-| ✅ | **NNE Action Swords** | Incompatible with Beash's Swing Animations and Hold My Actions |
-| ✅ | **Beash's Swing Animations** | Incompatible with NNE Action Swords and Hold My Actions |
+| Pack | Version | Details/Notes |
+|------|---------|---------------|
+| **Actually 3D Stuff** (A3DS) | 1.3.6 | Limited compatibility with Gous's Hand Poses |
+| **Weskerson's 3D Items** (W3DI) | 2.4.3 | Limited compatibility with Refined Torches; Currently incompatible with Gous's Hand Poses; Incompatible with W3DFoods |
+| **Weskerson's 3D Foods** | 1.0 | Incompatible with Fresh Foods; Incompatible with W3DI |
+| **Weskerson's Nature** | 1.02 | --- |
+| **R&V Chests & Boxes** | --- | --- |
+| **R&V Torches** | --- | Incompatible with Pato's Refined Torches |
+| **Pato's Refined Torches** | 2.1 | Incompatible with R&V Torches; Limited compatibility with W3DI |
+| **Pato's Refined Buckets** | 2.4.1 | --- |
+| **Pato's Refined Totem** | 1.0 | Incompatible with Glowing 3D Totem |
+| **Just 3D Armors** | 1.4 | Incompatible with Glowing 3D Armors |
+| **Glowing 3D Armors** | 1.1.4 | Incompatible with Just 3D Armors |
+| **Glowing 3D Totem** | 1.3 | Incompatible with Pato's Refined Totem |
+| **Fresh Flowers and Plants** | 1.4.8 | --- |
+| **Fresh Foods** | 1.3.3 | Incompatible with Weskerson's 3D Foods |
+| **Fresh Ores And Ingots** | 1.2.5 | --- |
+| **Fresh Seeds** | 1.3 | --- |
+| **Fresh Music Discs** | 1.3.1 | --- |
+| **Ben's Bundle** | 1.4 | --- |
+| **Fyoncle's 3D Trims** | 5.0 | --- |
+| **Classic Tools Fusion** | --- | --- |
+| **Bray & Cyber's Better, Fresher 3D Books** | 1.5.1 | --- |
+| **Gous's Hand Poses** | 1.2.0 | Currently incompatible with W3DI; Limited compatibility with A3DS |
+| **NNE Action Swords** | --- | Incompatible with Beash's Swing Animations and Hold My Actions |
+| **Beash's Swing Animations** | 1.5 | Incompatible with NNE Action Swords and Hold My Actions |
 
 # 📸 Visual Demonstration
 
@@ -68,7 +71,7 @@ To ensure correct positioning, follow this load order:
 4. **Weskerson's 3D Items**
 5. **Weskerson's Nature**
 6. **HMI Item Position Fix**
-7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords) or **Hold My Actions**
+7. **Beash's Swing Animations** or **[HMI] REANIMATED** (if you are using NNE Action Swords)
 
 > `Fyoncle's 3D Trims` must always sit above `Just 3D Armors`, `R&V Torches`, `Refined Torches`, and `Fresh Foods` in your load order. For reasons we haven't been able to pin down, placing it lower breaks item positioning and physics for those packs. As a precaution, keep it at the very top.
 
