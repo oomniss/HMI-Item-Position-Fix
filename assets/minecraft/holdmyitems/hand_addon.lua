@@ -343,6 +343,11 @@ if ${alternative} then
         else
             transform(move, {-0.1, -0.02, nil})
             transform(rotate, {-9, nil, 8})
+
+            if itemName == "wildflowers" or itemName == "leaf_litter" or itemName == "pink_petals" then
+                transform(move, {nil, 0.07, nil})
+                transform(rotate, {nil, nil, -8})
+            end
         end
     end
 end
