@@ -57,7 +57,7 @@ ItemsTag = {
         "wooden_shelves", "hanging_signs", "signs", "copper_golem_statues", "lanterns", "buttons", "rails",
         "chiseled_bookshelf", "pickaxes", "axes", "hoes", "shovels", "bundles", "bookshelf_books", "music_discs",
         "boats", "chest_boats", "swords", "head_armor", "chest_armor", "leg_armor", "foot_armor", "arrows",
-        "ingots", "raw_materials", "nuggets", "harnesses", "dyes"
+        "ingots", "raw_materials", "nuggets", "harnesses", "dyes", "skulls"
     },
     registry = {
         pressure_plates       = {"_pressure_plate"},

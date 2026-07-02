@@ -19,7 +19,7 @@ if HMIversion == "5.1+" then
 end
 
 local mat           = matrices
-local l             = (mainHand and 1) or -0.43
+local l             = (mainHand and 1) or -1
 local d             = (mainHand and 1) or -0.43
 local itemName      = I:getName(item):gsub("minecraft:", "")
 local isUsingItem   = P:isUsingItem(player)
@@ -387,7 +387,7 @@ if a3ds then
         compass             = { m = {0.015, 0.06, -0.03}, r = {-6.5, -5, -2} },
         map                 = { m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
         paper               = { m = {0.025, -0.02, -0.055}, r = {-6.5, -5, nil} },
-        firework_rocket     = { m = {0.035, -0.01, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
+        firework_rocket     = { m = {posInHands(0.035, 0.015), -0.01, -0.07}, r = {-6, -5.5, -1.5}, s = {0.9} },
         saddle              = { m = {-0.025, nil, nil} },
         boats               = { r = {nil, -37.5, nil} },
         chest_boats         = { r = {nil, -37.5, nil} },
