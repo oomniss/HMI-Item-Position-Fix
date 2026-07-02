@@ -18,10 +18,10 @@ if HMIversion == "5.1+" then
     bl                    = context.bl
 end
 
-local mat         = matrices
-local l           = mainHand and 1 or -1
-local itemName    = I:getName(item):gsub("minecraft:", "")
-local skinModel   = (${skinModel} and "Alex") or "Steve"
+local mat               = matrices
+local l                 = mainHand and 1 or -1
+local itemName          = I:getName(item):gsub("minecraft:", "")
+local steveSkinModel    = ${steveSkinModel}
 
 -- === FUNCTIONS ===
 if not ItemsTag or not ItemLists or not PackCompat then
@@ -141,7 +141,7 @@ elseif general2D then
     rotate(-6.5, -5.5, -1)
 end
 
-if skinModel == "Steve" then
+if steveSkinModel then
     move(0.035, nil, nil)
 end
 

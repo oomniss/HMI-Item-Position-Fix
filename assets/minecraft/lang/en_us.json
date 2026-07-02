@@ -1,9 +1,5 @@
 {
     "rpo.HMIItemPositionFix": "HMI Item Position Fix",
-    "rpo.HMIItemPositionFix.General.SkinModel.true": "Alex",
-    "rpo.HMIItemPositionFix.General.SkinModel.false": "Steve",
-    "rpo.HMIItemPositionFix.General.PoseStyle.false": "Default",
-    "rpo.HMIItemPositionFix.General.PoseStyle.true": "Alternative",
     "rpo.HMIItemPositionFix.General.useStyle1": "Use Style 1",
     "rpo.HMIItemPositionFix.General.useStyle1.tooltip": "This option will only take effect if Hold My Actions is enabled.",
 

@@ -330,6 +330,7 @@ if a3ds then
 end
 
 -- === POSES CONFIGS ===
+--debugger:out(${alternative})
 if ${alternative} then
     local positionItem = true
     if isInList(PackCompat.w3di) and w3di then positionItem = false end

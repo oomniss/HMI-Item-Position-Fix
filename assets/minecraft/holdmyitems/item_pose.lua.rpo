@@ -1,24 +1,6 @@
 {
   expansions: {
-    rvTorches:          "HMIItemPositionFix.ResourcePacksCompatibility.RVTorches",
-    refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",
-    refinedBuckets:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedBuckets",
-    glowing3Darmors:    "HMIItemPositionFix.ResourcePacksCompatibility.Glowing3DArmors",
-    glowing3Dtotem:     "HMIItemPositionFix.ResourcePacksCompatibility.Glowing3DTotem",
-    freshFoods:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshFoods",
-    freshPlants:        "HMIItemPositionFix.ResourcePacksCompatibility.FreshFlowersAndPlants",
-    a3ds:               "HMIItemPositionFix.ResourcePacksCompatibility.Actually3DStuff",
-    w3di:               "HMIItemPositionFix.ResourcePacksCompatibility.Weskerson3DItems",
-    w3Dfoods:           "HMIItemPositionFix.ResourcePacksCompatibility.Weskerson3DFoods",
-    better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
-    bensBundle:         "HMIItemPositionFix.ResourcePacksCompatibility.BensBundle",
-    fyoncle3Dtrims:     "HMIItemPositionFix.ResourcePacksCompatibility.Fyoncle3DTrims",
-    freshOresIngots:    "HMIItemPositionFix.ResourcePacksCompatibility.FreshOresAndIngots",
-    gousPoses:          "HMIItemPositionFix.ResourcePacksCompatibility.GoussHandPoses",
-    nneSwords:          "HMIItemPositionFix.ResourcePacksCompatibility.NNEActionSwords",
-    beashAnimations:    "HMIItemPositionFix.ResourcePacksCompatibility.BeashSwingAnimations",
-
-    skinModel:          "HMIItemPositionFix.General.SkinModel",
+    steveSkinModel:     "HMIItemPositionFix.General.SkinModel.value == HMIItemPositionFix.General.SkinModel.Steve",
     inspectKeybind:     "HMIItemPositionFix.General.InspectKeybind"
   }
 }

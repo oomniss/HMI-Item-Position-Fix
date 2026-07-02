@@ -1,22 +1,5 @@
 {
   expansions: {
-    w3Dfoods:           "HMIItemPositionFix.ResourcePacksCompatibility.Weskerson3DFoods",
-    w3di:               "HMIItemPositionFix.ResourcePacksCompatibility.Weskerson3DItems",
-    a3ds:               "HMIItemPositionFix.ResourcePacksCompatibility.Actually3DStuff",
-    rvTorches:          "HMIItemPositionFix.ResourcePacksCompatibility.RVTorches",
-    glowing3Darmors:    "HMIItemPositionFix.ResourcePacksCompatibility.Glowing3DArmors",
-    glowing3Dtotem:     "HMIItemPositionFix.ResourcePacksCompatibility.Glowing3DTotem",
-    bensBundle:         "HMIItemPositionFix.ResourcePacksCompatibility.BensBundle",
-    freshFlowersPlants: "HMIItemPositionFix.ResourcePacksCompatibility.FreshFlowersAndPlants",
-    freshFoods:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshFoods",
-    freshOresIngots:    "HMIItemPositionFix.ResourcePacksCompatibility.FreshOresAndIngots",
-    freshSeeds:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshSeeds",
-    refinedBuckets:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedBuckets",
-    refinedTorches:     "HMIItemPositionFix.ResourcePacksCompatibility.PatoRefinedTorches",
-    freshDiscs:         "HMIItemPositionFix.ResourcePacksCompatibility.FreshMusicDiscs",
-    better3Dbooks:      "HMIItemPositionFix.ResourcePacksCompatibility.BrayAndCyberBetterFresher3DBooks",
-    just3Darmors:       "HMIItemPositionFix.ResourcePacksCompatibility.Just3DArmors",
-
-    alternative:        "HMIItemPositionFix.General.PoseStyle"
+    alternative: "HMIItemPositionFix.General.PoseStyle.value == HMIItemPositionFix.General.PoseStyle.Alternative"
   }
 }

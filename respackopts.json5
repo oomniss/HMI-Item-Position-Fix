@@ -4,8 +4,16 @@
   capabilities: ["FileFilter", "DirFilter"],
   conf: {
     General: {
-      SkinModel: false,
-      PoseStyle: false,
+      SkinModel: {
+        type: "enum",
+        default: "Steve",
+        values: ["Steve", "Alex"]
+      },
+      PoseStyle: {
+        type: "enum",
+        default: "Default",
+        values: ["Default", "Alternative"]
+      },
       InspectKeybind: {
         type: "integer",
         default: 74
